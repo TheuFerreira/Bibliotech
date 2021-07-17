@@ -6,7 +6,5 @@
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
         mc:Ignorable="d"
         Title="AddEditLectorWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <Grid Background="White"/>
 </Window>
