@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Bibliotech
+namespace Bibliotech.View.Lectors
 {
     /// <summary>
-    /// Interação lógica para MainWindow.xam
+    /// Lógica interna para AddEditLectorWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AddEditLectorWindow : Window
     {
-        public MainWindow()
+        public AddEditLectorWindow()
         {
             InitializeComponent();
         }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Bibliotech.View;
 
 namespace Bibliotech
 {
@@ -13,5 +14,12 @@ namespace Bibliotech
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            MainWindow = new MainWindow();
+            MainWindow.ShowDialog();
+        }
     }
 }

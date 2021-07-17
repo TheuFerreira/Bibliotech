@@ -126,7 +126,168 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Model\DAO\Connection.cs" />
+    <Compile Include="Model\DAO\DAOAddress.cs" />
+    <Compile Include="Model\DAO\DAOAuthor.cs" />
+    <Compile Include="Model\DAO\DAOBook.cs" />
+    <Compile Include="Model\DAO\DAOExamplary.cs" />
+    <Compile Include="Model\DAO\DAOLector.cs" />
+    <Compile Include="Model\DAO\DAOLending.cs" />
+    <Compile Include="Model\DAO\DAOSchool.cs" />
+    <Compile Include="Model\DAO\DAOUser.cs" />
+    <Compile Include="Model\Entities\Address.cs" />
+    <Compile Include="Model\Entities\Author.cs" />
+    <Compile Include="Model\Entities\Book.cs" />
+    <Compile Include="Model\Entities\Enums\ExemplaryStatus.cs" />
+    <Compile Include="Model\Entities\Enums\TypeUser.cs" />
+    <Compile Include="Model\Entities\Exemplary.cs" />
+    <Compile Include="Model\Entities\Lector.cs" />
+    <Compile Include="Model\Entities\Lending.cs" />
+    <Compile Include="Model\Entities\School.cs" />
+    <Compile Include="Model\Entities\User.cs" />
+    <Compile Include="Services\DialogService.cs" />
+    <Compile Include="UserControls\Button.xaml.cs">
+      <DependentUpon>Button.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ButtonImage.xaml.cs">
+      <DependentUpon>ButtonImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ComboBox.xaml.cs">
+      <DependentUpon>ComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ComboBoxSearchField.xaml.cs">
+      <DependentUpon>ComboBoxSearchField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomDialog\InformationDialog.xaml.cs">
+      <DependentUpon>InformationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomDialog\QuestionDialog.xaml.cs">
+      <DependentUpon>QuestionDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomDialog\TextFieldDialog.xaml.cs">
+      <DependentUpon>TextFieldDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SearchField.xaml.cs">
+      <DependentUpon>SearchField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TextField.xaml.cs">
+      <DependentUpon>TextField.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Books\AddEditBookWindow.xaml.cs">
+      <DependentUpon>AddEditBookWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Books\BooksWindow.xaml.cs">
+      <DependentUpon>BooksWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Books\ExemplaryWindow.xaml.cs">
+      <DependentUpon>ExemplaryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Devolutions\DevolutionWindow.xaml.cs">
+      <DependentUpon>DevolutionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Lectors\AddEditLectorWindow.xaml.cs">
+      <DependentUpon>AddEditLectorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Lectors\LectorHistoryWindow.xaml.cs">
+      <DependentUpon>LectorHistoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Lectors\LectorsWindow.xaml.cs">
+      <DependentUpon>LectorsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Lendings\LendingWindow.xaml.cs">
+      <DependentUpon>LendingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Reports\ReportsWindow.xaml.cs">
+      <DependentUpon>ReportsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Schools\AddEditSchoolWindow.xaml.cs">
+      <DependentUpon>AddEditSchoolWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Schools\SchoolsWindow.xaml.cs">
+      <DependentUpon>SchoolsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ServerWindow.xaml.cs">
+      <DependentUpon>ServerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Users\AddEditUserWindow.xaml.cs">
+      <DependentUpon>AddEditUserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Users\UsersWindow.xaml.cs">
+      <DependentUpon>UsersWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="UserControls\Alert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Button.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ButtonImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ComboBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ComboBoxSearchField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomDialog\InformationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomDialog\QuestionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomDialog\TextFieldDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SearchField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TextField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Books\AddEditBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Books\BooksWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Books\ExemplaryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Devolutions\DevolutionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lectors\AddEditLectorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lectors\LectorHistoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lectors\LectorsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lendings\LendingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -134,10 +295,34 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Reports\ReportsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Schools\AddEditSchoolWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Schools\SchoolsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ServerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Users\AddEditUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Users\UsersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -166,5 +351,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
