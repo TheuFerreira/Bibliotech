@@ -94,7 +94,7 @@
 
                 <Button
                     x:Name="btnEnter"
-                    Margin="60,0">
+                    Margin="60,0" Click="BtnEnter_Click">
 
                     <Button.Style>
                         <Style TargetType="Button">

@@ -22,7 +22,11 @@ namespace Bibliotech.View.Users
         public LoginWindow()
         {
             InitializeComponent();
-            
+        }
+
+        private void BtnEnter_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
