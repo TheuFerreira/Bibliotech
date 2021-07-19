@@ -54,7 +54,8 @@
                                         CornerRadius="5" 
                                         Padding="5,1,0,1"
                                         BorderThickness="1"
-                                        BorderBrush="Transparent">
+                                        BorderBrush="Transparent"
+                                        Background="Transparent">
 
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
@@ -85,7 +86,7 @@
 
                                                         <ColorAnimationUsingKeyFrames
                                                             Storyboard.TargetName="Border"
-                                                            Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
 
                                                             <EasingColorKeyFrame
                                                                 KeyTime="0"
