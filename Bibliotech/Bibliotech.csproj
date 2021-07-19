@@ -360,7 +360,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <Resource Include="Resources\ico_bibliotech.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_bibliotech.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

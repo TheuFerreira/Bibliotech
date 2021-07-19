@@ -10,6 +10,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Login" Height="640" Width="360" 
         ResizeMode="NoResize" 
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStyle="None" 
         Background="Transparent">
     <Border
@@ -71,7 +72,9 @@
                     Height="200" 
                     VerticalAlignment="Top">
 
-                    <Image/>
+                    <Image 
+                        Margin="30,20,30,30"
+                        Source="/Bibliotech;component/Resources/img_bibliotech.png"/>
                 </Border>
 
                 <TextBlock 
