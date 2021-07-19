@@ -49,8 +49,7 @@
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Cursor" Value="Hand"/>
-                                            <Setter TargetName="bd" Property="Background" Value="Red"/>
-                                            <Setter TargetName="tb" Property="Foreground" Value="White"/>
+                                            <Setter TargetName="tb" Property="Foreground" Value="RED"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -89,12 +88,13 @@
                 
                 <uc:TextField 
                     x:Name="tfPassword"
-                    Margin="0,25"
+                    Margin="0,25,0,40"
                     Title="SENHA:"
                     Placeholder="*****"/>
 
                 <Button
-                    Margin="45,0">
+                    x:Name="btnEnter"
+                    Margin="60,0">
 
                     <Button.Style>
                         <Style TargetType="Button">

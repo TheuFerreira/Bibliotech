@@ -22,6 +22,7 @@ namespace Bibliotech.View.Users
         public LoginWindow()
         {
             InitializeComponent();
+            
         }
     }
 }
