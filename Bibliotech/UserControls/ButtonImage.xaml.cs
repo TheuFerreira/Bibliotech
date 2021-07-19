@@ -20,6 +20,14 @@ namespace Bibliotech.UserControls
     /// </summary>
     public partial class ButtonImage : UserControl
     {
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(ButtonImage), new PropertyMetadata("Text"));
+
+        public string Text
+        {
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
+        }
+
         public ButtonImage()
         {
             InitializeComponent();

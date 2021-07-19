@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Bibliotech">
     <Application.Resources>
 
+        <SolidColorBrush x:Key="BackgroundSolidColor" Color="#EEEEEE"/>
         <SolidColorBrush x:Key="NormalSolidColor" Color="#939393"/>
         <SolidColorBrush x:Key="ForegroundSolidColor" Color="#480853"/>
         <Color x:Key="NormalColor">#939393</Color>
