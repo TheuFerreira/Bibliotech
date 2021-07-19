@@ -4,9 +4,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Schools"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="SchoolsWindow" Height="450" Width="800">
+        Title="SchoolsWindow" Height="720" Width="1280">
     <Grid>
-        
+        <uc:ComboBoxSearchField
+            x:Name="searchField"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Width="450"/>
+
+        <DataGrid
+            Margin="0,60,0,130">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Visibility="Collapsed"/>
+                <DataGridTextColumn Header="NOME" Width="*"/>
+                <DataGridTextColumn Header="TELEFONE" MinWidth="125"/>
+                <DataGridTextColumn Header="ENDEREÇO" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+            
+            <uc:ButtonImage
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Text="EDITAR"/>
+            
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Text="NOVO"/>
+            
+            <uc:ButtonImage
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Text="ATIVAR/DESATIVAR"/>
+        </Grid>
     </Grid>
 </Window>

@@ -4,9 +4,95 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bibliotech.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             mc:Ignorable="d" >
+    
+    <UserControl.Resources>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="MinWidth" Value="20" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="AllowDrop" Value="true" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate 
+                        TargetType="{x:Type TextBoxBase}">
+
+                        <Border
+                            Padding="5,2,0,2">
+                            
+                            <ScrollViewer 
+                                Margin="0" 
+                                x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </UserControl.Resources>
+    
+    <Border
+        CornerRadius="5"
+        BorderBrush="{StaticResource NormalSolidColor}"
+        BorderThickness="1">
+
+        <Grid>
+
+            <ComboBox
+                MinWidth="100"
+                HorizontalAlignment="Left"/>
+
+            <TextBlock
+                Text="PESQUISAR ESCOLAS"
+                FontSize="16"
+                Margin="107,0,25,0"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource NormalSolidColor}"/>
+
+            <TextBox
+                FontSize="16"
+                MinWidth="250"
+                Margin="100,0,25,0"/>
+
+            <Button
+                HorizontalAlignment="Right"
+                Width="25">
+                
+                <Button.Content>
+                    <Image 
+                        Width="15"
+                        Source="/Bibliotech;component/Resources/img_search.png" 
+                        OpacityMask="#59000000"/>
+                </Button.Content>
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+
+                                    <ContentPresenter 
+                                        HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"/>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </Grid>
+        
+    </Border>
 </UserControl>

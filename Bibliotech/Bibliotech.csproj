@@ -153,9 +153,6 @@
     <Compile Include="UserControls\ButtonImage.xaml.cs">
       <DependentUpon>ButtonImage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ComboBox.xaml.cs">
-      <DependentUpon>ComboBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ComboBoxSearchField.xaml.cs">
       <DependentUpon>ComboBoxSearchField.xaml</DependentUpon>
     </Compile>
@@ -228,10 +225,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ButtonImage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -364,6 +357,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_bibliotech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

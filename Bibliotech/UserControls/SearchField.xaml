@@ -5,8 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bibliotech.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             MinWidth="120">
+    <Border
+        CornerRadius="5"
+        BorderThickness="1"
+        BorderBrush="{StaticResource NormalSolidColor}">
+        
+        <Grid>
+            <!--<TextBox
+                MinWidth="120"
+                FontSize="14"
+                Margin="0,0,20,0"/>
+
+            <Button
+                Width="20"
+                HorizontalAlignment="Right"/>-->
+        </Grid>
+    </Border>
 </UserControl>
