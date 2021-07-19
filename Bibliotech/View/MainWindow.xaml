@@ -4,9 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech"
+        xmlns:ctrl="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <ctrl:TextField 
+            Title="Nome:*"
+            VerticalAlignment="Top" />
         
+        <ctrl:TextField 
+            Title="Nome:"
+            Margin="0,70,0,0"
+            VerticalAlignment="Top"
+            Placeholder="Insira o nome"/>
     </Grid>
 </Window>
