@@ -22,6 +22,7 @@ namespace Bibliotech.UserControls
     {
         public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register("Placeholder", typeof(string), typeof(TextField), new PropertyMetadata("Placeholder"));
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TextField), new PropertyMetadata("Title"));
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextField), new PropertyMetadata(string.Empty));
 
         public string Placeholder
         {
@@ -37,8 +38,8 @@ namespace Bibliotech.UserControls
 
         public string Text
         {
-            get => textBox.Text;
-            set => textBox.Text = value;
+            get => (string)GetValue(TextProperty);
+            set => SetValue(TextProperty, value);
         }
 
         public TextField()
