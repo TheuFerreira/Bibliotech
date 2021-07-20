@@ -52,7 +52,8 @@
                     x:Name="tfServer"
                     Margin="0,5"
                     Title="SERVIDOR:*"
-                    Placeholder="DNS.192.168.0.1"/>
+                    Placeholder="DNS.192.168.0.1"
+                    MaxLength="100"/>
 
                 <Grid 
                     Margin="0,5">
@@ -67,27 +68,31 @@
                         Title="PORTA:*"
                         Placeholder="3306"
                         Margin="0,0,5,0"
-                        Grid.Column="0"/>
+                        Grid.Column="0"
+                        MaxLength="5"/>
 
                     <uc:TextField
                         x:Name="tfDatabase"
                         Title="BANCO:*"
                         Placeholder="BANCO_BIBLIOTECH"
                         Margin="5,0,0,0"
-                        Grid.Column="1"/>
+                        Grid.Column="1"
+                        MaxLength="50"/>
                 </Grid>
 
                 <uc:TextField
                     x:Name="tfUser"
                     Title="USUÁRIO:*"
                     Placeholder="EXEMPLO"
-                    Margin="0,5"/>
+                    Margin="0,5"
+                    MaxLength="25"/>
                 
                 <uc:TextField
                     x:Name="tfPassword"
                     Title="SENHA:*"
                     Placeholder="*****"
-                    Margin="0,5"/>
+                    Margin="0,5"
+                    MaxLength="25"/>
             </StackPanel>
 
             <Grid 

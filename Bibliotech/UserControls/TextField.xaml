@@ -33,6 +33,7 @@
                 BorderBrush="Transparent"
                 FontSize="14"
                 Text="{Binding ElementName=uc, Path=Text}"
+                MaxLength="{Binding ElementName=uc, Path=MaxLength}"
                 TextChanged="TextBox_TextChanged">
 
                 <TextBox.Style>

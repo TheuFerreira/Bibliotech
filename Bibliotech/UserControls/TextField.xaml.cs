@@ -23,6 +23,7 @@ namespace Bibliotech.UserControls
         public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register("Placeholder", typeof(string), typeof(TextField), new PropertyMetadata("Placeholder"));
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TextField), new PropertyMetadata("Title"));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TextField), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register("MaxLength", typeof(int), typeof(TextField), new PropertyMetadata(0));
 
         public string Placeholder
         {
@@ -40,6 +41,12 @@ namespace Bibliotech.UserControls
         {
             get => (string)GetValue(TextProperty);
             set => SetValue(TextProperty, value);
+        }
+
+        public int MaxLength
+        {
+            get => (int)GetValue(MaxLengthProperty);
+            set => SetValue(MaxLengthProperty, value);
         }
 
         public TextField()
