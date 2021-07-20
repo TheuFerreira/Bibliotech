@@ -19,46 +19,29 @@
 
         <Grid>
 
-            <Button 
-                x:Name="btnClose"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top" 
-                Width="50" 
-                Height="39" Click="BtnClose_Click">
+            <Border 
+                Height="40"
+                CornerRadius="35,35,0,0"
+                Background="{StaticResource BarSolidColor}"
+                VerticalAlignment="Top">
 
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
+                <Grid>
+                    <Image 
+                        Margin="15,3,3,3"
+                        HorizontalAlignment="Left"
+                        Source="/Bibliotech;component/Resources/ico_bibliotech.ico"/>
 
-                                    <Border 
-                                        x:Name="bd"
-                                        CornerRadius="0,35,0,0"
-                                        Background="Transparent">
+                    <Button 
+                        x:Name="btnClose"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" 
+                        Width="50" 
+                        Height="39" 
+                        Click="BtnClose_Click"
+                        Style="{StaticResource BtnClose}"/>
+                </Grid>
 
-                                        <TextBlock
-                                            x:Name="tb"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="20"
-                                            FontFamily="Segoe MDL2 Assets" 
-                                            Foreground="Black"
-                                            Text="&#xE711;"/>
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Cursor" Value="Hand"/>
-                                            <Setter TargetName="tb" Property="Foreground" Value="RED"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Button.Style>
-            </Button>
+            </Border>
 
             <StackPanel
                 Orientation="Vertical" 
