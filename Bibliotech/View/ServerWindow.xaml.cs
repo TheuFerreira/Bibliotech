@@ -23,5 +23,10 @@ namespace Bibliotech.View
         {
             InitializeComponent();
         }
+
+        private void ButtonImage_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Teste");
+        }
     }
 }

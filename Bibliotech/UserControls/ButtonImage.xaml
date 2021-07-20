@@ -9,30 +9,44 @@
              MinWidth="140"
              MinHeight="110"
              d:DesignHeight="110" d:DesignWidth="140">
-    <Border
-        CornerRadius="10"
-        Background="{StaticResource BackgroundSolidColor}">
+    <Button
+        Click="Button_Click">
+        <Button.Style>
+            <Style TargetType="Button">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border
+                                CornerRadius="10"
+                                Background="{StaticResource BackgroundSolidColor}">
 
-        <Grid>
+                                <Grid>
 
-            <Image
-                Margin="0,5,0,30"
-                Source="/Bibliotech;component/Resources/img_save.png"/>
+                                    <Image
+                                        Margin="0,5,0,30"
+                                        Source="/Bibliotech;component/Resources/img_save.png"/>
 
-            <Border
-                CornerRadius="0,0,10,10"
-                VerticalAlignment="Bottom"
-                Background="{StaticResource ForegroundSolidColor}">
+                                    <Border
+                                        CornerRadius="0,0,10,10"
+                                        VerticalAlignment="Bottom"
+                                        Background="{StaticResource ForegroundSolidColor}">
 
-                <TextBlock 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Text="{Binding ElementName=uc, Path=Text}"
-                    Margin="0,3"
-                    FontSize="15"
-                    Foreground="White"/>
-            </Border>
-        </Grid>
-            
-    </Border>
+                                        <TextBlock 
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding ElementName=uc, Path=Text}"
+                                            Margin="0,3"
+                                            FontSize="15"
+                                            Foreground="White"/>
+                                    </Border>
+                                </Grid>
+
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Button.Style>
+    </Button>
+    
 </UserControl>

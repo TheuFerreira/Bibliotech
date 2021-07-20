@@ -19,6 +19,8 @@
 
         <Grid>
 
+            <uc:ButtonImage OnClick="ButtonImage_OnClick"/>
+
             <StackPanel
                 Margin="20,60,20,20"
                 VerticalAlignment="Top">

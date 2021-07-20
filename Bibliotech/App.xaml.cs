@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Bibliotech.View.Schools;
+using Bibliotech.View;
 
 namespace Bibliotech
 {
@@ -18,7 +18,7 @@ namespace Bibliotech
         {
             base.OnStartup(e);
 
-            MainWindow = new SchoolsWindow();
+            MainWindow = new ServerWindow();
             MainWindow.ShowDialog();
         }
     }
