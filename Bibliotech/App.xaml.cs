@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Bibliotech.View.Schools;
 using Bibliotech.View.Users;
 
 namespace Bibliotech
@@ -18,7 +19,7 @@ namespace Bibliotech
         {
             base.OnStartup(e);
 
-            MainWindow = new LoginWindow();
+            MainWindow = new AddEditSchoolWindow();
             MainWindow.ShowDialog();
         }
     }

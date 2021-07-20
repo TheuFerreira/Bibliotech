@@ -27,9 +27,11 @@ namespace Bibliotech.View.Schools
         public bool ValidateFields()
         {
             int control = 0;
+            double result = 0;
 
-            if(tfName.Text == "")
+            if((tfName.Text == "") || (double.TryParse(tfName.Text, out result)))
             {
+                MessageBox.Show("Escreva um nome válido! \nEle deve ser composto por letras. \nNúmeros apenas não são aceitos.");
                 tfName.Focus();
                 
             }
@@ -38,8 +40,9 @@ namespace Bibliotech.View.Schools
                 control++;
             }
 
-            if(tfCity.Text == "")
+            if((tfCity.Text == "") || (double.TryParse(tfCity.Text, out result)))
             {
+                MessageBox.Show("Escreva um nome de cidade válido! \nEle deve ser composto por letras. \nNúmeros apenas não são aceitos.");
                 tfCity.Focus();
             }
             else
@@ -49,6 +52,7 @@ namespace Bibliotech.View.Schools
 
             if(tfDistrict.Text == "")
             {
+                MessageBox.Show("Escreva o nome de um bairro! \nEste campo é obrigatório, portanto preencha-o para continuar.");
                 tfDistrict.Focus();
             }
             else
@@ -56,35 +60,30 @@ namespace Bibliotech.View.Schools
                 control++;
             }
 
-            if(tfPhone.Text.Length < 10)
+            if(((tfPhone.Text.Length >= 8) || (tfPhone.Text == "")) && (double.TryParse(tfPhone.Text, out result)))
             {
+                control++;
+                
+            }
+            else
+            {
+                MessageBox.Show("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
                 tfPhone.Focus();
             }
-            else
+
+            if(((double.TryParse(tfNumber.Text, out result)) && result>=0) || (tfNumber.Text == ""))
             {
                 control++;
-            }
-
-            if(tfStreet.Text == "")
-            {
-                tfStreet.Focus();
+                
             }
             else
             {
-                control++;
-            }
-
-            if(!(double.TryParse(tfNumber.Text, out double result)))
-            {
+                MessageBox.Show("Insira um número válido! \nOu deixe este campo em branco.");
                 tfNumber.Focus();
             }
-            else
-            {
-                control++;
-            }
 
 
-            if(control < 6)
+            if(control < 5)
             {
                 return false;
             }
@@ -97,7 +96,14 @@ namespace Bibliotech.View.Schools
 
         private void btnSave_OnClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("certo");
+            if (ValidateFields())
+            {
+                MessageBox.Show("enoix");
+            }
         }
+
+ 
+
+
     }
 }
