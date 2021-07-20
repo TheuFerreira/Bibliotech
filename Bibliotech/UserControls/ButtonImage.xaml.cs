@@ -22,6 +22,8 @@ namespace Bibliotech.UserControls
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(ButtonImage), new PropertyMetadata("Text"));
 
+        public event RoutedEventHandler OnClick;
+
         public string Text
         {
             get => (string)GetValue(TextProperty);
@@ -31,6 +33,11 @@ namespace Bibliotech.UserControls
         public ButtonImage()
         {
             InitializeComponent();
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OnClick?.Invoke(sender, e);
         }
     }
 }
