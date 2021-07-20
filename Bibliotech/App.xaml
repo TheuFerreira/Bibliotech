@@ -8,8 +8,40 @@
         <SolidColorBrush x:Key="NormalSolidColor" Color="#939393"/>
         <SolidColorBrush x:Key="ForegroundSolidColor" Color="#480853"/>
         <SolidColorBrush x:Key="ConfirmSolidColor" Color="#37BF07"/>
+        <SolidColorBrush x:Key="BarSolidColor" Color="#4169E1"/>
         <Color x:Key="NormalColor">#939393</Color>
         <Color x:Key="HoverColor">#46474B</Color>
+
+        <Style x:Key="BtnClose" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+
+                        <Border 
+                            x:Name="bd"
+                            CornerRadius="0,35,0,0"
+                            Background="Transparent">
+
+                            <TextBlock
+                                x:Name="tb"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                FontFamily="Segoe MDL2 Assets" 
+                                Foreground="White"
+                                Text="&#xE711;"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter TargetName="tb" Property="Foreground" Value="RED"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </Application.Resources>
 </Application>

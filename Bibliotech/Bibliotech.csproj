@@ -135,6 +135,7 @@
     <Compile Include="Model\DAO\DAOLector.cs" />
     <Compile Include="Model\DAO\DAOLending.cs" />
     <Compile Include="Model\DAO\DAOSchool.cs" />
+    <Compile Include="Model\DAO\DAOServer.cs" />
     <Compile Include="Model\DAO\DAOUser.cs" />
     <Compile Include="Model\Entities\Address.cs" />
     <Compile Include="Model\Entities\Author.cs" />
@@ -147,6 +148,8 @@
     <Compile Include="Model\Entities\School.cs" />
     <Compile Include="Model\Entities\User.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Singletons\Server.cs" />
+    <Compile Include="Singletons\Session.cs" />
     <Compile Include="UserControls\Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
@@ -165,6 +168,7 @@
     <Compile Include="UserControls\CustomDialog\TextFieldDialog.xaml.cs">
       <DependentUpon>TextFieldDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CustomEnums\FieldType.cs" />
     <Compile Include="UserControls\SearchField.xaml.cs">
       <DependentUpon>SearchField.xaml</DependentUpon>
     </Compile>

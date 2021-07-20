@@ -33,7 +33,9 @@
                 BorderBrush="Transparent"
                 FontSize="14"
                 Text="{Binding ElementName=uc, Path=Text}"
-                TextChanged="TextBox_TextChanged">
+                MaxLength="{Binding ElementName=uc, Path=MaxLength}"
+                TextChanged="TextBox_TextChanged"
+                PreviewTextInput="TextBox_PreviewTextInput">
 
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">

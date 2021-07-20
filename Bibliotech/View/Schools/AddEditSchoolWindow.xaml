@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Bibliotech.View.Schools"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="AddEditSchoolWindow" Height="469.5" Width="875">
+        Title="AddEditSchoolWindow" Height="469" Width="890">
     <Grid>
 
         <TextBlock 
@@ -23,6 +23,7 @@
 
             <uc:TextField 
                 x:Name="tfName"
+                MaxLength="200"
                 Margin="10"
                 VerticalAlignment="Top"
                 Title="NOME:*"
@@ -33,6 +34,7 @@
                 
                 <uc:TextField 
                     x:Name="tfCity"
+                    MaxLength="45"
                     VerticalAlignment="Top"
                     Title="CIDADE:*"
                     Placeholder="CIDADE"
@@ -40,6 +42,7 @@
 
                 <uc:TextField 
                     x:Name="tfDistrict"
+                    MaxLength="45"
                     VerticalAlignment="Top"
                     Title="BAIRRO:*"
                     Placeholder="BAIRRO"
@@ -49,8 +52,10 @@
                 <uc:TextField 
                     x:Name="tfPhone"
                     VerticalAlignment="Top"
+                    MaxLength="11"
+                    FieldType="Number"
                     Title="TELEFONE:"
-                    Placeholder="(DD) 0000-0000" 
+                    Placeholder="(DD) 00000-0000" 
                     HorizontalAlignment="Right" Width="178" />
             </Grid>
 
@@ -59,6 +64,7 @@
 
                 <uc:TextField 
                     x:Name="tfStreet"
+                    MaxLength="100"
                     VerticalAlignment="Top"
                     Title="RUA:"
                     Placeholder="AV/RUA"
@@ -67,6 +73,7 @@
                 
                 <uc:TextField 
                     x:Name="tfNumber"
+                    MaxLength="5"
                     VerticalAlignment="Top"
                     Title="NÚMERO:"
                     Placeholder="85"
