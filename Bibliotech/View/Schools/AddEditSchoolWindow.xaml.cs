@@ -23,5 +23,81 @@ namespace Bibliotech.View.Schools
         {
             InitializeComponent();
         }
+
+        public bool ValidateFields()
+        {
+            int control = 0;
+
+            if(tfName.Text == "")
+            {
+                tfName.Focus();
+                
+            }
+            else
+            {
+                control++;
+            }
+
+            if(tfCity.Text == "")
+            {
+                tfCity.Focus();
+            }
+            else
+            {
+                control++;
+            }
+
+            if(tfDistrict.Text == "")
+            {
+                tfDistrict.Focus();
+            }
+            else
+            {
+                control++;
+            }
+
+            if(tfPhone.Text.Length < 10)
+            {
+                tfPhone.Focus();
+            }
+            else
+            {
+                control++;
+            }
+
+            if(tfStreet.Text == "")
+            {
+                tfStreet.Focus();
+            }
+            else
+            {
+                control++;
+            }
+
+            if(!(double.TryParse(tfNumber.Text, out double result)))
+            {
+                tfNumber.Focus();
+            }
+            else
+            {
+                control++;
+            }
+
+
+            if(control < 6)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+            
+        }
+
+        private void btnSave_OnClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("certo");
+        }
     }
 }
