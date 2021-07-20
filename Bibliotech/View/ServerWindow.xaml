@@ -10,6 +10,7 @@
         Background="Transparent"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
+        Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="ServerWindow" Height="350" Width="600" ResizeMode="NoResize">
 
@@ -19,11 +20,36 @@
 
         <Grid>
 
+            <Border 
+                Height="40"
+                CornerRadius="35,35,0,0"
+                Background="{StaticResource BarSolidColor}"
+                VerticalAlignment="Top">
+
+                <Grid>
+                    <Image 
+                        Margin="15,3,3,3"
+                        HorizontalAlignment="Left"
+                        Source="/Bibliotech;component/Resources/ico_bibliotech.ico"/>
+
+                    <Button 
+                        x:Name="btnClose"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top" 
+                        Width="50" 
+                        Height="40"
+                        Click="BtnClose_Click"
+                        Style="{StaticResource BtnClose}"/>
+                </Grid>
+                
+            </Border>
+            
             <StackPanel
                 Margin="20,60,20,20"
                 VerticalAlignment="Top">
 
                 <uc:TextField
+                    x:Name="tfServer"
                     Margin="0,5"
                     Title="SERVIDOR:*"
                     Placeholder="DNS.192.168.0.1"/>
@@ -37,12 +63,14 @@
                     </Grid.ColumnDefinitions>
 
                     <uc:TextField 
+                        x:Name="tfPort"
                         Title="PORTA:*"
                         Placeholder="3306"
                         Margin="0,0,5,0"
                         Grid.Column="0"/>
 
                     <uc:TextField
+                        x:Name="tfDatabase"
                         Title="BANCO:*"
                         Placeholder="BANCO_BIBLIOTECH"
                         Margin="5,0,0,0"
@@ -50,13 +78,15 @@
                 </Grid>
 
                 <uc:TextField
+                    x:Name="tfUser"
                     Title="USUÁRIO:*"
                     Placeholder="EXEMPLO"
                     Margin="0,5"/>
                 
                 <uc:TextField
+                    x:Name="tfPassword"
                     Title="SENHA:*"
-                    Placeholder="EXEPLO123"
+                    Placeholder="*****"
                     Margin="0,5"/>
             </StackPanel>
 
@@ -69,8 +99,10 @@
                 </Grid.ColumnDefinitions>
 
                 <Button
+                    x:Name="btnTestConnection"
                     Grid.Column="0"
-                    Background="{StaticResource BackgroundSolidColor}" >
+                    Background="{StaticResource BackgroundSolidColor}" 
+                    Click="BtnTestConnection_Click" >
 
                     <Button.Style>
                         <Style  TargetType="Button">
@@ -80,16 +112,22 @@
                                         <Border
                                             CornerRadius="0,0,0,35"
                                             Background="{TemplateBinding Background}" 
-                                            Height="45">
+                                            Height="35">
 
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 Margin="8"
-                                                FontSize="20"
+                                                FontSize="18"
                                                 Text="TESTAR CONEXÃO"/>
 
                                         </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -99,9 +137,11 @@
                 </Button>
 
                 <Button
+                    x:Name="btnConfirm"
                     Grid.Column="1"
                     Background="{StaticResource ConfirmSolidColor}" 
-                    Foreground="White">
+                    Foreground="White"
+                    Click="BtnConfirm_Click">
 
                     <Button.Style>
                         <Style  TargetType="Button">
@@ -111,17 +151,23 @@
                                         <Border
                                             CornerRadius="0,0,35,0"
                                             Background="{TemplateBinding Background}" 
-                                            Height="45">
+                                            Height="35">
 
                                             <TextBlock
                                                 Foreground="{TemplateBinding Foreground}"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 Margin="8"
-                                                FontSize="20"
+                                                FontSize="18"
                                                 Text="CONFIRMAR"/>
 
                                         </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
