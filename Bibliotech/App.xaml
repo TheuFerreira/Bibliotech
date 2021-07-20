@@ -7,6 +7,7 @@
         <SolidColorBrush x:Key="BackgroundSolidColor" Color="#EEEEEE"/>
         <SolidColorBrush x:Key="NormalSolidColor" Color="#939393"/>
         <SolidColorBrush x:Key="ForegroundSolidColor" Color="#480853"/>
+        <SolidColorBrush x:Key="ConfirmSolidColor" Color="#37BF07"/>
         <Color x:Key="NormalColor">#939393</Color>
         <Color x:Key="HoverColor">#46474B</Color>
 

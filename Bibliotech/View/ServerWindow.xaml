@@ -4,9 +4,137 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="ServerWindow" Height="450" Width="800">
-    <Grid>
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="ServerWindow" Height="350" Width="600" ResizeMode="NoResize">
+
+    <Border
+        Background="White"
+        CornerRadius="35">
+
+        <Grid>
+
+            <StackPanel
+                Margin="20,60,20,20"
+                VerticalAlignment="Top">
+
+                <uc:TextField
+                    Margin="0,5"
+                    Title="SERVIDOR:*"
+                    Placeholder="DNS.192.168.0.1"/>
+
+                <Grid 
+                    Margin="0,5">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <uc:TextField 
+                        Title="PORTA:*"
+                        Placeholder="3306"
+                        Margin="0,0,5,0"
+                        Grid.Column="0"/>
+
+                    <uc:TextField
+                        Title="BANCO:*"
+                        Placeholder="BANCO_BIBLIOTECH"
+                        Margin="5,0,0,0"
+                        Grid.Column="1"/>
+                </Grid>
+
+                <uc:TextField
+                    Title="USUÁRIO:*"
+                    Placeholder="EXEMPLO"
+                    Margin="0,5"/>
+                
+                <uc:TextField
+                    Title="SENHA:*"
+                    Placeholder="EXEPLO123"
+                    Margin="0,5"/>
+            </StackPanel>
+
+            <Grid 
+                VerticalAlignment="Bottom">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Grid.Column="0"
+                    Background="{StaticResource BackgroundSolidColor}" >
+
+                    <Button.Style>
+                        <Style  TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border
+                                            CornerRadius="0,0,0,35"
+                                            Background="{TemplateBinding Background}" 
+                                            Height="45">
+
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="8"
+                                                FontSize="20"
+                                                Text="TESTAR CONEXÃO"/>
+
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+
+                </Button>
+
+                <Button
+                    Grid.Column="1"
+                    Background="{StaticResource ConfirmSolidColor}" 
+                    Foreground="White">
+
+                    <Button.Style>
+                        <Style  TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border
+                                            CornerRadius="0,0,35,0"
+                                            Background="{TemplateBinding Background}" 
+                                            Height="45">
+
+                                            <TextBlock
+                                                Foreground="{TemplateBinding Foreground}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="8"
+                                                FontSize="20"
+                                                Text="CONFIRMAR"/>
+
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                    
+                </Button>
+
+            </Grid>
+            
+        </Grid>
         
-    </Grid>
+        
+
+    </Border>
 </Window>

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Bibliotech.View.Schools"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Title="SchoolsWindow" Height="720" Width="1280">
     <Grid>
         <uc:ComboBoxSearchField
