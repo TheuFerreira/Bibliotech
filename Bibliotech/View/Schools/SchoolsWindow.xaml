@@ -16,8 +16,8 @@
             VerticalAlignment="Top"
             Width="450"/>
 
-        <DataGrid
-            Margin="0,60,0,130">
+        <DataGrid x:Name="SchoolGrid"
+            Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Visibility="Collapsed"/>
@@ -45,7 +45,7 @@
             <uc:ButtonImage
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Text="ATIVAR/DESATIVAR"/>
+                Text="ATIVAR/DESATIVAR" OnClick="ButtonImage_OnClick"/>
         </Grid>
     </Grid>
 </Window>
