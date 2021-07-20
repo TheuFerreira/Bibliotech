@@ -84,13 +84,16 @@
                     VerticalAlignment="Top"
                     FontSize="40"/>
 
-                <TextBox 
+                <uc:TextField 
                     x:Name="tfUser"
-                />
-                <TextBox
+                    Title="USUÁRIO:"
+                    Placeholder="USUÁRIO"/>
+                
+                <uc:TextField
                     x:Name="tfPassword"
                     Margin="0,25,0,40"
-                />
+                    Title="SENHA:"
+                    Placeholder="****" />
 
                 <Button
                     x:Name="btnEnter"
