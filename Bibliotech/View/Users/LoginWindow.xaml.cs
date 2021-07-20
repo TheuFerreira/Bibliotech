@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 
 namespace Bibliotech.View.Users
 {
@@ -18,15 +20,31 @@ namespace Bibliotech.View.Users
     /// Lógica interna para LoginWindow.xaml
     /// </summary>
     public partial class LoginWindow : Window
-    {
+    { 
+        public static int IdBranch { get; set; }
+        public DAOUser DaoUser;
+
         public LoginWindow()
         {
             InitializeComponent();
+            DaoUser = new DAOUser();
         }
 
-        private void BtnEnter_Click(object sender, RoutedEventArgs e)
+        private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
+            String user = tfUser.Text;
+            String password = tfPassword.Text;
+            int result = await DaoUser.IsValidUser(user, password);
+            //if(result == 1)
+            {
+                MessageBox.Show("Connect");
+            }
+            
+        }
 
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

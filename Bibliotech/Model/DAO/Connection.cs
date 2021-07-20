@@ -10,7 +10,7 @@ namespace Bibliotech.Model.DAO
     public abstract class Connection
     { 
         protected MySqlConnection SqlConnection { get; private set; }
-        private const string Connection_string = "Server=localhost;Port=3306;Database=bibliotech;Username=financas;Password=@bibliotech123;AllowZeroDateTime=true;";
+        private const string Connection_string = "Server=localhost;Port=3306;Database=bibliotech;Username=bibliotech;Password=@bibliotech123;AllowZeroDateTime=true;";
 
         protected async Task Connect()
         {

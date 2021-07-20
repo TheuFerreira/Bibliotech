@@ -24,7 +24,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top" 
                 Width="50" 
-                Height="39">
+                Height="39" Click="BtnClose_Click">
 
                 <Button.Style>
                     <Style TargetType="Button">
@@ -84,16 +84,13 @@
                     VerticalAlignment="Top"
                     FontSize="40"/>
 
-                <uc:TextField 
+                <TextBox 
                     x:Name="tfUser"
-                    Title="USUÁRIO:"
-                    Placeholder="USUÁRIO"/>
-                
-                <uc:TextField 
+                />
+                <TextBox
                     x:Name="tfPassword"
                     Margin="0,25,0,40"
-                    Title="SENHA:"
-                    Placeholder="*****"/>
+                />
 
                 <Button
                     x:Name="btnEnter"
