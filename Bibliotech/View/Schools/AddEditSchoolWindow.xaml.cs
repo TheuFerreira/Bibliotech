@@ -26,71 +26,42 @@ namespace Bibliotech.View.Schools
 
         public bool ValidateFields()
         {
-            int control = 0;
-            double result = 0;
-
-            if((tfName.Text == "") || (double.TryParse(tfName.Text, out result)))
+            
+            if((String.IsNullOrEmpty(tfName.Text)))
             {
-                MessageBox.Show("Escreva um nome válido! \nEle deve ser composto por letras. \nNúmeros apenas não são aceitos.");
-                tfName.Focus();
+                MessageBox.Show("Escreva um nome válido! \n");
+                return false;
                 
             }
-            else
-            {
-                control++;
-            }
-
-            if((tfCity.Text == "") || (double.TryParse(tfCity.Text, out result)))
-            {
-                MessageBox.Show("Escreva um nome de cidade válido! \nEle deve ser composto por letras. \nNúmeros apenas não são aceitos.");
-                tfCity.Focus();
-            }
-            else
-            {
-                control++;
-            }
-
-            if(tfDistrict.Text == "")
-            {
-                MessageBox.Show("Escreva o nome de um bairro! \nEste campo é obrigatório, portanto preencha-o para continuar.");
-                tfDistrict.Focus();
-            }
-            else
-            {
-                control++;
-            }
-
-            if(((tfPhone.Text.Length >= 8) || (tfPhone.Text == "")) && (double.TryParse(tfPhone.Text, out result)))
-            {
-                control++;
-                
-            }
-            else
-            {
-                MessageBox.Show("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
-                tfPhone.Focus();
-            }
-
-            if(((double.TryParse(tfNumber.Text, out result)) && result>=0) || (tfNumber.Text == ""))
-            {
-                control++;
-                
-            }
-            else
-            {
-                MessageBox.Show("Insira um número válido! \nOu deixe este campo em branco.");
-                tfNumber.Focus();
-            }
 
 
-            if(control < 5)
+            if((String.IsNullOrEmpty(tfCity.Text)))
             {
+                MessageBox.Show("Escreva um nome de cidade válido! \n");
                 return false;
             }
-            else
+
+
+            if(String.IsNullOrEmpty(tfDistrict.Text))
             {
-                return true;
+                MessageBox.Show("Escreva o nome de um bairro! \nEste campo é obrigatório, portanto preencha-o para continuar.");
+                return false;
             }
+
+
+            if (!String.IsNullOrEmpty(tfPhone.Text))
+            {
+
+
+                if (tfPhone.Text.Length <= 8)
+                {
+                    MessageBox.Show("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
+                    return false;
+                }
+            }
+
+
+            return true;
             
         }
 

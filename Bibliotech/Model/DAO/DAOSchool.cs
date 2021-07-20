@@ -8,5 +8,6 @@ namespace Bibliotech.Model.DAO
 {
     class DAOSchool
     {
+
     }
 }
