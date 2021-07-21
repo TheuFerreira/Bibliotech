@@ -23,6 +23,7 @@ namespace Bibliotech.View.Users
     { 
         public static int IdBranch { get; set; }
         public DAOUser DaoUser;
+        public User User;
 
         public LoginWindow()
         {
@@ -34,11 +35,13 @@ namespace Bibliotech.View.Users
         {
             String user = tfUser.Text;
             String password = tfPassword.Text;
-            int result = await DaoUser.IsValidUser(user, password);
-            //if(result == 1)
+            User = await DaoUser.IsValidUser(user, password);
+            if(User != null)
             {
-                MessageBox.Show("Connect");
+                MessageBox.Show("Hello World");
             }
+            
+         
             
         }
 

@@ -19,7 +19,7 @@ namespace Bibliotech
         {
             base.OnStartup(e);
 
-            MainWindow = new AddEditSchoolWindow();
+            MainWindow = new LoginWindow();
             MainWindow.ShowDialog();
         }
     }
