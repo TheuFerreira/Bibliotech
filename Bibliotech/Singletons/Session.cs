@@ -1,4 +1,6 @@
-﻿namespace Bibliotech.Singletons
+﻿using Bibliotech.Model.Entities;
+
+namespace Bibliotech.Singletons
 {
     public class Session
     {
@@ -14,6 +16,7 @@
         }
         private static Session session;
 
+        public User User { get; set; }
         public Server Server { get; set; }
 
         private Session()
