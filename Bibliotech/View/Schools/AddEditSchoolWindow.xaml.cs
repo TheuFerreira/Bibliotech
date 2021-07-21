@@ -73,7 +73,7 @@ namespace Bibliotech.View.Schools
                 MessageBox.Show("enoix");
                 DAOSchool ds = new DAOSchool();
 
-                await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
+                 await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
             }
         }
 
