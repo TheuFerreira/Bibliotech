@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="Login" Height="640" Width="360" 
+        Title="Login" Height="600" Width="360" 
         ResizeMode="NoResize" 
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStyle="None" 
@@ -107,6 +107,35 @@
 
             </StackPanel>
 
+            <Button
+                x:Name="btnDatabase"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Width="75"
+                Height="45">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Image 
+                                        Margin="5"
+                                        Source="/Bibliotech;component/Resources/img_database.png"/>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+                
+            </Button>
+            
         </Grid>
 
     </Border>
