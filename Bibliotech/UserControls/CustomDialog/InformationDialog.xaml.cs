@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
     /// <summary>
     /// Interação lógica para InformationDialog.xam
     /// </summary>
-    public partial class InformationDialog : UserControl
+    public partial class InformationDialog : Window
     {
-        public InformationDialog()
+        public InformationDialog(string title, string description, TypeDialog typeDialog)
         {
             InitializeComponent();
+
+            tbTitle.Text = title;
+            tbDescription.Text = description;
+
+            switch (typeDialog)
+            {
+                case TypeDialog.Error:
+                    img.Source = new BitmapImage(new Uri("pack://application:,,,/Bibliotech;component/Resources/img_error.png"));
+                    break;
+                case TypeDialog.Success:
+                    img.Source = new BitmapImage(new Uri("pack://application:,,,/Bibliotech;component/Resources/img_ok.png"));
+                    break;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

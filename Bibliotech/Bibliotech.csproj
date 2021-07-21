@@ -168,6 +168,7 @@
     <Compile Include="UserControls\CustomDialog\TextFieldDialog.xaml.cs">
       <DependentUpon>TextFieldDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CustomDialog\TypeDialog.cs" />
     <Compile Include="UserControls\CustomEnums\FieldType.cs" />
     <Compile Include="UserControls\SearchField.xaml.cs">
       <DependentUpon>SearchField.xaml</DependentUpon>
@@ -370,6 +371,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_ok.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

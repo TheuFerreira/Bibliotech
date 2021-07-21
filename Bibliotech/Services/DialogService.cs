@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bibliotech.UserControls.CustomDialog;
 
 namespace Bibliotech.Services
 {
-    class DialogService
+    public class DialogService
     {
+        public void ShowError(string description)
+        {
+            _ = new InformationDialog("ERRO", description, TypeDialog.Error).ShowDialog();
+        }
+
+        public void ShowSuccess(string description)
+        {
+            _ = new InformationDialog("SUCESSO", description, TypeDialog.Success).ShowDialog();
+        }
     }
 }

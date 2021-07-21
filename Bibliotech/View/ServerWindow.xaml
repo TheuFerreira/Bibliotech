@@ -118,13 +118,13 @@
                                         <Border
                                             CornerRadius="0,0,0,35"
                                             Background="{TemplateBinding Background}" 
-                                            Height="35">
+                                            Height="45">
 
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 Margin="8"
-                                                FontSize="18"
+                                                FontSize="20"
                                                 Text="TESTAR CONEXÃO"/>
 
                                         </Border>
@@ -157,14 +157,14 @@
                                         <Border
                                             CornerRadius="0,0,35,0"
                                             Background="{TemplateBinding Background}" 
-                                            Height="35">
+                                            Height="45">
 
                                             <TextBlock
                                                 Foreground="{TemplateBinding Foreground}"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center"
                                                 Margin="8"
-                                                FontSize="18"
+                                                FontSize="20"
                                                 Text="CONFIRMAR"/>
 
                                         </Border>

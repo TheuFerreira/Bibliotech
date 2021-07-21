@@ -1,4 +1,5 @@
 ﻿using Bibliotech.Model.DAO;
+using Bibliotech.Services;
 using Bibliotech.Singletons;
 using System.Windows;
 
@@ -10,12 +11,14 @@ namespace Bibliotech.View
     public partial class ServerWindow : Window
     {
         private readonly DAOServer daoServer;
+        private readonly DialogService dialogService;
 
         public ServerWindow()
         {
             InitializeComponent();
 
             daoServer = new DAOServer();
+            dialogService = new DialogService();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -37,7 +40,7 @@ namespace Bibliotech.View
         {
             if (ValidatedFields() == false)
             {
-                MessageBox.Show("Preencha todos os campos com *!!!");
+                dialogService.ShowError("Preencha todos os campos com *!!!");
                 return;
             }
 
@@ -50,16 +53,16 @@ namespace Bibliotech.View
             btnConfirm.IsEnabled = true;
 
             if (result)
-                MessageBox.Show("Conexão bem sucedida");
+                dialogService.ShowSuccess("Conexão bem sucedida!!!");
             else
-                MessageBox.Show("Conexão mal sucedida");
+                dialogService.ShowError("Conexão mal sucedida!!!");
         }
 
         private void BtnConfirm_Click(object sender, RoutedEventArgs e)
         {
             if (ValidatedFields() == false)
             {
-                MessageBox.Show("Preencha todos os campos com *!!!");
+                dialogService.ShowError("Preencha todos os campos com *!!!");
                 return;
             }
 
@@ -70,7 +73,7 @@ namespace Bibliotech.View
             Session.Instance.Server.Password = tfPassword.Text;
             Session.Instance.Server.Save();
 
-            MessageBox.Show("Configurações da base de dados salva!!!");
+            dialogService.ShowSuccess("Configurações Salvas!!!");
 
             DialogResult = true;
             Close();
