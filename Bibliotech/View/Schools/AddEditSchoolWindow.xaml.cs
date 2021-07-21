@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bibliotech.Model.DAO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -65,11 +66,14 @@ namespace Bibliotech.View.Schools
             
         }
 
-        private void btnSave_OnClick(object sender, RoutedEventArgs e)
+        private async void btnSave_OnClick(object sender, RoutedEventArgs e)
         {
             if (ValidateFields())
             {
                 MessageBox.Show("enoix");
+                DAOSchool ds = new DAOSchool();
+
+                await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
             }
         }
 
