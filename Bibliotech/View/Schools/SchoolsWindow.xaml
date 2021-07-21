@@ -16,12 +16,12 @@
             VerticalAlignment="Top"
             Width="450"/>
 
-        <DataGrid x:Name="SchoolGrid"
-            Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True">
-            
+        <DataGrid x:Name="schoolGrid"
+            Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14">
+
             <DataGrid.Columns>
-                <DataGridTextColumn Visibility="Collapsed"/>
-                <DataGridTextColumn Header="NOME" Width="*"/>
+                <DataGridTextColumn Visibility="Hidden" Header="Id"/>
+                <DataGridTextColumn Header="NOME" Width="*" FontSize="14" HeaderStringFormat="name"/>
                 <DataGridTextColumn Header="TELEFONE" MinWidth="125"/>
                 <DataGridTextColumn Header="ENDEREÇO" Width="*"/>
             </DataGrid.Columns>
@@ -31,21 +31,22 @@
             Margin="30,0,30,10"
             Height="110"
             VerticalAlignment="Bottom">
-            
+
             <uc:ButtonImage
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Text="EDITAR"/>
-            
+
             <uc:ButtonImage
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Text="NOVO"/>
-            
+
             <uc:ButtonImage
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Text="ATIVAR/DESATIVAR" OnClick="ButtonImage_OnClick"/>
         </Grid>
+        <uc:Button HorizontalAlignment="Left" Height="23" Margin="899,24,0,0" VerticalAlignment="Top" Width="56" Background="Black" MouseDown="Button_MouseDown"/>
     </Grid>
 </Window>

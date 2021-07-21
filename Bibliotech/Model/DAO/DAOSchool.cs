@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using MySqlConnector;
 using System.Windows;
-
+using Bibliotech.Services;
+using System.Data;
+using System.Windows.Controls;
 
 namespace Bibliotech.Model.DAO
 {
     public class DAOSchool: Connection
     {
+        DialogService dialogService = new DialogService();
         public async Task InsertSchool(String name, String city, String dist, String phone, String street, String number)
         {
             await Connect();
@@ -49,12 +52,103 @@ namespace Bibliotech.Model.DAO
 
                 await transaction.CommitAsync();
 
+                dialogService.ShowSuccess("Usuário salvo com sucesso");
+
             }
             catch (MySqlException)
             {
                 await transaction.RollbackAsync();
-                throw;
+                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<int> UserCount()
+        {
+            await Connect();
+            int number;
+            String strSql = "select count(id_user) from users;";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+                object result = await cmd.ExecuteScalarAsync();
+                number = Convert.ToInt32(result.ToString());              
+            }
+            catch (MySqlException)
+            {
+                number = -1;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+
+            return number;
+        }
+
+        public async Task FillDataGrid(DataGrid dataGrid)
+        {
+            await Connect();
+
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco "+
+                            "from branch as b "+
+                            "inner join address as a on b.id_address = a.id_address; ";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+                await cmd.ExecuteNonQueryAsync();
+
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable("branch");
+                adapter.Fill(dt);
+                dataGrid.ItemsSource = dt.DefaultView;
+                adapter.Update(dt);
                 
+            }
+            catch (Exception)
+            {
+                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
+                
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+
+
+        public async Task FillDataGrid(DataGrid dataGrid, String query)
+        {
+            await Connect();
+
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco " +
+                            "from branch as b " +
+                            "inner join address as a on b.id_address = a.id_address " +
+                            "where b.name like \"%@query%\";"; 
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+                cmd.Parameters.AddWithValue("@query", query);
+                await cmd.ExecuteNonQueryAsync();
+
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable("branch");
+                adapter.Fill(dt);
+                dataGrid.ItemsSource = dt.DefaultView;
+                adapter.Update(dt);
+
+            }
+            catch (Exception)
+            {
+                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
+
             }
             finally
             {

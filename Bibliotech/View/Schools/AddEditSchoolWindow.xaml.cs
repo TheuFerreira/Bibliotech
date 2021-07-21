@@ -1,4 +1,5 @@
 ﻿using Bibliotech.Model.DAO;
+using Bibliotech.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace Bibliotech.View.Schools
     /// </summary>
     public partial class AddEditSchoolWindow : Window
     {
+        DialogService dialogService = new DialogService();
+        DAOSchool ds = new DAOSchool();
+
         public AddEditSchoolWindow()
         {
             InitializeComponent();
@@ -30,7 +34,7 @@ namespace Bibliotech.View.Schools
             
             if((String.IsNullOrEmpty(tfName.Text)))
             {
-                MessageBox.Show("Escreva um nome válido! \n");
+                dialogService.ShowError("Escreva um nome válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
                 return false;
                 
             }
@@ -38,14 +42,15 @@ namespace Bibliotech.View.Schools
 
             if((String.IsNullOrEmpty(tfCity.Text)))
             {
-                MessageBox.Show("Escreva um nome de cidade válido! \n");
+                dialogService.ShowError("Escreva um nome de cidade válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
                 return false;
             }
 
 
             if(String.IsNullOrEmpty(tfDistrict.Text))
             {
-                MessageBox.Show("Escreva o nome de um bairro! \nEste campo é obrigatório, portanto preencha-o para continuar.");
+                
+                dialogService.ShowError("Escreva o nome de um bairro válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
                 return false;
             }
 
@@ -56,7 +61,7 @@ namespace Bibliotech.View.Schools
 
                 if (tfPhone.Text.Length <= 8)
                 {
-                    MessageBox.Show("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
+                    dialogService.ShowError("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
                     return false;
                 }
             }
@@ -70,15 +75,14 @@ namespace Bibliotech.View.Schools
         {
             if (ValidateFields())
             {
-                MessageBox.Show("enoix");
-                DAOSchool ds = new DAOSchool();
-
                  await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
             }
         }
 
- 
-
-
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            int aux = await ds.UserCount();
+            tfUsers.Text = aux.ToString();
+        }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Bibliotech.View.Schools"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="AddEditSchoolWindow" Height="469" Width="890">
+        Title="AddEditSchoolWindow" Height="469" Width="890" Loaded="Window_Loaded">
     <Grid>
 
         <TextBlock 
