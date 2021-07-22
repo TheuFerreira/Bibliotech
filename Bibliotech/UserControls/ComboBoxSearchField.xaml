@@ -48,6 +48,7 @@
                 HorizontalAlignment="Left"/>
 
             <TextBlock
+                x:Name="tbPlaceholder"
                 Text="PESQUISAR ESCOLAS"
                 FontSize="16"
                 Margin="107,0,25,0"
@@ -55,13 +56,16 @@
                 Foreground="{StaticResource NormalSolidColor}"/>
 
             <TextBox
+                x:Name="tb"
                 FontSize="16"
                 MinWidth="250"
-                Margin="100,0,25,0"/>
+                Margin="100,0,25,0"
+                TextChanged="Tb_TextChanged"/>
 
             <Button
                 HorizontalAlignment="Right"
-                Width="25">
+                Width="25"
+                Click="Button_Click">
                 
                 <Button.Content>
                     <Image 
