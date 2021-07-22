@@ -34,9 +34,11 @@ namespace Bibliotech.View.Schools
 
         private void ButtonImage_OnClick(object sender, RoutedEventArgs e)
         {
-           
+            object obj = new object();
             List<DataGridCellInfo> gridCells = new List<DataGridCellInfo>();
             //obj = schoolGrid.SelectedCells.ElementAt(1).Item ;
+          
+            
 
         }
 

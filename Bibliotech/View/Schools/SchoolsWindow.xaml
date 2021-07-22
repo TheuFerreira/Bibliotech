@@ -17,9 +17,10 @@
             Width="450" Click="searchField_Click"/>
 
         <DataGrid x:Name="schoolGrid"
-            Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14">
+            Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14"
+            ItemsSource="{Binding}">
 
-           
+
         </DataGrid>
 
         <Grid
