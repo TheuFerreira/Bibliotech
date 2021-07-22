@@ -94,7 +94,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco "+
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status "+
                             "from branch as b "+
                             "inner join address as a on b.id_address = a.id_address; ";
 
@@ -129,7 +129,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco " +
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status " +
                             "from branch as b " +
                             "inner join address as a on b.id_address = a.id_address " +
                             "where b.name like \"%" +query +"%\";";
@@ -157,6 +157,28 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
+        }
+
+        public async Task OnOffSchool(int status, int id)
+        {
+            await Connect();
+            String strSql = "update branch set status = " + status + "where id_branch = " + id + ";";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+                await cmd.ExecuteNonQueryAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+            
         }
     }
 }

@@ -14,7 +14,7 @@
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="450"/>
+            Width="450" Click="searchField_Click"/>
 
         <DataGrid x:Name="schoolGrid"
             Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14">
@@ -44,6 +44,5 @@
                 VerticalAlignment="Bottom"
                 Text="ATIVAR/DESATIVAR" OnClick="ButtonImage_OnClick"/>
         </Grid>
-        <uc:Button HorizontalAlignment="Left" Height="23" Margin="899,24,0,0" VerticalAlignment="Top" Width="56" Background="Black" MouseDown="Button_MouseDown"/>
     </Grid>
 </Window>

@@ -35,6 +35,9 @@ namespace Bibliotech.View.Schools
         private void ButtonImage_OnClick(object sender, RoutedEventArgs e)
         {
            
+            List<DataGridCellInfo> gridCells = new List<DataGridCellInfo>();
+            //obj = schoolGrid.SelectedCells.ElementAt(1).Item ;
+
         }
 
         private async void SchoolGrid_Loaded(object sender, RoutedEventArgs e)
@@ -43,9 +46,13 @@ namespace Bibliotech.View.Schools
             
         }
 
-        private async void Button_MouseDown(object sender, MouseButtonEventArgs e)
+
+
+        private async void searchField_Click(object sender, RoutedEventArgs e)
         {
-            await ds.FillDataGrid(schoolGrid, "y");
+            await ds.FillDataGrid(schoolGrid, searchField.Text);
         }
+
+
     }
 }
