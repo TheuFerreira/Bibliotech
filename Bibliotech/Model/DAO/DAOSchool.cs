@@ -98,6 +98,7 @@ namespace Bibliotech.Model.DAO
                             "from branch as b "+
                             "inner join address as a on b.id_address = a.id_address; ";
 
+            
             try
             {
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
@@ -108,7 +109,8 @@ namespace Bibliotech.Model.DAO
                 adapter.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
-                
+                dataGrid.Columns[0].Visibility = Visibility.Hidden;
+
             }
             catch (Exception)
             {
@@ -130,12 +132,12 @@ namespace Bibliotech.Model.DAO
             String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco " +
                             "from branch as b " +
                             "inner join address as a on b.id_address = a.id_address " +
-                            "where b.name like \"%@query%\";"; 
+                            "where b.name like \"%" +query +"%\";";
 
+            
             try
             {
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
-                cmd.Parameters.AddWithValue("@query", query);
                 await cmd.ExecuteNonQueryAsync();
 
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
@@ -143,6 +145,7 @@ namespace Bibliotech.Model.DAO
                 adapter.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
+                dataGrid.Columns[0].Visibility = Visibility.Hidden;
 
             }
             catch (Exception)

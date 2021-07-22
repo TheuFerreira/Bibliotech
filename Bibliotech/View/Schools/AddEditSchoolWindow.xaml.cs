@@ -76,6 +76,14 @@ namespace Bibliotech.View.Schools
             if (ValidateFields())
             {
                  await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
+
+                tfName.Text = "";
+                tfCity.Text = "";
+                tfDistrict.Text = "";
+                tfPhone.Text = "";
+                tfStreet.Text = "";
+                tfNumber.Text = "";
+
             }
         }
 
