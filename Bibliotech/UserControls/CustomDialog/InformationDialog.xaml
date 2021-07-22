@@ -9,7 +9,8 @@
         Background="Transparent"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         ResizeMode="NoResize"
         Height="245" Width="420">
     <Border
@@ -28,8 +29,21 @@
                 Height="65"
                 Margin="0,15,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Source="/Bibliotech;component/Resources/img_error.png"/>
+                VerticalAlignment="Top">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Error">
+                                <Setter Property="Source" Value="/Bibliotech;component/Resources/img_error.png"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Success">
+                                <Setter Property="Source" Value="/Bibliotech;component/Resources/img_ok.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
 
             <TextBlock
                 x:Name="tbTitle"
@@ -68,6 +82,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
                                     <Border 
+                                        x:Name="bd"
                                         Background="{TemplateBinding Background}"
                                         CornerRadius="0,0,35,35">
 
@@ -80,6 +95,14 @@
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Cursor" Value="Hand"/>
                                         </Trigger>
+
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Error">
+                                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ErrorSolidColor}"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Success">
+                                            <Setter TargetName="bd" Property="Background" Value="{StaticResource ConfirmSolidColor}"/>
+                                        </DataTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>

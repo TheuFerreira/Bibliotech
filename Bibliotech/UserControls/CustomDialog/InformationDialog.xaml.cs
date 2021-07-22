@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media.Imaging;
+﻿using System.Windows;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
@@ -9,22 +7,15 @@ namespace Bibliotech.UserControls.CustomDialog
     /// </summary>
     public partial class InformationDialog : Window
     {
+        public TypeDialog TypeDialog { get; set; }
+
         public InformationDialog(string title, string description, TypeDialog typeDialog)
         {
             InitializeComponent();
 
             tbTitle.Text = title;
             tbDescription.Text = description;
-
-            switch (typeDialog)
-            {
-                case TypeDialog.Error:
-                    img.Source = new BitmapImage(new Uri("pack://application:,,,/Bibliotech;component/Resources/img_error.png"));
-                    break;
-                case TypeDialog.Success:
-                    img.Source = new BitmapImage(new Uri("pack://application:,,,/Bibliotech;component/Resources/img_ok.png"));
-                    break;
-            }
+            TypeDialog = typeDialog;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
