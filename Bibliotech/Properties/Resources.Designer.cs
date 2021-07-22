@@ -73,6 +73,16 @@ namespace Bibliotech.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap img_add {
+            get {
+                object obj = ResourceManager.GetObject("img_add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap img_bibliotech {
             get {
                 object obj = ResourceManager.GetObject("img_bibliotech", resourceCulture);
@@ -86,6 +96,16 @@ namespace Bibliotech.Properties {
         internal static System.Drawing.Bitmap img_database {
             get {
                 object obj = ResourceManager.GetObject("img_database", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap img_edit {
+            get {
+                object obj = ResourceManager.GetObject("img_edit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

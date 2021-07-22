@@ -30,11 +30,13 @@
             <uc:ButtonImage
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_edit.png"
                 Text="EDITAR"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_add.png"
                 Text="NOVO"/>
 
             <uc:ButtonImage

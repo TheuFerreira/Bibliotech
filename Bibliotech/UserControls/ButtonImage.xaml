@@ -24,7 +24,7 @@
 
                                     <Image
                                         Margin="0,5,0,30"
-                                        Source="/Bibliotech;component/Resources/img_save.png"/>
+                                        Source="{Binding ElementName=uc, Path=Source}"/>
 
                                     <Border
                                         CornerRadius="0,0,10,10"

@@ -101,6 +101,7 @@
             Width="140"
             Height="110"
             Margin="10"
+            Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
             VerticalAlignment="Bottom" OnClick="btnSave_OnClick"/>
 
