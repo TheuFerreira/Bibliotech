@@ -21,7 +21,7 @@ namespace Bibliotech.UserControls
     public partial class ButtonImage : UserControl
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(ButtonImage), new PropertyMetadata("Text"));
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(BitmapImage), typeof(ButtonImage), new PropertyMetadata(null));
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(ButtonImage), new PropertyMetadata(null));
 
         public event RoutedEventHandler OnClick;
 
@@ -31,9 +31,9 @@ namespace Bibliotech.UserControls
             set => SetValue(TextProperty, value);
         }
 
-        public BitmapImage Source
+        public ImageSource Source
         {
-            get => (BitmapImage)GetValue(SourceProperty);
+            get => (ImageSource)GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
         }
 
