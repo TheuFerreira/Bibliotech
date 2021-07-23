@@ -170,6 +170,7 @@ namespace Bibliotech.Model.DAO
                 dataGrid.Columns[7].Visibility = Visibility.Hidden;
                 dataGrid.Columns[8].Visibility = Visibility.Hidden;
                 dataGrid.Columns[9].Visibility = Visibility.Hidden;
+                dataGrid.Columns[10].Visibility = Visibility.Hidden;
 
             }
             catch (Exception)
@@ -210,6 +211,7 @@ namespace Bibliotech.Model.DAO
                 dataGrid.Columns[7].Visibility = Visibility.Hidden;
                 dataGrid.Columns[8].Visibility = Visibility.Hidden;
                 dataGrid.Columns[9].Visibility = Visibility.Hidden;
+                dataGrid.Columns[10].Visibility = Visibility.Hidden;
 
             }
             catch (Exception)
