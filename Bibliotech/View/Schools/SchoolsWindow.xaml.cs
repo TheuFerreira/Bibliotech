@@ -25,35 +25,39 @@ namespace Bibliotech.View.Schools
     /// </summary>
     public partial class SchoolsWindow : Window
     {
-        AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
+        
         DialogService dialogService = new DialogService();
         DAOSchool ds = new DAOSchool();
         Address address = new Address();
         School school = new School();
-        public bool isUpdate = false;
+        private bool canUpdateGrid = false;
+
+        public bool CanUpdateGrid { get => canUpdateGrid; set => canUpdateGrid = value; }
 
         public SchoolsWindow()
         {
             InitializeComponent();
         }
 
-        private void ButtonImage_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonImage_OnClick(object sender, RoutedEventArgs e)
         {
-            object obj = new object();
-            List<DataGridCellInfo> gridCells = new List<DataGridCellInfo>();
-            //obj = schoolGrid.SelectedCells.ElementAt(1).Item ;
-          
-            
-
+            if (school.Status == 1)
+            {
+                dialogService.ShowError("Tem certeza que deseja desativar esta escola?");
+                await ds.OnOff(0, school.Id_branch);
+            }
+            else
+            {
+                dialogService.ShowError("Tem certeza que deseja ativar esta escola?");
+                await ds.OnOff(1, school.Id_branch);
+            }
+            await ds.FillDataGrid(schoolGrid);
         }
 
-        private async void SchoolGrid_Loaded(object sender, RoutedEventArgs e)
+        public async void SchoolGrid_Loaded(object sender, RoutedEventArgs e)
         {
            await ds.FillDataGrid(schoolGrid);
-            
         }
-
-
 
         private async void searchField_Click(object sender, RoutedEventArgs e)
         {
@@ -67,8 +71,8 @@ namespace Bibliotech.View.Schools
             if(row_selected !=null)
             {
              
-
-                school.Id_address = Convert.ToInt32(row_selected["id_branch"].ToString());
+                school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
+                school.Id_address = Convert.ToInt32(row_selected["id_address"].ToString());
                 school.Name = row_selected["name"].ToString();
                 school.Telephone = row_selected["telephone"].ToString();
                 school.Status = Convert.ToInt32(row_selected["status"].ToString());
@@ -79,21 +83,47 @@ namespace Bibliotech.View.Schools
                 address.Number = row_selected["number"].ToString();
                 address.Complement = row_selected["complement"].ToString();
 
-
             }
         }
 
         private void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
         {
+            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
+            addEdit.Id = school.Id_branch;
+            addEdit.Id_address = school.Id_address;
             addEdit.tfName.Text = school.Name;
             addEdit.tfCity.Text = address.City;
             addEdit.tfDistrict.Text = address.Neighborhood;
             addEdit.tfPhone.Text = school.Telephone;
             addEdit.tfStreet.Text = address.Street;
             addEdit.tfNumber.Text = address.Number;
-            isUpdate = true;
+            addEdit.IsUpdate = true;
             addEdit.ShowDialog();
+        }
 
+        private void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
+        {
+            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
+
+            addEdit.IsUpdate = false;
+            addEdit.ShowDialog();
+        }
+
+        private async void searchField_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(String.IsNullOrEmpty(searchField.Text))
+            {
+                await ds.FillDataGrid(schoolGrid);
+            }
+        }
+
+        private async void Window_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(canUpdateGrid)
+            {
+                await ds.FillDataGrid(schoolGrid);
+                canUpdateGrid = false;
+            }
         }
     }
 }

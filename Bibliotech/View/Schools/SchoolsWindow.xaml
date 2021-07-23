@@ -7,14 +7,14 @@
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="SchoolsWindow" Height="720" Width="1280">
+        Title="SchoolsWindow" Height="720" Width="1280" GotFocus="Window_GotFocus">
     <Grid>
         <uc:ComboBoxSearchField
             x:Name="searchField"
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="450" Click="searchField_Click"/>
+            Width="450" Click="searchField_Click" LostFocus="searchField_LostFocus"/>
 
         <DataGrid x:Name="schoolGrid"
             Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14"
@@ -38,7 +38,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
-                Text="NOVO"/>
+                Text="NOVO" OnClick="ButtonImage_OnClick_2"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Right"

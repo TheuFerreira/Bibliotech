@@ -24,11 +24,18 @@ namespace Bibliotech.View.Schools
         DialogService dialogService = new DialogService();
         DAOSchool ds = new DAOSchool();
         SchoolsWindow schoolsWindow = new SchoolsWindow();
+        private int id;
+        private bool isUpdate = false;
+        private int id_address;
 
         public AddEditSchoolWindow()
         {
             InitializeComponent();
         }
+
+        public int Id { get => id; set => id = value; }
+        public bool IsUpdate { get => isUpdate; set => isUpdate = value; }
+        public int Id_address { get => id_address; set => id_address = value; }
 
         public bool ValidateFields()
         {
@@ -76,7 +83,8 @@ namespace Bibliotech.View.Schools
         {
             if (ValidateFields())
             {
-                if (!schoolsWindow.isUpdate)
+              
+                if (!isUpdate)
                 {
                     await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
 
@@ -86,6 +94,13 @@ namespace Bibliotech.View.Schools
                     tfPhone.Text = "";
                     tfStreet.Text = "";
                     tfNumber.Text = "";
+                    schoolsWindow.CanUpdateGrid = true;
+                }
+                else
+                {
+                    await ds.Update(Id, tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text, Id_address);
+                    schoolsWindow.CanUpdateGrid = true;
+                    Close(); 
                 }
 
             }
@@ -95,6 +110,15 @@ namespace Bibliotech.View.Schools
         {
             int aux = await ds.UserCount();
             tfUsers.Text = aux.ToString();
+            
+            if (id < 1)
+            {
+                if (isUpdate)
+                {
+                    dialogService.ShowError("Selecione algo primeiro");
+                    Close();
+                }
+            }
             
         }
     }
