@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using Bibliotech.Model.Entities;
 namespace Bibliotech.View.Schools
 {
     /// <summary>
@@ -23,6 +23,7 @@ namespace Bibliotech.View.Schools
     {
         DialogService dialogService = new DialogService();
         DAOSchool ds = new DAOSchool();
+        SchoolsWindow schoolsWindow = new SchoolsWindow();
 
         public AddEditSchoolWindow()
         {
@@ -75,14 +76,17 @@ namespace Bibliotech.View.Schools
         {
             if (ValidateFields())
             {
-                 await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
+                if (!schoolsWindow.isUpdate)
+                {
+                    await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
 
-                tfName.Text = "";
-                tfCity.Text = "";
-                tfDistrict.Text = "";
-                tfPhone.Text = "";
-                tfStreet.Text = "";
-                tfNumber.Text = "";
+                    tfName.Text = "";
+                    tfCity.Text = "";
+                    tfDistrict.Text = "";
+                    tfPhone.Text = "";
+                    tfStreet.Text = "";
+                    tfNumber.Text = "";
+                }
 
             }
         }
@@ -91,6 +95,7 @@ namespace Bibliotech.View.Schools
         {
             int aux = await ds.UserCount();
             tfUsers.Text = aux.ToString();
+            
         }
     }
 }

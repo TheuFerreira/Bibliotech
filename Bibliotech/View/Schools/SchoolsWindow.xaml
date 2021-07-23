@@ -18,7 +18,7 @@
 
         <DataGrid x:Name="schoolGrid"
             Margin="0,60,0,130" IsSynchronizedWithCurrentItem="True" Loaded="SchoolGrid_Loaded" FontSize="14"
-            ItemsSource="{Binding}">
+            ItemsSource="{Binding}" SelectionChanged="schoolGrid_SelectionChanged">
 
 
         </DataGrid>
@@ -32,7 +32,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
-                Text="EDITAR"/>
+                Text="EDITAR" OnClick="ButtonImage_OnClick_1"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"

@@ -94,7 +94,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status "+
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status, a.city, a.neighborhood, a.street, a.number, a.complement " +
                             "from branch as b "+
                             "inner join address as a on b.id_address = a.id_address; ";
 
@@ -110,6 +110,11 @@ namespace Bibliotech.Model.DAO
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
                 dataGrid.Columns[0].Visibility = Visibility.Hidden;
+                dataGrid.Columns[5].Visibility = Visibility.Hidden;
+                dataGrid.Columns[6].Visibility = Visibility.Hidden;
+                dataGrid.Columns[7].Visibility = Visibility.Hidden;
+                dataGrid.Columns[8].Visibility = Visibility.Hidden;
+                dataGrid.Columns[9].Visibility = Visibility.Hidden;
 
             }
             catch (Exception)
@@ -129,7 +134,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status " +
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status, a.city, a.neighborhood, a.street, a.number, a.complement " +
                             "from branch as b " +
                             "inner join address as a on b.id_address = a.id_address " +
                             "where b.name like \"%" +query +"%\";";
@@ -146,6 +151,11 @@ namespace Bibliotech.Model.DAO
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
                 dataGrid.Columns[0].Visibility = Visibility.Hidden;
+                dataGrid.Columns[5].Visibility = Visibility.Hidden;
+                dataGrid.Columns[6].Visibility = Visibility.Hidden;
+                dataGrid.Columns[7].Visibility = Visibility.Hidden;
+                dataGrid.Columns[8].Visibility = Visibility.Hidden;
+                dataGrid.Columns[9].Visibility = Visibility.Hidden;
 
             }
             catch (Exception)
