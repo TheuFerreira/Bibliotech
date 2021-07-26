@@ -164,14 +164,6 @@ namespace Bibliotech.Model.DAO
                 adapter.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
-                dataGrid.Columns[0].Visibility = Visibility.Hidden;
-                dataGrid.Columns[5].Visibility = Visibility.Hidden;
-                dataGrid.Columns[6].Visibility = Visibility.Hidden;
-                dataGrid.Columns[7].Visibility = Visibility.Hidden;
-                dataGrid.Columns[8].Visibility = Visibility.Hidden;
-                dataGrid.Columns[9].Visibility = Visibility.Hidden;
-                dataGrid.Columns[10].Visibility = Visibility.Hidden;
-
             }
             catch (Exception)
             {
@@ -205,14 +197,6 @@ namespace Bibliotech.Model.DAO
                 adapter.Fill(dt);
                 dataGrid.ItemsSource = dt.DefaultView;
                 adapter.Update(dt);
-                dataGrid.Columns[0].Visibility = Visibility.Hidden;
-                dataGrid.Columns[5].Visibility = Visibility.Hidden;
-                dataGrid.Columns[6].Visibility = Visibility.Hidden;
-                dataGrid.Columns[7].Visibility = Visibility.Hidden;
-                dataGrid.Columns[8].Visibility = Visibility.Hidden;
-                dataGrid.Columns[9].Visibility = Visibility.Hidden;
-                dataGrid.Columns[10].Visibility = Visibility.Hidden;
-
             }
             catch (Exception)
             {
