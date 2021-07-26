@@ -22,11 +22,11 @@
 
         <DataGrid 
             x:Name="schoolGrid"
-            Margin="0,60,0,130" 
+            Margin="0,87,0,143" 
             IsSynchronizedWithCurrentItem="True" 
             Loaded="SchoolGrid_Loaded" 
             ItemsSource="{Binding}" 
-            SelectionChanged="schoolGrid_SelectionChanged">
+            SelectionChanged="schoolGrid_SelectionChanged" FontSize="16">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone}" Width="150"/>
