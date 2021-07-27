@@ -206,7 +206,6 @@
     <Compile Include="View\Schools\AddEditSchoolWindow.xaml.cs">
       <DependentUpon>AddEditSchoolWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Schools\CustomBinding.cs" />
     <Compile Include="View\Schools\SchoolsWindow.xaml.cs">
       <DependentUpon>SchoolsWindow.xaml</DependentUpon>
     </Compile>
