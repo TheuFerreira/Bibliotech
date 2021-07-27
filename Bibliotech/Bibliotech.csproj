@@ -414,5 +414,8 @@
   <ItemGroup>
     <Resource Include="Resources\img_logo_vgp.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_power.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

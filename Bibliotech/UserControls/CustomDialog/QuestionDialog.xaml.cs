@@ -1,28 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
     /// <summary>
     /// Interação lógica para QuestionDialog.xam
     /// </summary>
-    public partial class QuestionDialog : UserControl
+    public partial class QuestionDialog : Window
     {
-        public QuestionDialog()
+        public QuestionDialog(string title, string description)
         {
             InitializeComponent();
+
+            tbTitle.Text = title;
+            tbDescription.Text = description;
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+
+        private void ButtonConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
         }
     }
 }

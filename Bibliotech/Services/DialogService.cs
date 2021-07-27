@@ -13,5 +13,13 @@ namespace Bibliotech.Services
         {
             _ = new InformationDialog("SUCESSO", description, TypeDialog.Success).ShowDialog();
         }
+
+        public bool ShowQuestion(string title, string description)
+        {
+            QuestionDialog questionDialog = new QuestionDialog(title, description);
+            _ = questionDialog.ShowDialog();
+
+            return questionDialog.DialogResult.Value;
+        }
     }
 }
