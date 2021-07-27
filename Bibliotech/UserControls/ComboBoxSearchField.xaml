@@ -8,32 +8,6 @@
     
     <UserControl.Resources>
 
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="MinWidth" Value="20" />
-            <Setter Property="MinHeight" Value="20" />
-            <Setter Property="AllowDrop" Value="true" />
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate 
-                        TargetType="{x:Type TextBoxBase}">
-
-                        <Border
-                            Padding="5,2,0,2">
-                            
-                            <ScrollViewer 
-                                Margin="0" 
-                                x:Name="PART_ContentHost" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -268,9 +242,9 @@
             <TextBox
                 x:Name="tb"
                 FontSize="16"
-                MinWidth="250"
                 Margin="100,0,25,0"
-                TextChanged="Tb_TextChanged"/>
+                TextChanged="Tb_TextChanged"
+                Style="{StaticResource SearchField}"/>
 
             <Button
                 HorizontalAlignment="Right"
