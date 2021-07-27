@@ -66,7 +66,10 @@ namespace Bibliotech.Model.DAO
                 await Connect();
 
                 string str = "" +
-                    "SELECT ";
+                    "SELECT u.id_user, u.name, u.telephone, CONCAT(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) AS address, u.birth_date, tu.description " +
+                    "FROM users AS u " +
+                    "INNER JOIN type_users AS tu ON u.id_type_user = tu.id_type_user " +
+                    "INNER JOIN address AS a ON u.id_address = a.id_address; ";
                 MySqlCommand command = new MySqlCommand(str, SqlConnection);
 
                 DataTable dt = new DataTable();
@@ -74,6 +77,33 @@ namespace Bibliotech.Model.DAO
                 dataAdapter.Fill(dt);
 
                 return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<bool> Delete(int idUser)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                string str = "" +
+                    "UPDATE users SET status = 0 WHERE id_user = @idUser";
+
+                MySqlCommand command = new MySqlCommand(str, SqlConnection, transaction);
+                command.Parameters.AddWithValue("@idUser", idUser);
+
+                await command.ExecuteNonQueryAsync();
+
+                return true;
             }
             catch (MySqlException ex)
             {

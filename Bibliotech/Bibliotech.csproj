@@ -418,10 +418,10 @@
     <Resource Include="Resources\img_power.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\img_question.png" />
+    <Resource Include="Resources\img_zoom.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\img_zoom.png" />
+    <Resource Include="Resources\img_question.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
