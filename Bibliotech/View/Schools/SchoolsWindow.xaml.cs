@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Data;
 using MySqlConnector;
 using Bibliotech.Model.Entities;
+using Bibliotech.Model.Entities.Enums;
 
 namespace Bibliotech.View.Schools
 
@@ -41,7 +42,7 @@ namespace Bibliotech.View.Schools
 
         private async void ButtonImage_OnClick(object sender, RoutedEventArgs e)
         {
-            if (school.Status == 1)
+            if (school.Status == Status.Active)
             {
                 dialogService.ShowError("Tem certeza que deseja desativar esta escola?");
                 await ds.OnOff(0, school.Id_branch);
