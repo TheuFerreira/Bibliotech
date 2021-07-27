@@ -16,8 +16,13 @@ namespace Bibliotech.Model.DAO
         DialogService dialogService = new DialogService();
 
 
-        public async Task InsertSchool(String name, String city, String dist, String phone, String street, String number)
+        public async Task Insert(String name, String city, String dist, String phone, String street, String number)
         {
+            if (String.IsNullOrEmpty(phone))
+            {
+                phone = "0";
+            }
+
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
@@ -71,14 +76,18 @@ namespace Bibliotech.Model.DAO
      
         public async Task Update(int id, String name, String city, String dist, String phone, String street, String number, int id_address)
         {
+            if (String.IsNullOrEmpty(phone))
+            {
+                phone = "0";
+            }
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
-            String strSql1 = "update address "+
+            String strSql = "update address "+
                              "set city = @city, neighborhood = @dist, street = @street, number = @number " +
                              "where id_address = @id_address; ";
 
-            String strSql2 = "update branch " +
+            String strSql1 = "update branch " +
                              "set name = '" + name + "', telephone = '" + phone + "' " +
                              " where id_branch = @id;";
 
@@ -86,8 +95,8 @@ namespace Bibliotech.Model.DAO
             try
             {
               
-                MySqlCommand cmd1 = new MySqlCommand(strSql1, SqlConnection, transaction);
-                MySqlCommand cmd2= new MySqlCommand(strSql2, SqlConnection, transaction);
+                MySqlCommand cmd1 = new MySqlCommand(strSql, SqlConnection, transaction);
+                MySqlCommand cmd2= new MySqlCommand(strSql1, SqlConnection, transaction);
 
                 cmd1.Parameters.AddWithValue("@city", city);
                 cmd1.Parameters.AddWithValue("@dist", dist);
@@ -120,7 +129,7 @@ namespace Bibliotech.Model.DAO
         }
 
 
-        public async Task<int> UserCount()
+        public async Task<int> Count()
         {
             await Connect();
             int number;

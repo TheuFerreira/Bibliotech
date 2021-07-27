@@ -43,13 +43,19 @@ namespace Bibliotech.View.Schools
         {
             if (school.Status == 1)
             {
-                dialogService.ShowError("Tem certeza que deseja desativar esta escola?");
-                await ds.OnOff(0, school.Id_branch);
+                if(dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
+                {
+                    await ds.OnOff(0, school.Id_branch);
+                }
+               
+                
             }
             else
             {
-                dialogService.ShowError("Tem certeza que deseja ativar esta escola?");
-                await ds.OnOff(1, school.Id_branch);
+                if (dialogService.ShowQuestion("Tem certeza que deseja ativar esta escola?", ""))
+                {
+                    await ds.OnOff(1, school.Id_branch);
+                }
             }
             await ds.FillDataGrid(schoolGrid);
         }
@@ -86,7 +92,7 @@ namespace Bibliotech.View.Schools
             }
         }
 
-        private void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
+        private async void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
             addEdit.Id = school.Id_branch;
@@ -99,14 +105,16 @@ namespace Bibliotech.View.Schools
             addEdit.tfNumber.Text = address.Number;
             addEdit.IsUpdate = true;
             addEdit.ShowDialog();
+            await ds.FillDataGrid(schoolGrid);
         }
 
-        private void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
+        private async void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
 
             addEdit.IsUpdate = false;
             addEdit.ShowDialog();
+            await ds.FillDataGrid(schoolGrid);
         }
 
         private async void searchField_LostFocus(object sender, RoutedEventArgs e)

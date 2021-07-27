@@ -86,7 +86,7 @@ namespace Bibliotech.View.Schools
               
                 if (!isUpdate)
                 {
-                    await ds.InsertSchool(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
+                    await ds.Insert(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
 
                     tfName.Text = "";
                     tfCity.Text = "";
@@ -108,7 +108,7 @@ namespace Bibliotech.View.Schools
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int aux = await ds.UserCount();
+            int aux = await ds.Count();
             tfUsers.Text = aux.ToString();
             
             if (id < 1)
