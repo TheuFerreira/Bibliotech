@@ -1,4 +1,5 @@
 ﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using Bibliotech.Services;
 using System;
 using System.Data;
@@ -24,13 +25,26 @@ namespace Bibliotech.View.Users
 
         private async void LoadUsers()
         {
-            string text = string.Empty;
+            string text = searchField.Text;
 
             dataGrid.ItemsSource = await daoUser.SearchByText(text);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            LoadUsers();
+        }
+
+        private void SearchField_Click(object sender, RoutedEventArgs e)
+        {
+            LoadUsers();
+        }
+
+        private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
+        {
+            AddEditUserWindow addEditUser = new AddEditUserWindow(new User());
+            addEditUser.ShowDialog();
+
             LoadUsers();
         }
 
@@ -42,12 +56,14 @@ namespace Bibliotech.View.Users
             DataRowView row = dataGrid.SelectedItem as DataRowView;
             string name = row["name"].ToString();
 
-            if (dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja excluir o Usuário {name}?") == false)
+            bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja excluir o Usuário {name}?");
+            if (result == false)
                 return;
 
             int idUser = Convert.ToInt32(row["id_user"].ToString());
+            await daoUser.Delete(idUser);
 
-            bool result = await daoUser.Delete(idUser);
+            dialogService.ShowSuccess($"Usuário {name}, excluído com sucesso!!!");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bibliotech.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,23 @@ namespace Bibliotech.View.Users
     /// </summary>
     public partial class AddEditUserWindow : Window
     {
-        public AddEditUserWindow()
+        public AddEditUserWindow(User user)
         {
             InitializeComponent();
+
+            if (user.IdUser != -1)
+            {
+                tfName.Text = user.Name;
+                tfBirthDate.Text = user.GetBirthDate();
+                tfUserName.Text = user.UserName;
+                tfPassword.Text = user.Password;
+                tfPhone.Text = user.GetTelephone();
+                tfCity.Text = user.Address.City;
+                tfStreet.Text = user.Address.Street;
+                tfDistrict.Text = user.Address.Neighborhood;
+                tfNumber.Text = user.Address.Neighborhood;
+                tfComplement.Text = user.Address.Neighborhood;
+            }
         }
     }
 }
