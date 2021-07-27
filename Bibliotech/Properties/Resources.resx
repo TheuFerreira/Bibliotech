@@ -127,8 +127,14 @@
   <data name="img_bibliotech" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_bibliotech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_books" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_books.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_database" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_database.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_devolutions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_devolutions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="img_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,13 +142,37 @@
   <data name="img_error" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_error.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_lectors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_lectors.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_lendings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_lendings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_logo_vgp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_logo_vgp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_manual" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_manual.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_ok" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_ok.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_reports.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="img_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_schools" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_schools.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_users" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_users.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

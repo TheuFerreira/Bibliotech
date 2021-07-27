@@ -384,5 +384,35 @@
   <ItemGroup>
     <Resource Include="Resources\img_edit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_books.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_manual.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_reports.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_schools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_devolutions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_lectors.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_lendings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_logo_vgp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
