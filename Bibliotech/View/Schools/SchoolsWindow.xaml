@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
-        Title="Escolas" Height="720" Width="1280" GotFocus="Window_GotFocus">
+        Title="Escolas" Height="720" Width="1280">
 
     <Grid>
         <uc:SearchField
@@ -32,7 +32,7 @@
                 <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, StringFormat={}{0:(00) 00000-0000}}" Width="150"/>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
                 <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
-                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=status}" Width="175"/>
+                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=description}" Width="175"/>
             </DataGrid.Columns>
         </DataGrid>
 

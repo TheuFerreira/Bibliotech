@@ -16,46 +16,37 @@ namespace Bibliotech.Model.DAO
         DialogService dialogService = new DialogService();
 
 
-        public async Task Insert(String name, String city, String dist, String phone, String street, String number)
+        public async Task Insert(String name, String city, String dist, long? phone, String street, String number)
         {
-            if (String.IsNullOrEmpty(phone))
-            {
-                phone = "0";
-            }
 
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
-            String strSql = "insert into address(city, neighborhood, street, number) " +
-                                         "values(@city, @dist, @street, @number); "+
-                            "select @@identity;";
-
-            String strSql1 = " insert into branch(name, id_address, telephone, status) "+
-                                          "values(@name, @id, @phone, 1);";
-
-
             try
             {
-                
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
-                MySqlCommand cmd1 = new MySqlCommand(strSql1, SqlConnection, transaction);
-             
+                String strSql = "insert into address(city, neighborhood, street, number) " +
+                                       "values(@city, @dist, @street, @number); " +
+                                       "select @@identity;";
 
-                cmd1.Parameters.AddWithValue("@name", name);
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+
                 cmd.Parameters.AddWithValue("@city", city);
                 cmd.Parameters.AddWithValue("@dist", dist);
-                cmd1.Parameters.AddWithValue("@phone", phone);
                 cmd.Parameters.AddWithValue("@street", street);
                 cmd.Parameters.AddWithValue("@number", number);
-               
 
-                
                 object result = await cmd.ExecuteScalarAsync();
                 int id = Convert.ToInt32(result.ToString());
 
-                cmd1.Parameters.AddWithValue("@id", id);
-          
-                await cmd1.ExecuteNonQueryAsync();
+                strSql = " insert into branch(name, id_address, telephone, status) " +
+                                      "values(@name, @id, @phone, 1);";
+
+                cmd.CommandText = strSql;
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@phone", phone);
+
+                await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
 
@@ -73,42 +64,38 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-     
-        public async Task Update(int id, String name, String city, String dist, String phone, String street, String number, int id_address)
+        public async Task Update(int id, String name, String city, String dist, long? phone, String street, String number, int id_address)
         {
-            if (String.IsNullOrEmpty(phone))
-            {
-                phone = "0";
-            }
+           
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
-            String strSql = "update address "+
+            try
+            {
+                String strSql = "update address " +
                              "set city = @city, neighborhood = @dist, street = @street, number = @number " +
                              "where id_address = @id_address; ";
 
-            String strSql1 = "update branch " +
-                             "set name = '" + name + "', telephone = '" + phone + "' " +
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+               
+
+                cmd.Parameters.AddWithValue("@city", city);
+                cmd.Parameters.AddWithValue("@dist", dist);
+                cmd.Parameters.AddWithValue("@street", street);
+                cmd.Parameters.AddWithValue("@number", number);
+                cmd.Parameters.AddWithValue("@id_address", id_address);
+
+                await cmd.ExecuteNonQueryAsync();
+
+                strSql = "update branch " +
+                             "set name = '" + name + "', telephone = @phone " +
                              " where id_branch = @id;";
 
-
-            try
-            {
-              
-                MySqlCommand cmd1 = new MySqlCommand(strSql, SqlConnection, transaction);
-                MySqlCommand cmd2= new MySqlCommand(strSql1, SqlConnection, transaction);
-
-                cmd1.Parameters.AddWithValue("@city", city);
-                cmd1.Parameters.AddWithValue("@dist", dist);
-                cmd1.Parameters.AddWithValue("@street", street);
-                cmd1.Parameters.AddWithValue("@number", number);
-                cmd1.Parameters.AddWithValue("@id_address", id_address);
-
-                cmd2.Parameters.AddWithValue("@id", id);
-
-
-                await cmd1.ExecuteNonQueryAsync();
-                await cmd2.ExecuteNonQueryAsync();
+                cmd.CommandText = strSql;
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.Parameters.AddWithValue("@phone", phone);
+                
+                await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
                 dialogService.ShowSuccess("Usuário salvo com sucesso");
@@ -123,17 +110,40 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
-
-
-
         }
 
+        public async Task OnOff(int status, int id)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            String strSql = "update branch set status = " + status + " where id_branch = " + id + ";";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+                await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+                
+            }
+            catch (Exception)
+            {
+                dialogService.ShowError("Algo deu errado\nTente novamente");
+                await transaction.RollbackAsync();
+                throw;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+
+        }
 
         public async Task<int> Count()
         {
             await Connect();
             int number;
-            String strSql = "select count(id_user) from users;";
+            String strSql = "select count(id_user) from users where status = 1;";
 
             try
             {
@@ -153,49 +163,16 @@ namespace Bibliotech.Model.DAO
             return number;
         }
 
-
-        public async Task FillDataGrid(DataGrid dataGrid)
+        public async Task<DataTable> FillDataGrid(String query)
         {
             await Connect();
 
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status, b.id_address, a.city, a.neighborhood, a.street, a.number, a.complement " +
-                            "from branch as b "+
-                            "inner join address as a on b.id_address = a.id_address; ";
-
-            
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
-                await cmd.ExecuteNonQueryAsync();
-
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable("branch");
-                adapter.Fill(dt);
-                dataGrid.ItemsSource = dt.DefaultView;
-                adapter.Update(dt);
-            }
-            catch (Exception)
-            {
-                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
-                
-            }
-            finally
-            {
-                await Disconnect();
-            }
-        }
-
-
-        public async Task FillDataGrid(DataGrid dataGrid, String query)
-        {
-            await Connect();
-
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, b.status, b.id_address, a.city, a.neighborhood, a.street, a.number, a.complement " +
+            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, s.description, b.id_address, a.city, a.neighborhood, a.street, a.number " +
                             "from branch as b " +
                             "inner join address as a on b.id_address = a.id_address " +
+                            "inner join status as s on s.id_status = b.status " +
                             "where b.name like \"%" +query +"%\";";
 
-            
             try
             {
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
@@ -203,14 +180,13 @@ namespace Bibliotech.Model.DAO
 
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable("branch");
+                
                 adapter.Fill(dt);
-                dataGrid.ItemsSource = dt.DefaultView;
-                adapter.Update(dt);
+                return dt;
             }
             catch (Exception)
             {
-                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
-
+                return null;
             }
             finally
             {
@@ -219,32 +195,7 @@ namespace Bibliotech.Model.DAO
         }
 
 
-        public async Task OnOff(int status, int id)
-        {
-            await Connect();
-            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
-
-            String strSql = "update branch set status = " + status + " where id_branch = " + id + ";";
-
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
-                await cmd.ExecuteNonQueryAsync();
-                await transaction.CommitAsync();
-                dialogService.ShowSuccess("Ativado/Desativado com sucesso");
-            }
-            catch (Exception)
-            {
-                dialogService.ShowError("Algo deu errado\nTente novamente");
-                await transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                await Disconnect();
-            }
-            
-        }
+       
     }
 }
 

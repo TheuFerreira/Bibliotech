@@ -31,44 +31,77 @@ namespace Bibliotech.View.Schools
         DAOSchool ds = new DAOSchool();
         Address address = new Address();
         School school = new School();
-        private bool canUpdateGrid = false;
-
-        public bool CanUpdateGrid { get => canUpdateGrid; set => canUpdateGrid = value; }
-
+    
         public SchoolsWindow()
         {
             InitializeComponent();
         }
 
+        private async void UpdateGrid()
+        {
+            DataTable dataTable = new DataTable();
+            dataTable = await ds.FillDataGrid(searchField.Text);
+            schoolGrid.ItemsSource = dataTable.DefaultView;
+        }
+
         private async void ButtonImage_OnClick(object sender, RoutedEventArgs e)
         {
-            if (school.Status == Status.Active)
+            if (school.Id_branch >= 1)
             {
-                if(dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
+                if (school.Status == Status.Active)
                 {
-                    await ds.OnOff(0, school.Id_branch);
+                    if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
+                    {
+                        await ds.OnOff(0, school.Id_branch);
+                        dialogService.ShowSuccess("Desativado com sucesso!");
+                    }
+
+                    UpdateGrid();
+                    return;
                 }
-               
-                
-            }
-            else
-            {
-                if (dialogService.ShowQuestion("Tem certeza que deseja ativar esta escola?", ""))
+
+                if (dialogService.ShowQuestion("Tem certeza que deseja\nativar esta escola?", ""))
                 {
                     await ds.OnOff(1, school.Id_branch);
+                    dialogService.ShowSuccess("Ativado com sucesso!");
                 }
+
+                UpdateGrid();
             }
-            await ds.FillDataGrid(schoolGrid);
+            
         }
 
-        public async void SchoolGrid_Loaded(object sender, RoutedEventArgs e)
+        private void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
         {
-           await ds.FillDataGrid(schoolGrid);
+            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
+            addEdit.Id = school.Id_branch;
+            addEdit.Id_address = school.Id_address;
+            addEdit.tfName.Text = school.Name;
+            addEdit.tfCity.Text = address.City;
+            addEdit.tfDistrict.Text = address.Neighborhood;
+            addEdit.tfPhone.Text = school.Telephone.ToString();
+            addEdit.tfStreet.Text = address.Street;
+            addEdit.tfNumber.Text = address.Number;
+            addEdit.IsUpdate = true;
+            addEdit.tbInfo.Text = "Editar Escola";
+            if(school.Id_branch >= 1)
+            addEdit.ShowDialog();
+            UpdateGrid();
         }
 
-        private async void searchField_Click(object sender, RoutedEventArgs e)
+        private void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
         {
-            await ds.FillDataGrid(schoolGrid, searchField.Text);
+            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
+
+            addEdit.IsUpdate = false;
+            addEdit.tbInfo.Text = "Adicionar Escola";
+            addEdit.ShowDialog();
+            UpdateGrid();
+        }
+
+        public void SchoolGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
         }
 
         private void schoolGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -81,58 +114,40 @@ namespace Bibliotech.View.Schools
                 school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
                 school.Id_address = Convert.ToInt32(row_selected["id_address"].ToString());
                 school.Name = row_selected["name"].ToString();
-                school.Telephone = long.Parse(row_selected["telephone"].ToString());
-                school.Status = (Status)Convert.ToInt32(row_selected["status"].ToString());
+                long.TryParse(row_selected["telephone"].ToString(), out long temp);
+                school.Telephone = temp;
+
+                if(row_selected["description"].ToString() == "Ativo")
+                {
+                    school.Status = Status.Active;
+                }
+                else
+                {
+                    school.Status = Status.Inactive;
+                }
 
                 address.City = row_selected["city"].ToString();
                 address.Neighborhood = row_selected["neighborhood"].ToString();
                 address.Street = row_selected["street"].ToString();
                 address.Number = row_selected["number"].ToString();
-                address.Complement = row_selected["complement"].ToString();
+             
 
             }
         }
 
-        private async void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
+        private void searchField_Click(object sender, RoutedEventArgs e)
         {
-            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
-            addEdit.Id = school.Id_branch;
-            addEdit.Id_address = school.Id_address;
-            addEdit.tfName.Text = school.Name;
-            addEdit.tfCity.Text = address.City;
-            addEdit.tfDistrict.Text = address.Neighborhood;
-            addEdit.tfPhone.Text = school.Telephone.ToString();
-            addEdit.tfStreet.Text = address.Street;
-            addEdit.tfNumber.Text = address.Number;
-            addEdit.IsUpdate = true;
-            addEdit.ShowDialog();
-            await ds.FillDataGrid(schoolGrid);
+            UpdateGrid();
         }
 
-        private async void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
-        {
-            AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
-
-            addEdit.IsUpdate = false;
-            addEdit.ShowDialog();
-            await ds.FillDataGrid(schoolGrid);
-        }
-
-        private async void searchField_LostFocus(object sender, RoutedEventArgs e)
+        private void searchField_LostFocus(object sender, RoutedEventArgs e)
         {
             if(String.IsNullOrEmpty(searchField.Text))
             {
-                await ds.FillDataGrid(schoolGrid);
+                UpdateGrid();
             }
         }
 
-        private async void Window_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if(canUpdateGrid)
-            {
-                await ds.FillDataGrid(schoolGrid);
-                canUpdateGrid = false;
-            }
-        }
+       
     }
 }

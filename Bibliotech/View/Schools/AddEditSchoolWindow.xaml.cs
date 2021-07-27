@@ -24,6 +24,7 @@ namespace Bibliotech.View.Schools
         DialogService dialogService = new DialogService();
         DAOSchool ds = new DAOSchool();
         SchoolsWindow schoolsWindow = new SchoolsWindow();
+
         private int id;
         private bool isUpdate = false;
         private int id_address;
@@ -42,41 +43,60 @@ namespace Bibliotech.View.Schools
             
             if((String.IsNullOrEmpty(tfName.Text)))
             {
-                dialogService.ShowError("Escreva um nome válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
+                dialogService.ShowError("Escreva um nome válido! \nEste campo é obrigatório, portanto preencha-o.");
                 return false;
-                
             }
 
 
             if((String.IsNullOrEmpty(tfCity.Text)))
             {
-                dialogService.ShowError("Escreva um nome de cidade válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
+                dialogService.ShowError("Escreva um nome de cidade!\nEste campo é obrigatório, portanto preencha-o.");
                 return false;
             }
 
 
             if(String.IsNullOrEmpty(tfDistrict.Text))
             {
-                
-                dialogService.ShowError("Escreva o nome de um bairro válido! \nEste campo é obrigatório, portanto preencha-o para continuar.");
+                dialogService.ShowError("Escreva o nome de um bairro!\nEste campo é obrigatório, portanto preencha-o.");
                 return false;
             }
 
 
             if (!String.IsNullOrEmpty(tfPhone.Text))
             {
-
-
                 if (tfPhone.Text.Length <= 8)
                 {
-                    dialogService.ShowError("Insira um número de telefone válido! \n É recomendável que se digite junto o DDD. \nOu também pode deixar este campo sem preencher");
+                    dialogService.ShowError("Insira um número de telefone válido!\nOu deixe este campo sem preencher.");
                     return false;
                 }
             }
 
 
+            if (String.IsNullOrEmpty(tfStreet.Text))
+            {
+                dialogService.ShowError("Escreva o nome de uma rua!\nEste campo é obrigatório, portanto preencha-o.");
+                return false;
+            }
+
+
+            if (String.IsNullOrEmpty(tfNumber.Text))
+            {
+                dialogService.ShowError("Escreva um número!\nEste campo é obrigatório, portanto preencha-o.");
+                return false;
+            }
+
             return true;
             
+        }
+
+        private void ClearFields()
+        {
+            tfName.Text = "";
+            tfCity.Text = "";
+            tfDistrict.Text = "";
+            tfPhone.Text = "";
+            tfStreet.Text = "";
+            tfNumber.Text = "";
         }
 
         private async void btnSave_OnClick(object sender, RoutedEventArgs e)
@@ -86,20 +106,26 @@ namespace Bibliotech.View.Schools
               
                 if (!isUpdate)
                 {
-                    await ds.Insert(tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text);
+                    long? phone = null;
+                    if (long.TryParse(tfPhone.Text, out long temp))
+                    {
+                        phone = temp;
+                    }
+                    await ds.Insert(tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text);
 
-                    tfName.Text = "";
-                    tfCity.Text = "";
-                    tfDistrict.Text = "";
-                    tfPhone.Text = "";
-                    tfStreet.Text = "";
-                    tfNumber.Text = "";
-                    schoolsWindow.CanUpdateGrid = true;
+                    ClearFields();
+    
                 }
                 else
                 {
-                    await ds.Update(Id, tfName.Text, tfCity.Text, tfDistrict.Text, tfPhone.Text, tfStreet.Text, tfNumber.Text, Id_address);
-                    schoolsWindow.CanUpdateGrid = true;
+                    long? phone = null;
+                    if(long.TryParse(tfPhone.Text, out long temp))
+                    {
+                        phone = temp;
+                    }
+
+                    await ds.Update(Id, tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text, Id_address);
+    
                     Close(); 
                 }
 
@@ -110,16 +136,6 @@ namespace Bibliotech.View.Schools
         {
             int aux = await ds.Count();
             tfUsers.Text = aux.ToString();
-            
-            if (id < 1)
-            {
-                if (isUpdate)
-                {
-                    dialogService.ShowError("Selecione algo primeiro");
-                    Close();
-                }
-            }
-            
         }
     }
 }
