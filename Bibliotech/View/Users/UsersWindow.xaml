@@ -14,11 +14,11 @@
             Margin="0,87,0,143">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TIPO DE USUÁRIO"/>
-                <DataGridTextColumn Header="NOME"/>
-                <DataGridTextColumn Header="TELEFONE"/>
-                <DataGridTextColumn Header="ENDEREÇO"/>
-                <DataGridTextColumn Header="DATA DE NASCIMENTO"/>
+                <DataGridTextColumn Header="TIPO DE USUÁRIO" Width="150"/>
+                <DataGridTextColumn Header="NOME" Width="*"/>
+                <DataGridTextColumn Header="TELEFONE" Width="100"/>
+                <DataGridTextColumn Header="ENDEREÇO" Width="*"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO" Width="175"/>
             </DataGrid.Columns>
         </DataGrid>
 

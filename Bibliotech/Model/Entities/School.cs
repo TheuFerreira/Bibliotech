@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bibliotech.Model.Entities
 {
-    class School
+    public class School
     {
         int id_branch;
         String name;
