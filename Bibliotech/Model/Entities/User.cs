@@ -29,5 +29,18 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
+        public string GetBirthDate()
+        {
+            if (BirthDate.HasValue)
+                return BirthDate.Value.ToString("dd/MM/yyyy");
+
+            return string.Empty;
+        }
+
+        public string GetTelephone()
+        {
+            return Telephone.ToString();
+        }
+
     }
 }

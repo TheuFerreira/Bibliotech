@@ -69,8 +69,11 @@ namespace Bibliotech.Model.DAO
                     "SELECT u.id_user, u.name, u.telephone, CONCAT(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) AS address, u.birth_date, tu.description " +
                     "FROM users AS u " +
                     "INNER JOIN type_users AS tu ON u.id_type_user = tu.id_type_user " +
-                    "INNER JOIN address AS a ON u.id_address = a.id_address; ";
+                    "INNER JOIN address AS a ON u.id_address = a.id_address " +
+                    "WHERE u.status = 1 " +
+                        "AND u.name LIKE @text; ";
                 MySqlCommand command = new MySqlCommand(str, SqlConnection);
+                command.Parameters.AddWithValue("@text", '%' + text + '%');
 
                 DataTable dt = new DataTable();
                 MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);

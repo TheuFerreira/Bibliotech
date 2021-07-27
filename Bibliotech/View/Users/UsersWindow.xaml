@@ -12,6 +12,16 @@
         Title="Usuários" Height="720" Width="1280">
     <Grid>
 
+        <uc:ComboBoxSearchField
+            x:Name="searchField"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            Placeholder="Pesquisar Usuários"
+            BorderBrush="Transparent"
+            VerticalAlignment="Top"
+            Width="450"
+            Click="SearchField_Click"/>
+        
         <DataGrid
             x:Name="dataGrid"
             Margin="0,87,0,143"
@@ -21,7 +31,7 @@
                 <DataGridTextColumn Header="Id" Visibility="Hidden" Binding="{Binding Path=id_user}"/>
                 <DataGridTextColumn Header="TIPO DE USUÁRIO" Width="150" Binding="{Binding Path=description}"/>
                 <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=name}"/>
-                <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=telephone, StringFormat={}{0:(00) 00000-0000}}"/>
+                <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}"/>
                 <DataGridTextColumn Header="ENDEREÇO" Width="*" Binding="{Binding Path=address}"/>
                 <DataGridTextColumn Header="DATA DE NASCIMENTO" Width="175" Binding="{Binding Path=birth_date}"/>
             </DataGrid.Columns>
@@ -42,7 +52,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
-                Text="NOVO"/>
+                Text="NOVO"
+                OnClick="ButtonAdd_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Right"

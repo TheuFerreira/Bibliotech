@@ -1,4 +1,5 @@
-﻿<UserControl x:Class="Bibliotech.UserControls.ComboBoxSearchField"
+﻿<UserControl x:Name="uc"
+             x:Class="Bibliotech.UserControls.ComboBoxSearchField"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -233,7 +234,7 @@
 
             <TextBlock
                 x:Name="tbPlaceholder"
-                Text="PESQUISAR ESCOLAS"
+                Text="{Binding ElementName=uc, Path=Placeholder}"
                 FontSize="16"
                 Margin="107,0,25,0"
                 VerticalAlignment="Center"

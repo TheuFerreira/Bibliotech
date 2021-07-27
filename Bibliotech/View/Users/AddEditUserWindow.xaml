@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Bibliotech.View.Users"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="AddEditUserWindow" Height="469" Width="890">
     <Grid>
@@ -27,7 +28,7 @@
                 Margin="10">
 
                 <uc:TextField 
-                    x:Name="name"
+                    x:Name="tfName"
                     MaxLength="200"
                     HorizontalAlignment="Left"
                     Width="330"
@@ -40,7 +41,7 @@
                     Width="250"/>
 
                 <uc:TextField 
-                    x:Name="birthDate"
+                    x:Name="tfBirthDate"
                     MaxLength="200"
                     FieldType="Number"
                     HorizontalAlignment="Right"
@@ -54,7 +55,7 @@
                 Margin="10,70,10,10">
 
                 <uc:TextField 
-                    x:Name="userName"
+                    x:Name="tfUserName"
                     MaxLength="20"
                     VerticalAlignment="Top"
                     Title="NOME DE USUÁRIO:*"
@@ -63,7 +64,7 @@
                     Width="298"/>
 
                 <uc:TextField 
-                    x:Name="password"
+                    x:Name="tfPassword"
                     MaxLength="10"
                     VerticalAlignment="Top"
                     Title="SENHA:*"
@@ -73,7 +74,7 @@
                     Margin="315,0,198,0"/>
 
                 <uc:TextField 
-                    x:Name="phone"
+                    x:Name="tfPhone"
                     VerticalAlignment="Top"
                     MaxLength="11"
                     FieldType="Number"
@@ -87,7 +88,7 @@
                 Margin="10,130,10,10">
 
                 <uc:TextField 
-                    x:Name="city"
+                    x:Name="tfCity"
                     MaxLength="45"
                     VerticalAlignment="Top"
                     Title="CIDADE:"
@@ -96,7 +97,7 @@
                     Width="280"/>
 
                 <uc:TextField 
-                    x:Name="street"
+                    x:Name="tfStreet"
                     MaxLength="100"
                     VerticalAlignment="Top"
                     Title="RUA:"
@@ -106,7 +107,7 @@
                     Width="300"/>
 
                 <uc:TextField 
-                    x:Name="district"
+                    x:Name="tfDistrict"
                     MaxLength="45"
                     VerticalAlignment="Top"
                     Title="BAIRRO:"
@@ -121,7 +122,7 @@
                 Margin="10,190,10,10">
 
                 <uc:TextField 
-                    x:Name="number"
+                    x:Name="tfNumber"
                     MaxLength="5"
                     VerticalAlignment="Top"
                     Title="NÚMERO:"
@@ -131,7 +132,7 @@
                     Width="150"/>
 
                 <uc:TextField 
-                    x:Name="complement"
+                    x:Name="tfComplement"
                     MaxLength="45"
                     VerticalAlignment="Top"
                     Title="COMPLEMENTO:"
