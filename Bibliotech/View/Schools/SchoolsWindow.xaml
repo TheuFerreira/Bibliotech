@@ -54,6 +54,7 @@
                 Text="NOVO" OnClick="ButtonImage_OnClick_2"/>
 
             <uc:ButtonImage
+                Source="/Bibliotech;component/Resources/img_power.png"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Text="ATIVAR/DESATIVAR" OnClick="ButtonImage_OnClick"/>

@@ -160,6 +160,9 @@
   <data name="img_ok" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_ok.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_power" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_power.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_reports.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
