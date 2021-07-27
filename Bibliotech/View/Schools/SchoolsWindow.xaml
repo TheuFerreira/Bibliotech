@@ -29,7 +29,7 @@
             SelectionChanged="schoolGrid_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone}" Width="150"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, StringFormat={}{0:(00) 00000-0000}}" Width="150"/>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
                 <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
                 <DataGridTextColumn Header="STATUS" Binding="{Binding Path=status}" Width="175"/>
