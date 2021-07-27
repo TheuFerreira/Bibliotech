@@ -22,6 +22,7 @@ namespace Bibliotech.UserControls
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(ButtonImage), new PropertyMetadata("Text"));
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(ButtonImage), new PropertyMetadata(null));
+        public static readonly DependencyProperty HasBorderProperty = DependencyProperty.Register("HasBorder", typeof(bool), typeof(ButtonImage), new PropertyMetadata(true));
 
         public event RoutedEventHandler OnClick;
 
@@ -35,6 +36,12 @@ namespace Bibliotech.UserControls
         {
             get => (ImageSource)GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
+        }
+
+        public bool HasBorder
+        {
+            get => (bool)GetValue(HasBorderProperty);
+            set => SetValue(HasBorderProperty, value);
         }
 
         public ButtonImage()

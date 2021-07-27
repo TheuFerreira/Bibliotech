@@ -27,11 +27,13 @@
                                         Source="{Binding ElementName=uc, Path=Source}"/>
 
                                     <Border
+                                        x:Name="bd"
                                         CornerRadius="0,0,10,10"
                                         VerticalAlignment="Bottom"
                                         Background="{StaticResource ForegroundSolidColor}">
 
                                         <TextBlock 
+                                            x:Name="tb"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Text="{Binding ElementName=uc, Path=Text}"
@@ -47,6 +49,11 @@
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
+
+                                <DataTrigger Binding="{Binding ElementName=uc, Path=HasBorder}" Value="False">
+                                    <Setter TargetName="bd" Property="Background" Value="Transparent"/>
+                                    <Setter TargetName="tb" Property="Foreground" Value="{StaticResource ButtonTextSolidColor}"/>
+                                </DataTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>

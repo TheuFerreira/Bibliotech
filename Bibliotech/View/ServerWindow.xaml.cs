@@ -36,6 +36,20 @@ namespace Bibliotech.View
             Close();
         }
 
+        private bool ValidatedFields()
+        {
+            if (string.IsNullOrEmpty(tfServer.Text)
+                || string.IsNullOrEmpty(tfPort.Text)
+                || string.IsNullOrEmpty(tfDatabase.Text)
+                || string.IsNullOrEmpty(tfUser.Text)
+                || string.IsNullOrEmpty(tfPassword.Text))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private async void BtnTestConnection_Click(object sender, RoutedEventArgs e)
         {
             if (ValidatedFields() == false)
@@ -77,20 +91,6 @@ namespace Bibliotech.View
 
             DialogResult = true;
             Close();
-        }
-
-        private bool ValidatedFields()
-        {
-            if (string.IsNullOrEmpty(tfServer.Text)
-                || string.IsNullOrEmpty(tfPort.Text)
-                || string.IsNullOrEmpty(tfDatabase.Text)
-                || string.IsNullOrEmpty(tfUser.Text)
-                || string.IsNullOrEmpty(tfPassword.Text))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

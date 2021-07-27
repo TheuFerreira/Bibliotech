@@ -6,16 +6,98 @@
         xmlns:local="clr-namespace:Bibliotech"
         xmlns:ctrl="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1280">
     <Grid>
-        <ctrl:TextField 
-            Title="Nome:*"
-            VerticalAlignment="Top" />
-        
-        <ctrl:TextField 
-            Title="Nome:"
-            Margin="0,70,0,0"
-            VerticalAlignment="Top"
-            Placeholder="Insira o nome"/>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock 
+            Foreground="{StaticResource NormalSolidColor}"
+            FontSize="18"
+            Text="BEM VINDO, DUANNE BOMFIM"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ctrl:ButtonImage 
+                Grid.Column="0"
+                Text="LEITOR"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+            <ctrl:ButtonImage 
+                Grid.Column="1"
+                Text="EMPRÉSTIMO"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+            <ctrl:ButtonImage 
+                Grid.Column="2"
+                Text="DEVOLUÇÃO"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+            <ctrl:ButtonImage 
+                Grid.Column="3"
+                Text="LIVROS"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ctrl:ButtonImage 
+                Grid.Column="0"
+                Text="USUÁRIOS"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+            <ctrl:ButtonImage 
+                Grid.Column="1"
+                Text="MANUAL"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+            <ctrl:ButtonImage 
+                Grid.Column="2"
+                Text="RELATÓRIOS"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <ctrl:ButtonImage 
+                Grid.Column="0"
+                Text="ESCOLAS"
+                HasBorder="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+        </Grid>
+
     </Grid>
 </Window>

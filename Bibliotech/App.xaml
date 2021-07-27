@@ -14,6 +14,7 @@
         <SolidColorBrush x:Key="HeaderSolidColor" Color="#909090"/>
         <SolidColorBrush x:Key="GridLineSolidColor" Color="#BCBCBC"/>
         <SolidColorBrush x:Key="LineSelectColor" Color="#EEEEEE"/>
+        <SolidColorBrush x:Key="ButtonTextSolidColor" Color="#9F9F9F"/>
         <Color x:Key="NormalColor">#939393</Color>
         <Color x:Key="HoverColor">#46474B</Color>
 
