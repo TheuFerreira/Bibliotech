@@ -28,7 +28,7 @@
                 x:Name="img"
                 Height="65"
                 Margin="0,15,0,0"
-                Source=""
+                Source="/Bibliotech;component/Resources/img_question.png"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top">
             </Image>

@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Users"
         mc:Ignorable="d"
-        Title="UsersWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Usuários" Height="720" Width="1280">
     <Grid>
-        
+
+        <DataGrid
+            Margin="0,87,0,143">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="TIPO DE USUÁRIO"/>
+                <DataGridTextColumn Header="NOME"/>
+                <DataGridTextColumn Header="TELEFONE"/>
+                <DataGridTextColumn Header="ENDEREÇO"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>
