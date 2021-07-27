@@ -111,10 +111,16 @@ namespace Bibliotech.View.Schools
                     {
                         phone = temp;
                     }
-                    await ds.Insert(tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text);
 
-                    ClearFields();
-    
+                    if(await ds.Insert(tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text))
+                    {
+                        dialogService.ShowSuccess("Usuário salvo com sucesso");
+                        ClearFields();
+                        return;
+                    }
+                    
+                     dialogService.ShowError("Algo deu errado\nTente novamente");
+
                 }
                 else
                 {
@@ -124,9 +130,14 @@ namespace Bibliotech.View.Schools
                         phone = temp;
                     }
 
-                    await ds.Update(Id, tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text, Id_address);
-    
-                    Close(); 
+                    if(await ds.Update(Id, tfName.Text, tfCity.Text, tfDistrict.Text, phone, tfStreet.Text, tfNumber.Text, Id_address))
+                    {
+                        dialogService.ShowSuccess("Usuário salvo com sucesso");
+                        Close();
+                        return;
+                    }
+
+                    dialogService.ShowError("Algo deu errado\nTente novamente");
                 }
 
             }

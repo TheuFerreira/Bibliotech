@@ -45,19 +45,19 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
-                Text="EDITAR" OnClick="ButtonImage_OnClick_1"/>
+                Text="EDITAR" OnClick="ButtonEdit_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
-                Text="NOVO" OnClick="ButtonImage_OnClick_2"/>
+                Text="NOVO" OnClick="ButtonAdd_OnClick"/>
 
             <uc:ButtonImage
                 Source="/Bibliotech;component/Resources/img_power.png"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Text="ATIVAR/DESATIVAR" OnClick="ButtonImage_OnClick"/>
+                Text="ATIVAR/DESATIVAR" OnClick="ButtonOnOff_OnClick"/>
         </Grid>
     </Grid>
 </Window>

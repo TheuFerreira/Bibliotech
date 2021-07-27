@@ -13,10 +13,8 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOSchool: Connection
     {
-        DialogService dialogService = new DialogService();
 
-
-        public async Task Insert(String name, String city, String dist, long? phone, String street, String number)
+        public async Task<bool> Insert(String name, String city, String dist, long? phone, String street, String number)
         {
 
             await Connect();
@@ -50,13 +48,15 @@ namespace Bibliotech.Model.DAO
 
                 await transaction.CommitAsync();
 
-                dialogService.ShowSuccess("Usuário salvo com sucesso");
+                return true;
+                
 
             }
             catch (MySqlException)
             {
                 await transaction.RollbackAsync();
-                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
+                return false;
+                throw;
             }
             finally
             {
@@ -64,7 +64,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task Update(int id, String name, String city, String dist, long? phone, String street, String number, int id_address)
+        public async Task<bool> Update(int id, String name, String city, String dist, long? phone, String street, String number, int id_address)
         {
            
             await Connect();
@@ -98,13 +98,14 @@ namespace Bibliotech.Model.DAO
                 await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
-                dialogService.ShowSuccess("Usuário salvo com sucesso");
+                return true;
 
             }
             catch (Exception)
             {
                 await transaction.RollbackAsync();
-                dialogService.ShowError("Algo de errado aconteceu.\nTente novamente.");
+                return false;
+                throw;
             }
             finally
             {
@@ -128,7 +129,6 @@ namespace Bibliotech.Model.DAO
             }
             catch (Exception)
             {
-                dialogService.ShowError("Algo deu errado\nTente novamente");
                 await transaction.RollbackAsync();
                 throw;
             }
@@ -187,6 +187,7 @@ namespace Bibliotech.Model.DAO
             catch (Exception)
             {
                 return null;
+                throw;
             }
             finally
             {

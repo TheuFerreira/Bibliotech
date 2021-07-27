@@ -28,7 +28,7 @@ namespace Bibliotech.View.Schools
     {
         
         DialogService dialogService = new DialogService();
-        DAOSchool ds = new DAOSchool();
+        DAOSchool daoSchool = new DAOSchool();
         Address address = new Address();
         School school = new School();
     
@@ -40,11 +40,11 @@ namespace Bibliotech.View.Schools
         private async void UpdateGrid()
         {
             DataTable dataTable = new DataTable();
-            dataTable = await ds.FillDataGrid(searchField.Text);
+            dataTable = await daoSchool.FillDataGrid(searchField.Text);
             schoolGrid.ItemsSource = dataTable.DefaultView;
         }
 
-        private async void ButtonImage_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonOnOff_OnClick(object sender, RoutedEventArgs e)
         {
             if (school.Id_branch >= 1)
             {
@@ -52,7 +52,7 @@ namespace Bibliotech.View.Schools
                 {
                     if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
                     {
-                        await ds.OnOff(0, school.Id_branch);
+                        await daoSchool.OnOff(0, school.Id_branch);
                         dialogService.ShowSuccess("Desativado com sucesso!");
                     }
 
@@ -62,7 +62,7 @@ namespace Bibliotech.View.Schools
 
                 if (dialogService.ShowQuestion("Tem certeza que deseja\nativar esta escola?", ""))
                 {
-                    await ds.OnOff(1, school.Id_branch);
+                    await daoSchool.OnOff(1, school.Id_branch);
                     dialogService.ShowSuccess("Ativado com sucesso!");
                 }
 
@@ -71,7 +71,7 @@ namespace Bibliotech.View.Schools
             
         }
 
-        private void ButtonImage_OnClick_1(object sender, RoutedEventArgs e)
+        private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
             addEdit.Id = school.Id_branch;
@@ -89,7 +89,7 @@ namespace Bibliotech.View.Schools
             UpdateGrid();
         }
 
-        private void ButtonImage_OnClick_2(object sender, RoutedEventArgs e)
+        private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
 
@@ -148,6 +148,5 @@ namespace Bibliotech.View.Schools
             }
         }
 
-       
     }
 }
