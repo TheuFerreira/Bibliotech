@@ -4,9 +4,181 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Users"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="AddEditUserWindow" Height="450" Width="800">
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="AddEditUserWindow" Height="469" Width="890">
     <Grid>
+
+        <TextBlock 
+            x:Name="tbInfo"
+            Margin="0,10"
+            FontSize="25"
+            Text="ADICIONAR/EDITAR USUÁRIO"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"/>
+
+        <Grid 
+            Margin="20,40"
+            VerticalAlignment="Top">
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10">
+
+                <uc:TextField 
+                    x:Name="name"
+                    MaxLength="200"
+                    HorizontalAlignment="Left"
+                    Width="330"
+                    Title="NOME:*"
+                    Placeholder="INSIRA O NOME"/>
+
+                <ComboBox 
+                    Margin="130,0,0,0"
+                    HorizontalAlignment="Center"
+                    Width="250"/>
+
+                <uc:TextField 
+                    x:Name="birthDate"
+                    MaxLength="200"
+                    FieldType="Number"
+                    HorizontalAlignment="Right"
+                    Width="200"
+                    Title="DATA DE NASCIMENTO:"
+                    Placeholder="DIA/MÊS/ANO"/>
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,70,10,10">
+
+                <uc:TextField 
+                    x:Name="userName"
+                    MaxLength="20"
+                    VerticalAlignment="Top"
+                    Title="NOME DE USUÁRIO:*"
+                    Placeholder="@exemplo"
+                    HorizontalAlignment="Left" 
+                    Width="298"/>
+
+                <uc:TextField 
+                    x:Name="password"
+                    MaxLength="10"
+                    VerticalAlignment="Top"
+                    Title="SENHA:*"
+                    Placeholder="12345"
+                    HorizontalAlignment="Center"
+                    Width="260" 
+                    Margin="315,0,198,0"/>
+
+                <uc:TextField 
+                    x:Name="phone"
+                    VerticalAlignment="Top"
+                    MaxLength="11"
+                    FieldType="Number"
+                    Title="TELEFONE:"
+                    Placeholder="(DD) 00000-0000" 
+                    HorizontalAlignment="Right" Width="178" />
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,130,10,10">
+
+                <uc:TextField 
+                    x:Name="city"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="CIDADE:"
+                    Placeholder="CIDADE"
+                    HorizontalAlignment="Left" 
+                    Width="280"/>
+
+                <uc:TextField 
+                    x:Name="street"
+                    MaxLength="100"
+                    VerticalAlignment="Top"
+                    Title="RUA:"
+                    Placeholder="AV/RUA"
+                    HorizontalAlignment="Center" 
+                    Margin="260,0,178,0" 
+                    Width="300"/>
+
+                <uc:TextField 
+                    x:Name="district"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="BAIRRO:"
+                    Placeholder="BAIRRO"
+                    HorizontalAlignment="Right" 
+                    Width="200"/>
+
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,190,10,10">
+
+                <uc:TextField 
+                    x:Name="number"
+                    MaxLength="5"
+                    VerticalAlignment="Top"
+                    Title="NÚMERO:"
+                    FieldType="Number"
+                    Placeholder="85"
+                    HorizontalAlignment="Left" 
+                    Width="150"/>
+
+                <uc:TextField 
+                    x:Name="complement"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="COMPLEMENTO:"
+                    Placeholder="CASA"
+                    HorizontalAlignment="Left" 
+                    Margin="180,0,278,0" 
+                    Width="250"/>
+
+            </Grid>
+            
+        </Grid>
+
+        <StackPanel
+            Margin="30,0,0,30"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom">
+
+            <uc:TextField 
+                x:Name="school"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Width="300"
+                Title="NOME DA ESCOLA:"
+                Text=""
+                IsEnabled="False"/>
+
+            <uc:Button
+                Source="/Bibliotech;component/Resources/img_zoom.png"
+                VerticalAlignment="Bottom"
+                Height="25"
+                MarginImage="7,3,0,3"
+                Margin="10,0,0,0"
+                Width="150"
+                CornerRadius="15"
+                Text="ESCOLA"/>
+        </StackPanel>
         
+        <uc:ButtonImage 
+            x:Name="save"
+            Text="SALVAR"
+            Width="140"
+            Height="110"
+            Margin="10"
+            Source="/Bibliotech;component/Resources/img_save.png"
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"/>
+
     </Grid>
 </Window>

@@ -4,23 +4,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Users"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Loaded="Window_Loaded"
         Title="Usuários" Height="720" Width="1280">
     <Grid>
 
         <DataGrid
-            Margin="0,87,0,143">
+            x:Name="dataGrid"
+            Margin="0,87,0,143"
+            ItemsSource="{Binding}">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TIPO DE USUÁRIO"/>
-                <DataGridTextColumn Header="NOME"/>
-                <DataGridTextColumn Header="TELEFONE"/>
-                <DataGridTextColumn Header="ENDEREÇO"/>
-                <DataGridTextColumn Header="DATA DE NASCIMENTO"/>
+                <DataGridTextColumn Header="Id" Visibility="Hidden" Binding="{Binding Path=id_user}"/>
+                <DataGridTextColumn Header="TIPO DE USUÁRIO" Width="150" Binding="{Binding Path=description}"/>
+                <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=name}"/>
+                <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=telephone, StringFormat={}{0:(00) 00000-0000}}"/>
+                <DataGridTextColumn Header="ENDEREÇO" Width="*" Binding="{Binding Path=address}"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO" Width="175" Binding="{Binding Path=birth_date}"/>
             </DataGrid.Columns>
         </DataGrid>
 
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+
+            <uc:ButtonImage
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_edit.png"
+                Text="EDITAR"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_add.png"
+                Text="NOVO"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Text="DELETAR"
+                OnClick="ButtonDelete_OnClick"/>
+        </Grid>
     </Grid>
 </Window>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bibliotech.Model.Entities
 {
-    class Address
+    public class Address
     {
         int id_address;
         String city;

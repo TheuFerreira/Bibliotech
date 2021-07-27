@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace Bibliotech.Model.Entities.Enums
 {
-    class TypeUser
+    public enum TypeUser
     {
+        [Description("Controlador")]
+        Controller = 1,
+        [Description("Usuário")]
+        User = 2
     }
 }

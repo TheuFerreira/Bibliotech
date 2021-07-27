@@ -140,7 +140,7 @@
     <Compile Include="Model\Entities\Address.cs" />
     <Compile Include="Model\Entities\Author.cs" />
     <Compile Include="Model\Entities\Book.cs" />
-    <Compile Include="Model\Entities\Enums\ExemplaryStatus.cs" />
+    <Compile Include="Model\Entities\Enums\Status.cs" />
     <Compile Include="Model\Entities\Enums\TypeUser.cs" />
     <Compile Include="Model\Entities\Exemplary.cs" />
     <Compile Include="Model\Entities\Lector.cs" />
@@ -416,6 +416,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_power.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_zoom.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_question.png" />

@@ -12,6 +12,13 @@ namespace Bibliotech.UserControls
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Button), new PropertyMetadata(new CornerRadius(35)));
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(Button), new PropertyMetadata(null));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(Button), new PropertyMetadata("Text"));
+        public static readonly DependencyProperty MarginImageProperty = DependencyProperty.Register("MarginImage", typeof(Thickness), typeof(Button), new PropertyMetadata(new Thickness(8)));
+
+        public Thickness MarginImage
+        {
+            get => (Thickness)GetValue(MarginImageProperty);
+            set => SetValue(MarginImageProperty, value);
+        }
 
         public CornerRadius CornerRadius
         {

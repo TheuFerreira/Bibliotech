@@ -21,8 +21,8 @@ namespace Bibliotech.View.Users
     /// </summary>
     public partial class LoginWindow : Window
     { 
-        public static int IdBranch { get; set; }
-        public DAOUser DaoUser;
+        public static string NameBranch { get; set; }
+        private DAOUser DaoUser;
         public User User;
 
         public LoginWindow()
@@ -33,16 +33,19 @@ namespace Bibliotech.View.Users
 
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(tfUser.Text) || string.IsNullOrWhiteSpace(tfPassword.Text))
+            {
+                MessageBox.Show("White Space into User/PassWord");
+            }
+            
             String user = tfUser.Text;
             String password = tfPassword.Text;
             User = await DaoUser.IsValidUser(user, password);
+            
             if(User != null)
             {
                 MessageBox.Show("Hello World");
             }
-            
-         
-            
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
