@@ -75,6 +75,7 @@
                 <uc:TextField
                     x:Name="tfPassword"
                     Margin="0,25,0,40"
+                    MaxLength="10"
                     Title="SENHA:"
                     Placeholder="****" />
 

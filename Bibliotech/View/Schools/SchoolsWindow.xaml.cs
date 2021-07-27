@@ -75,8 +75,8 @@ namespace Bibliotech.View.Schools
                 school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
                 school.Id_address = Convert.ToInt32(row_selected["id_address"].ToString());
                 school.Name = row_selected["name"].ToString();
-                school.Telephone = row_selected["telephone"].ToString();
-                school.Status = Convert.ToInt32(row_selected["status"].ToString());
+                school.Telephone = long.Parse(row_selected["telephone"].ToString());
+                school.Status = (Status)Convert.ToInt32(row_selected["status"].ToString());
 
                 address.City = row_selected["city"].ToString();
                 address.Neighborhood = row_selected["neighborhood"].ToString();
@@ -95,7 +95,7 @@ namespace Bibliotech.View.Schools
             addEdit.tfName.Text = school.Name;
             addEdit.tfCity.Text = address.City;
             addEdit.tfDistrict.Text = address.Neighborhood;
-            addEdit.tfPhone.Text = school.Telephone;
+            addEdit.tfPhone.Text = school.Telephone.ToString();
             addEdit.tfStreet.Text = address.Street;
             addEdit.tfNumber.Text = address.Number;
             addEdit.IsUpdate = true;

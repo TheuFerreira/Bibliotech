@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bibliotech.Model.DAO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bibliotech.View.Users
 {
@@ -19,9 +8,25 @@ namespace Bibliotech.View.Users
     /// </summary>
     public partial class UsersWindow : Window
     {
+        private readonly DAOUser daoUser;
+
         public UsersWindow()
         {
             InitializeComponent();
+
+            daoUser = new DAOUser();
+        }
+
+        private async void LoadUsers()
+        {
+            string text = string.Empty;
+
+            dataGrid.ItemsSource = await daoUser.SearchByText(text);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadUsers();
         }
     }
 }

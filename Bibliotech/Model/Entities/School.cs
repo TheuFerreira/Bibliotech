@@ -40,5 +40,6 @@ namespace Bibliotech.Model.Entities
         public string Name { get => name; set => name = value; }
         public int Id_address { get => id_address; set => id_address = value; }
         public long Telephone { get => telephone; set => telephone = value; }
+        public Status Status { get => status; set => status = value; }
     } 
 }

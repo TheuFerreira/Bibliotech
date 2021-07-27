@@ -6,7 +6,6 @@ namespace Bibliotech.Model.Entities.Enums
     {
         [Description("Controlador")]
         Controller = 1,
-
         [Description("Usuário")]
         User = 2
     }

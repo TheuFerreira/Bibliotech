@@ -20,7 +20,7 @@
 
                                 <Grid>
                                     <Image
-                                        Margin="8"
+                                        Margin="{Binding ElementName=uc, Path=MarginImage}"
                                         HorizontalAlignment="Left"
                                         Source="{Binding ElementName=uc, Path=Source}"/>
 
