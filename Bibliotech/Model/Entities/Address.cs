@@ -17,7 +17,7 @@ namespace Bibliotech.Model.Entities
 
         public Address()
         {
-
+            id_address = -1;
         }
 
         public Address(string city, string neighborhood, string street, string number, string complement)

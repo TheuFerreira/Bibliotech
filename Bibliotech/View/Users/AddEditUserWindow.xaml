@@ -36,6 +36,7 @@
                     Placeholder="INSIRA O NOME"/>
 
                 <ComboBox 
+                    x:Name="cbTypeUser"
                     Margin="130,0,0,0"
                     HorizontalAlignment="Center"
                     Width="250"/>
@@ -43,7 +44,6 @@
                 <uc:TextField 
                     x:Name="tfBirthDate"
                     MaxLength="200"
-                    FieldType="Number"
                     HorizontalAlignment="Right"
                     Width="200"
                     Title="DATA DE NASCIMENTO:"
@@ -91,7 +91,7 @@
                     x:Name="tfCity"
                     MaxLength="45"
                     VerticalAlignment="Top"
-                    Title="CIDADE:"
+                    Title="CIDADE:*"
                     Placeholder="CIDADE"
                     HorizontalAlignment="Left" 
                     Width="280"/>
@@ -100,7 +100,7 @@
                     x:Name="tfStreet"
                     MaxLength="100"
                     VerticalAlignment="Top"
-                    Title="RUA:"
+                    Title="RUA:*"
                     Placeholder="AV/RUA"
                     HorizontalAlignment="Center" 
                     Margin="260,0,178,0" 
@@ -110,7 +110,7 @@
                     x:Name="tfDistrict"
                     MaxLength="45"
                     VerticalAlignment="Top"
-                    Title="BAIRRO:"
+                    Title="BAIRRO:*"
                     Placeholder="BAIRRO"
                     HorizontalAlignment="Right" 
                     Width="200"/>
@@ -125,7 +125,7 @@
                     x:Name="tfNumber"
                     MaxLength="5"
                     VerticalAlignment="Top"
-                    Title="NÚMERO:"
+                    Title="NÚMERO:*"
                     FieldType="Number"
                     Placeholder="85"
                     HorizontalAlignment="Left" 
@@ -179,7 +179,8 @@
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom"/>
+            VerticalAlignment="Bottom"
+            OnClick="ButtonSave_OnClick"/>
 
     </Grid>
 </Window>

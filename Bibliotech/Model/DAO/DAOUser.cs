@@ -71,13 +71,13 @@ namespace Bibliotech.Model.DAO
                     "INNER JOIN type_users AS tu ON u.id_type_user = tu.id_type_user " +
                     "INNER JOIN address AS a ON u.id_address = a.id_address " +
                     "WHERE u.status = 1 " +
-                        "AND u.name LIKE @text; ";
+                        "AND u.name LIKE ?; ";
                 MySqlCommand command = new MySqlCommand(str, SqlConnection);
-                command.Parameters.AddWithValue("@text", '%' + text + '%');
+                command.Parameters.Add("?", DbType.String).Value = '%' + text + '%';
 
                 DataTable dt = new DataTable();
                 MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);
-                dataAdapter.Fill(dt);
+                _ = dataAdapter.Fill(dt);
 
                 return dt.DefaultView;
             }
@@ -99,12 +99,12 @@ namespace Bibliotech.Model.DAO
             try
             {
                 string str = "" +
-                    "UPDATE users SET status = 0 WHERE id_user = @idUser";
+                    "UPDATE users SET status = 0 WHERE id_user = ?";
 
                 MySqlCommand command = new MySqlCommand(str, SqlConnection, transaction);
-                command.Parameters.AddWithValue("@idUser", idUser);
+                command.Parameters.Add("?", DbType.Int32).Value = idUser;
 
-                await command.ExecuteNonQueryAsync();
+                _ = await command.ExecuteNonQueryAsync();
 
                 return true;
             }
@@ -116,6 +116,52 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
+        }
+
+        private async Task Insert(User user)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                MySqlCommand command = new MySqlCommand(SqlConnection, transaction);
+
+                user.Address.Id_address = await new DAOAddress().Insert(user.Address, command);
+
+                string str = "" +
+                    "INSERT INTO users(id_type_user, id_branch, name, user_name, password, birth_date, telephone, id_address, status) " +
+                    "VALUES (?, ?, ?, ?, AES_ENCRYPT(?, 'bibliotech2021'), ?, ?, ?, 1);";
+
+                command.Parameters.Clear();
+                command.CommandText = str;
+                command.Parameters.Add("?", DbType.Int32).Value = user.TypeUser;
+                command.Parameters.Add("?", DbType.Int32).Value = user.Branch.Id_branch;
+                command.Parameters.Add("?", DbType.String).Value = user.Name;
+                command.Parameters.Add("?", DbType.String).Value = user.UserName;
+                command.Parameters.Add("?", DbType.String).Value = user.Password;
+                command.Parameters.Add("?", DbType.Date).Value = user.BirthDate;
+                command.Parameters.Add("?", DbType.Int64).Value = user.Telephone;
+                command.Parameters.Add("?", DbType.Int32).Value = user.Address.Id_address;
+
+                _ = await command.ExecuteNonQueryAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task Save(User user)
+        {
+            if (user.IdUser == -1)
+                await Insert(user);
         }
     }
 }

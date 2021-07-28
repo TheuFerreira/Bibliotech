@@ -19,6 +19,7 @@ namespace Bibliotech.Model.Entities
         public User()
         {
             IdUser = -1;
+            Address = new Address();
         }
 
         public User(int idUser, TypeUser typeUser, string name)

@@ -1,12 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Bibliotech.Model.Entities;
+using MySqlConnector;
 using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
 {
-    class DAOAddress
+    public class DAOAddress
     {
+        public async Task<int> Insert(Address address, MySqlCommand command)
+        {
+            try
+            {
+                string str = "" +
+                    "INSERT INTO address(city, neighborhood, street, number, complement, status) " +
+                    "VALUES (?, ?, ?, ?, ?, 1);" +
+                    "SELECT @@IDENTITY;";
+
+                command.Parameters.Clear();
+                command.CommandText = str;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.City;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Neighborhood;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Street;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Number;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Complement;
+
+                object result = await command.ExecuteScalarAsync();
+                return int.Parse(result.ToString());
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
