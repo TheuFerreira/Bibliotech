@@ -31,5 +31,31 @@ namespace Bibliotech.Model.DAO
                 throw ex;
             }
         }
+
+        public async Task Update(Address address, MySqlCommand command)
+        {
+            try
+            {
+                string str = "" +
+                    "UPDATE address " +
+                    "SET city = ?, neighborhood = ?, street = ?, number = ?, complement = ? " +
+                    "WHERE id_address = ?;";
+
+                command.Parameters.Clear();
+                command.CommandText = str;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.City;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Neighborhood;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Street;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Number;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Complement;
+                command.Parameters.Add("?", System.Data.DbType.String).Value = address.Id_address;
+
+                _ = await command.ExecuteNonQueryAsync();
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

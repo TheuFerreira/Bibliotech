@@ -40,10 +40,25 @@ namespace Bibliotech.View.Users
             LoadUsers();
         }
 
+        private async void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedItem == null)
+            {
+                return;
+            }
+
+            DataRowView row = dataGrid.SelectedItem as DataRowView;
+            int idUser = int.Parse(row["id_user"].ToString());
+
+            User user = await daoUser.GetUserById(idUser);
+            _ = new AddEditUserWindow(user).ShowDialog();
+
+            LoadUsers();
+        }
+
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            AddEditUserWindow addEditUser = new AddEditUserWindow(new User());
-            addEditUser.ShowDialog();
+            _ = new AddEditUserWindow(new User()).ShowDialog();
 
             LoadUsers();
         }
@@ -51,19 +66,24 @@ namespace Bibliotech.View.Users
         private async void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
             if (dataGrid.SelectedItem == null)
+            {
                 return;
+            }
 
             DataRowView row = dataGrid.SelectedItem as DataRowView;
             string name = row["name"].ToString();
 
             bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja excluir o Usuário {name}?");
             if (result == false)
+            {
                 return;
+            }
 
             int idUser = Convert.ToInt32(row["id_user"].ToString());
             await daoUser.Delete(idUser);
 
             dialogService.ShowSuccess($"Usuário {name}, excluído com sucesso!!!");
+            LoadUsers();
         }
     }
 }

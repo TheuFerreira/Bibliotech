@@ -209,6 +209,9 @@
     <Compile Include="View\Schools\SchoolsWindow.xaml.cs">
       <DependentUpon>SchoolsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Schools\SearchSchoolWindow.xaml.cs">
+      <DependentUpon>SearchSchoolWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ServerWindow.xaml.cs">
       <DependentUpon>ServerWindow.xaml</DependentUpon>
     </Compile>
@@ -310,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Schools\SchoolsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Schools\SearchSchoolWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

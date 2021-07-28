@@ -33,7 +33,7 @@
                 <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=name}"/>
                 <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}"/>
                 <DataGridTextColumn Header="ENDEREÇO" Width="*" Binding="{Binding Path=address}"/>
-                <DataGridTextColumn Header="DATA DE NASCIMENTO" Width="175" Binding="{Binding Path=birth_date}"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO" Width="175" Binding="{Binding Path=birth_date, TargetNullValue='Sem Data'}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -46,7 +46,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
-                Text="EDITAR"/>
+                Text="EDITAR"
+                OnClick="ButtonEdit_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"

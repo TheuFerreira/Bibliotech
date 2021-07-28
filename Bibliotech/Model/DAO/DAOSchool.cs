@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bibliotech.Model.Entities;
 using MySqlConnector;
-using System.Windows;
-using Bibliotech.Services;
+using System;
 using System.Data;
-using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
 {
-    public class DAOSchool: Connection
+    public class DAOSchool : Connection
     {
 
         public async Task<bool> Insert(String name, String city, String dist, long? phone, String street, String number)
@@ -49,7 +44,7 @@ namespace Bibliotech.Model.DAO
                 await transaction.CommitAsync();
 
                 return true;
-                
+
 
             }
             catch (MySqlException)
@@ -66,7 +61,7 @@ namespace Bibliotech.Model.DAO
 
         public async Task<bool> Update(int id, String name, String city, String dist, long? phone, String street, String number, int id_address)
         {
-           
+
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
@@ -77,7 +72,7 @@ namespace Bibliotech.Model.DAO
                              "where id_address = @id_address; ";
 
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
-               
+
 
                 cmd.Parameters.AddWithValue("@city", city);
                 cmd.Parameters.AddWithValue("@dist", dist);
@@ -94,7 +89,7 @@ namespace Bibliotech.Model.DAO
                 cmd.CommandText = strSql;
                 cmd.Parameters.AddWithValue("@id", id);
                 cmd.Parameters.AddWithValue("@phone", phone);
-                
+
                 await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
@@ -125,7 +120,7 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
                 await cmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
-                
+
             }
             catch (Exception)
             {
@@ -149,7 +144,7 @@ namespace Bibliotech.Model.DAO
             {
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
                 object result = await cmd.ExecuteScalarAsync();
-                number = Convert.ToInt32(result.ToString());              
+                number = Convert.ToInt32(result.ToString());
             }
             catch (MySqlException)
             {
@@ -171,7 +166,7 @@ namespace Bibliotech.Model.DAO
                             "from branch as b " +
                             "inner join address as a on b.id_address = a.id_address " +
                             "inner join status as s on s.id_status = b.status " +
-                            "where b.name like \"%" +query +"%\";";
+                            "where b.name like \"%" + query + "%\";";
 
             try
             {
@@ -180,7 +175,7 @@ namespace Bibliotech.Model.DAO
 
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable("branch");
-                
+
                 adapter.Fill(dt);
                 return dt;
             }
@@ -195,8 +190,41 @@ namespace Bibliotech.Model.DAO
             }
         }
 
+        public async Task<School> GetById(int idBranch)
+        {
+            try
+            {
+                await Connect();
 
-       
+                string sql = "" +
+                    "SELECT name " +
+                    "FROM branch " +
+                    "WHERE id_branch = ?;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = idBranch;
+
+                School school = new School();
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string name = await reader.GetFieldValueAsync<string>(0);
+
+                    school = new School(idBranch, name);
+                }
+
+                return school;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
     }
 }
 

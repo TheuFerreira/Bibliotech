@@ -19,6 +19,7 @@ namespace Bibliotech.Model.Entities
         public User()
         {
             IdUser = -1;
+            Branch = new School();
             Address = new Address();
         }
 
@@ -32,10 +33,7 @@ namespace Bibliotech.Model.Entities
 
         public string GetBirthDate()
         {
-            if (BirthDate.HasValue)
-                return BirthDate.Value.ToString("dd/MM/yyyy");
-
-            return string.Empty;
+            return BirthDate.HasValue ? BirthDate.Value.ToString("dd/MM/yyyy") : string.Empty;
         }
 
         public string GetTelephone()
