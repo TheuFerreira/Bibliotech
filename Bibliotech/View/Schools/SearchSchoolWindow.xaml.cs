@@ -38,6 +38,12 @@ namespace Bibliotech.View.Schools
             LoadSchools();
         }
 
+        private int GetIdInSelectedRow()
+        {
+            DataRowView row = dataGrid.SelectedItem as DataRowView;
+            return int.Parse(row["id_branch"].ToString());
+        }
+        
         private async void ButtonSelect_Click(object sender, RoutedEventArgs e)
         {
             if (dataGrid.SelectedItem == null)
@@ -45,8 +51,7 @@ namespace Bibliotech.View.Schools
                 return;
             }
 
-            DataRowView row = dataGrid.SelectedItem as DataRowView;
-            int idBranch = int.Parse(row["id_branch"].ToString());
+            int idBranch = GetIdInSelectedRow();
 
             Branch = await daoSchool.GetById(idBranch);
             DialogResult = true;

@@ -59,6 +59,7 @@
             <uc:ButtonImage
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_delete.png"
                 Text="DELETAR"
                 OnClick="ButtonDelete_OnClick"/>
         </Grid>

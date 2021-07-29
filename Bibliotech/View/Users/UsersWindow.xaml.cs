@@ -1,7 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
-using System;
 using System.Data;
 using System.Windows;
 
@@ -40,6 +39,12 @@ namespace Bibliotech.View.Users
             LoadUsers();
         }
 
+        private int GetIdUserInSelectedRow()
+        {
+            DataRowView row = dataGrid.SelectedItem as DataRowView;
+            return int.Parse(row["id_user"].ToString());
+        }
+
         private async void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
         {
             if (dataGrid.SelectedItem == null)
@@ -47,8 +52,7 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            DataRowView row = dataGrid.SelectedItem as DataRowView;
-            int idUser = int.Parse(row["id_user"].ToString());
+            int idUser = GetIdUserInSelectedRow();
 
             User user = await daoUser.GetUserById(idUser);
             _ = new AddEditUserWindow(user).ShowDialog();
@@ -79,7 +83,7 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            int idUser = Convert.ToInt32(row["id_user"].ToString());
+            int idUser = GetIdUserInSelectedRow();
             await daoUser.Delete(idUser);
 
             dialogService.ShowSuccess($"Usuário {name}, excluído com sucesso!!!");
