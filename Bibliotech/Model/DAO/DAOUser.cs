@@ -41,11 +41,15 @@ namespace Bibliotech.Model.DAO
                     int idAddressBranch = reader.GetInt32(6);
                     long telephone = reader.GetInt64(7);
 
+                    Address address = new Address() 
+                    {
+                        IdAddress = idAddressBranch,
+                    };
+
                     User User = new User(idUser, typeUser, nameUser);
-                    School school = new School(idBranch, nameBranch, idAddressBranch, telephone);
+                    School school = new School(idBranch, nameBranch, address, telephone);
 
                     return User;
-
                 }
 
             }
@@ -129,7 +133,7 @@ namespace Bibliotech.Model.DAO
             {
                 MySqlCommand command = new MySqlCommand(SqlConnection, transaction);
 
-                user.Address.Id_address = await new DAOAddress().Insert(user.Address, command);
+                user.Address.IdAddress = await new DAOAddress().Insert(user.Address, command);
 
                 string str = "" +
                     "INSERT INTO users(id_type_user, id_branch, name, user_name, password, birth_date, telephone, id_address, status) " +
@@ -144,7 +148,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.String).Value = user.Password;
                 command.Parameters.Add("?", DbType.Date).Value = user.BirthDate;
                 command.Parameters.Add("?", DbType.Int64).Value = user.Telephone;
-                command.Parameters.Add("?", DbType.Int32).Value = user.Address.Id_address;
+                command.Parameters.Add("?", DbType.Int32).Value = user.Address.IdAddress;
 
                 _ = await command.ExecuteNonQueryAsync();
 
@@ -300,7 +304,7 @@ namespace Bibliotech.Model.DAO
 
                     Address address = new Address()
                     {
-                        Id_address = idAddress,
+                        IdAddress = idAddress,
                         City = city,
                         Neighborhood = neighborhood,
                         Street = street,

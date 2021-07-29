@@ -8,50 +8,47 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOSchool : Connection
     {
-
-        public async Task<bool> Insert(String name, String city, String dist, long? phone, String street, String number)
+        public async Task<bool> Insert(School school)
         {
-
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
-                String strSql = "insert into address(city, neighborhood, street, number) " +
+                string strSql = "insert into address(city, neighborhood, street, number) " +
                                        "values(@city, @dist, @street, @number); " +
                                        "select @@identity;";
 
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
 
-                cmd.Parameters.AddWithValue("@city", city);
-                cmd.Parameters.AddWithValue("@dist", dist);
-                cmd.Parameters.AddWithValue("@street", street);
-                cmd.Parameters.AddWithValue("@number", number);
+                _ = cmd.Parameters.AddWithValue("@city", school.Address.City);
+                _ = cmd.Parameters.AddWithValue("@dist", school.Address.Neighborhood);
+                _ = cmd.Parameters.AddWithValue("@street", school.Address.Street);
+                _ = cmd.Parameters.AddWithValue("@number", school.Address.Number);
 
                 object result = await cmd.ExecuteScalarAsync();
-                int id = Convert.ToInt32(result.ToString());
+                school.Address.IdAddress = Convert.ToInt32(result.ToString());
 
                 strSql = " insert into branch(name, id_address, telephone, status) " +
                                       "values(@name, @id, @phone, 1);";
 
-                cmd.CommandText = strSql;
-                cmd.Parameters.AddWithValue("@name", name);
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.Parameters.AddWithValue("@phone", phone);
+                cmd.Parameters.Clear();
 
-                await cmd.ExecuteNonQueryAsync();
+                cmd.CommandText = strSql;
+                _ = cmd.Parameters.AddWithValue("@name", school.Name);
+                _ = cmd.Parameters.AddWithValue("@id", school.Address.IdAddress);
+                _ = cmd.Parameters.AddWithValue("@phone", school.Telephone);
+
+                _ = await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
 
                 return true;
-
-
             }
-            catch (MySqlException)
+            catch (MySqlException ex)
             {
                 await transaction.RollbackAsync();
-                return false;
-                throw;
+                throw ex;
             }
             finally
             {
@@ -59,38 +56,38 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<bool> Update(int id, String name, String city, String dist, long? phone, String street, String number, int id_address)
+        public async Task<bool> Update(int id, School school)
         {
-
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
-                String strSql = "update address " +
+                string strSql = "update address " +
                              "set city = @city, neighborhood = @dist, street = @street, number = @number " +
                              "where id_address = @id_address; ";
 
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
 
+                _ = cmd.Parameters.AddWithValue("@city", school.Address.City);
+                _ = cmd.Parameters.AddWithValue("@dist", school.Address.Neighborhood);
+                _ = cmd.Parameters.AddWithValue("@street", school.Address.Street);
+                _ = cmd.Parameters.AddWithValue("@number", school.Address.Number);
+                _ = cmd.Parameters.AddWithValue("@id_address", school.Address.IdAddress);
 
-                cmd.Parameters.AddWithValue("@city", city);
-                cmd.Parameters.AddWithValue("@dist", dist);
-                cmd.Parameters.AddWithValue("@street", street);
-                cmd.Parameters.AddWithValue("@number", number);
-                cmd.Parameters.AddWithValue("@id_address", id_address);
-
-                await cmd.ExecuteNonQueryAsync();
+                _ = await cmd.ExecuteNonQueryAsync();
 
                 strSql = "update branch " +
-                             "set name = '" + name + "', telephone = @phone " +
+                             "set name = '" + school.Name + "', telephone = @phone " +
                              " where id_branch = @id;";
 
-                cmd.CommandText = strSql;
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.Parameters.AddWithValue("@phone", phone);
+                cmd.Parameters.Clear();
 
-                await cmd.ExecuteNonQueryAsync();
+                cmd.CommandText = strSql;
+                _ = cmd.Parameters.AddWithValue("@id", id);
+                _ = cmd.Parameters.AddWithValue("@phone", school.Telephone);
+
+                _ = await cmd.ExecuteNonQueryAsync();
 
                 await transaction.CommitAsync();
                 return true;
@@ -131,7 +128,6 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
-
         }
 
         public async Task<int> Count()
@@ -224,7 +220,6 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-
     }
 }
 

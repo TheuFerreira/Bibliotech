@@ -1,37 +1,24 @@
 ﻿using Bibliotech.Model.DAO;
-using Bibliotech.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data;
-using MySqlConnector;
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
+using Bibliotech.Services;
+using System;
+using System.Data;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Bibliotech.View.Schools
-
 {
     /// <summary>
     /// Lógica interna para SchoolsWindow.xaml
     /// </summary>
     public partial class SchoolsWindow : Window
     {
-        
-        DialogService dialogService = new DialogService();
-        DAOSchool daoSchool = new DAOSchool();
-        Address address = new Address();
-        School school = new School();
-    
+        private readonly DialogService dialogService = new DialogService();
+        private readonly DAOSchool daoSchool = new DAOSchool();
+        private readonly Address address = new Address();
+        private readonly School school = new School();
+
         public SchoolsWindow()
         {
             InitializeComponent();
@@ -39,43 +26,43 @@ namespace Bibliotech.View.Schools
 
         private async void UpdateGrid()
         {
-            DataTable dataTable = new DataTable();
-            dataTable = await daoSchool.FillDataGrid(searchField.Text);
+            DataTable dataTable = await daoSchool.FillDataGrid(searchField.Text);
             schoolGrid.ItemsSource = dataTable.DefaultView;
         }
 
         private async void ButtonOnOff_OnClick(object sender, RoutedEventArgs e)
         {
-            if (school.Id_branch >= 1)
+            if (school.Id_branch < 1)
             {
-                if (school.Status == Status.Active)
-                {
-                    if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
-                    {
-                        await daoSchool.OnOff(0, school.Id_branch);
-                        dialogService.ShowSuccess("Desativado com sucesso!");
-                    }
+                return;
+            }
 
-                    UpdateGrid();
-                    return;
-                }
-
-                if (dialogService.ShowQuestion("Tem certeza que deseja\nativar esta escola?", ""))
+            if (school.Status == Status.Active)
+            {
+                if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
                 {
-                    await daoSchool.OnOff(1, school.Id_branch);
-                    dialogService.ShowSuccess("Ativado com sucesso!");
+                    await daoSchool.OnOff(0, school.Id_branch);
+                    dialogService.ShowSuccess("Desativado com sucesso!");
                 }
 
                 UpdateGrid();
+                return;
             }
-            
+
+            if (dialogService.ShowQuestion("Tem certeza que deseja\nativar esta escola?", ""))
+            {
+                await daoSchool.OnOff(1, school.Id_branch);
+                dialogService.ShowSuccess("Ativado com sucesso!");
+            }
+
+            UpdateGrid();
         }
 
         private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
             addEdit.Id = school.Id_branch;
-            addEdit.Id_address = school.Id_address;
+            addEdit.Id_address = school.Address.IdAddress;
             addEdit.tfName.Text = school.Name;
             addEdit.tfCity.Text = address.City;
             addEdit.tfDistrict.Text = address.Neighborhood;
@@ -84,18 +71,22 @@ namespace Bibliotech.View.Schools
             addEdit.tfNumber.Text = address.Number;
             addEdit.IsUpdate = true;
             addEdit.tbInfo.Text = "Editar Escola";
-            if(school.Id_branch >= 1)
-            addEdit.ShowDialog();
+            
+            if (school.Id_branch >= 1)
+            {
+                addEdit.ShowDialog();
+            }
+
             UpdateGrid();
         }
 
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
-
-            addEdit.IsUpdate = false;
             addEdit.tbInfo.Text = "Adicionar Escola";
-            addEdit.ShowDialog();
+            addEdit.IsUpdate = false;
+            _ = addEdit.ShowDialog();
+
             UpdateGrid();
         }
 
@@ -108,16 +99,26 @@ namespace Bibliotech.View.Schools
         {
             DataGrid gd = (DataGrid)sender;
             DataRowView row_selected = gd.SelectedItem as DataRowView;
-            if(row_selected !=null)
+            if (row_selected != null)
             {
-             
-                school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
-                school.Id_address = Convert.ToInt32(row_selected["id_address"].ToString());
-                school.Name = row_selected["name"].ToString();
-                long.TryParse(row_selected["telephone"].ToString(), out long temp);
-                school.Telephone = temp;
+                address.IdAddress = Convert.ToInt32(row_selected["id_address"].ToString());
+                address.City = row_selected["city"].ToString();
+                address.Neighborhood = row_selected["neighborhood"].ToString();
+                address.Street = row_selected["street"].ToString();
+                address.Number = row_selected["number"].ToString();
 
-                if(row_selected["description"].ToString() == "Ativo")
+                school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
+                school.Address = address;
+                school.Name = row_selected["name"].ToString();
+
+                long? telephone = null;
+                if (long.TryParse(row_selected["telephone"].ToString(), out long temp))
+                {
+                    telephone = temp;
+                }
+                school.Telephone = telephone;
+
+                if (row_selected["description"].ToString() == "Ativo")
                 {
                     school.Status = Status.Active;
                 }
@@ -125,13 +126,6 @@ namespace Bibliotech.View.Schools
                 {
                     school.Status = Status.Inactive;
                 }
-
-                address.City = row_selected["city"].ToString();
-                address.Neighborhood = row_selected["neighborhood"].ToString();
-                address.Street = row_selected["street"].ToString();
-                address.Number = row_selected["number"].ToString();
-             
-
             }
         }
 
@@ -142,11 +136,10 @@ namespace Bibliotech.View.Schools
 
         private void searchField_LostFocus(object sender, RoutedEventArgs e)
         {
-            if(String.IsNullOrEmpty(searchField.Text))
+            if (string.IsNullOrEmpty(searchField.Text))
             {
                 UpdateGrid();
             }
         }
-
     }
 }

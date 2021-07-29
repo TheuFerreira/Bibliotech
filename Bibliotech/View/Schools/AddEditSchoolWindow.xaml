@@ -68,7 +68,7 @@
                     x:Name="tfStreet"
                     MaxLength="100"
                     VerticalAlignment="Top"
-                    Title="RUA:"
+                    Title="RUA:*"
                     Placeholder="AV/RUA"
                     HorizontalAlignment="Left" 
                     Width="423"/>
@@ -77,7 +77,7 @@
                     x:Name="tfNumber"
                     MaxLength="5"
                     VerticalAlignment="Top"
-                    Title="NÚMERO:"
+                    Title="NÚMERO:*"
                     Placeholder="85"
                     HorizontalAlignment="Center" 
                     Margin="441,0,278,0" 
@@ -105,7 +105,8 @@
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom" OnClick="btnSave_OnClick"/>
+            VerticalAlignment="Bottom" 
+            OnClick="BtnSave_OnClick"/>
 
     </Grid>
 </Window>

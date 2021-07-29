@@ -8,18 +8,15 @@ namespace Bibliotech.Model.Entities
         public int Id_branch { get; set; }
         public string Name
         {
-            get
-            {
-                return name;
-            }
+            get => name;
             set
             {
                 name = value;
                 NotifyPropertyChanged("Name");
             }
         }
-        public int Id_address { get; set; }
-        public long Telephone { get; set; }
+        public Address Address { get; set; }
+        public long? Telephone { get; set; }
         public Status Status { get; set; }
 
         private string name;
@@ -27,6 +24,7 @@ namespace Bibliotech.Model.Entities
         public School()
         {
             Id_branch = -1;
+            Address = new Address();
         }
 
         public School(int id_branch, string name)
@@ -36,19 +34,19 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
-        public School(string name, int id_address, long telephone)
+        public School(string name, Address address, long telephone)
         {
             Name = name;
-            Id_address = id_address;
+            Address = address;
             Telephone = telephone;
             Status = Status.Active;
         }
 
-        public School(int id_branch, string name, int id_address, long telephone)
+        public School(int id_branch, string name, Address address, long telephone)
         {
             Id_branch = id_branch;
             Name = name;
-            Id_address = id_address;
+            Address = address;
             Telephone = telephone;
             Status = Status.Active;
         }

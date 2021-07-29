@@ -1,49 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Bibliotech.Model.Entities
+﻿namespace Bibliotech.Model.Entities
 {
     public class Address
     {
-        int id_address;
-        String city;
-        String neighborhood;
-        String street;
-        String number;
-        String complement;
+        public int IdAddress { get; set; }
+        public string City { get; set; }
+        public string Neighborhood { get; set; }
+        public string Street { get; set; }
+        public string Number { get; set; }
+        public string Complement { get; set; }
 
         public Address()
         {
-            id_address = -1;
+            IdAddress = -1;
         }
 
         public Address(string city, string neighborhood, string street, string number, string complement)
         {
-            this.city = city;
-            this.neighborhood = neighborhood;
-            this.street = street;
-            this.number = number;
-            this.complement = complement;
+            City = city;
+            Neighborhood = neighborhood;
+            Street = street;
+            Number = number;
+            Complement = complement;
         }
 
-        public Address(int id_address, string city, string neighborhood, string street, string number, string complement)
+        public Address(int idAddress, string city, string neighborhood, string street, string number, string complement)
         {
-            this.id_address = id_address;
-            this.city = city;
-            this.neighborhood = neighborhood;
-            this.street = street;
-            this.number = number;
-            this.complement = complement;
+            IdAddress = idAddress;
+            City = city;
+            Neighborhood = neighborhood;
+            Street = street;
+            Number = number;
+            Complement = complement;
         }
-
-        public int Id_address { get => id_address; set => id_address = value; }
-        public string City { get => city; set => city = value; }
-        public string Neighborhood { get => neighborhood; set => neighborhood = value; }
-        public string Street { get => street; set => street = value; }
-        public string Number { get => number; set => number = value; }
-        public string Complement { get => complement; set => complement = value; }
     }
 }
