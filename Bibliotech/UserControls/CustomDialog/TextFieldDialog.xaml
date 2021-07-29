@@ -27,6 +27,7 @@
 
             <Image
                 x:Name="img"
+                Source="/Bibliotech;component/Resources/img_key.png"
                 Height="65"
                 Margin="0,15,0,0"
                 HorizontalAlignment="Center"
