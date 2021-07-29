@@ -189,27 +189,20 @@
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="SelectionStates">
                                     <VisualState x:Name="Unselected" />
-
-                                    <VisualState x:Name="Selected">
-                                        <Storyboard>
-                                            <ColorAnimationUsingKeyFrames
-                                                Storyboard.TargetName="Border"
-                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                                
-                                                <EasingColorKeyFrame
-                                                    KeyTime="0"
-                                                    Value="Green"/>
-                                            </ColorAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-
+                                    <VisualState x:Name="Selected"/>
                                     <VisualState x:Name="SelectedUnfocused">
-                                        
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <ContentPresenter />
                         </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource LineSelectColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
