@@ -1,12 +1,145 @@
-﻿<UserControl x:Class="Bibliotech.UserControls.CustomDialog.TextFieldDialog"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Bibliotech.UserControls.CustomDialog"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
-</UserControl>
+﻿<Window x:Class="Bibliotech.UserControls.CustomDialog.TextFieldDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:Bibliotech.UserControls.CustomDialog"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        mc:Ignorable="d" 
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ShowInTaskbar="True"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        ResizeMode="NoResize"
+        Height="245" Width="420">
+    <Border
+        CornerRadius="35"
+        Background="White"
+        Margin="10">
+
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="0"/>
+        </Border.Effect>
+
+        <Grid>
+
+            <Image
+                x:Name="img"
+                Height="65"
+                Margin="0,15,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+            </Image>
+
+            <TextBlock
+                x:Name="tbTitle"
+                Text="Para salvar, é necessário verificar sua identidade!!!"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                FontSize="16"
+                Margin="30,90,30,0" 
+                TextAlignment="Center"
+                TextWrapping="Wrap"/>
+
+            <uc:TextField
+                x:Name="tbPassword"
+                Title="REPETIR SENHA:"
+                Placeholder="123456"
+                FontSize="16"
+                VerticalAlignment="Center"
+                Margin="30,75,30,0"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Click="ButtonCancel_Click"
+                    VerticalAlignment="Bottom"
+                    Grid.Column="0"
+                    Background="{StaticResource CancelSolidColor}"
+                    Foreground="Black"
+                    Height="45">
+
+                    <Button.Content>
+                        <TextBlock
+                            Text="CANCELAR"
+                            FontSize="20"/>
+                    </Button.Content>
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border 
+                                            x:Name="bd"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="0,0,0,35">
+
+                                            <ContentPresenter 
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button
+                    Click="ButtonConfirm_Click"
+                    VerticalAlignment="Bottom"
+                    Grid.Column="1"
+                    Background="{StaticResource ConfirmSolidColor}"
+                    Foreground="White"
+                    Height="45">
+
+                    <Button.Content>
+                        <TextBlock
+                            Text="SALVAR"
+                            FontSize="20"/>
+                    </Button.Content>
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border 
+                                            x:Name="bd"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="0,0,35,0">
+
+                                            <ContentPresenter 
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Grid>
+
+    </Border>
+</Window>

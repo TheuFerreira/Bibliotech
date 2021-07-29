@@ -1,28 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
     /// <summary>
     /// Interação lógica para TextFieldDialog.xam
     /// </summary>
-    public partial class TextFieldDialog : UserControl
+    public partial class TextFieldDialog : Window
     {
+        public string Text { get; set; }
+
         public TextFieldDialog()
         {
             InitializeComponent();
+        }
+
+        public void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
+
+        public void ButtonConfirm_Click(object sender, RoutedEventArgs e)
+        {
+            Text = tbPassword.Text;
+
+            DialogResult = true;
+            Close();
         }
     }
 }

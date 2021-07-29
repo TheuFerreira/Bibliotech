@@ -1,4 +1,5 @@
 ﻿using Bibliotech.UserControls.CustomEnums;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -64,6 +65,10 @@ namespace Bibliotech.UserControls
                 case FieldType.Number:
                     Regex regex = new Regex("[^0-9]+");
                     e.Handled = regex.IsMatch(e.Text);
+                    break;
+                case FieldType.String:
+                    break;
+                default:
                     break;
             }
         }
