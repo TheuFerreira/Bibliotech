@@ -9,10 +9,11 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOUser : Connection
     {
+#pragma warning disable IDE0017 // Simplificar a inicialização de objeto
+
         public User User = new User();
         public async Task<User> IsValidUser(string user, string password)
         {
-
             try
             {
                 await Connect();

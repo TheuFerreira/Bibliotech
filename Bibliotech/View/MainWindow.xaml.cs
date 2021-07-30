@@ -29,15 +29,17 @@ namespace Bibliotech.View
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.ShowDialog();
 
-            if(User.IdUser < 0)
+            if(User != null)
             {
                 return;
             }
 
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+       
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            
         }
     }
 }

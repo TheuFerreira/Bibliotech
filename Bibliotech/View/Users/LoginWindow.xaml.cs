@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Singletons;
 using Bibliotech.UserControls;
 using Bibliotech.UserControls.CustomDialog;
 
@@ -24,14 +25,15 @@ namespace Bibliotech.View.Users
     public partial class LoginWindow : Window
     { 
         public static string NameBranch { get; set; }
-        private DAOUser DaoUser;
+        private readonly DAOUser DaoUser;
         public User User;
-        private readonly UserControl control;
+        private readonly Session session;
 
         public LoginWindow()
         {
             InitializeComponent();
             DaoUser = new DAOUser();
+            
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -42,6 +44,7 @@ namespace Bibliotech.View.Users
         {
             textBox.Text = string.Empty;
         }
+        
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(tfUser.Text) || string.IsNullOrWhiteSpace(tfPassword.Text))
