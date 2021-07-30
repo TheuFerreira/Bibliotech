@@ -21,7 +21,7 @@ namespace Bibliotech.View.Users
     /// </summary>
     public partial class AddEditUserWindow : Window
     {
-        public School Branch { get; set; }
+        public Branch Branch { get; set; }
 
         private User user;
         private readonly DialogService dialogService;
@@ -82,7 +82,7 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            Branch.Id_branch = searchSchool.Branch.Id_branch;
+            Branch.IdBranch = searchSchool.Branch.IdBranch;
             Branch.Name = searchSchool.Branch.Name;
         }
 
@@ -120,7 +120,7 @@ namespace Bibliotech.View.Users
                 return false;
             }
 
-            if (Branch.Id_branch == -1)
+            if (Branch.IdBranch == -1)
             {
                 dialogService.ShowError("Selecione uma escola para o Usuário!!!");
                 return false;
@@ -250,7 +250,7 @@ namespace Bibliotech.View.Users
 
                 user = new User();
 
-                Branch.Id_branch = -1;
+                Branch.IdBranch = -1;
                 Branch.Name = string.Empty;
             }
             else

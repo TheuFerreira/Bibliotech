@@ -47,7 +47,7 @@ namespace Bibliotech.Model.DAO
                     };
 
                     User User = new User(idUser, typeUser, nameUser);
-                    School school = new School(idBranch, nameBranch, address, telephone);
+                    Branch school = new Branch(idBranch, nameBranch, address, telephone);
 
                     return User;
                 }
@@ -142,7 +142,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Clear();
                 command.CommandText = str;
                 command.Parameters.Add("?", DbType.Int32).Value = user.TypeUser;
-                command.Parameters.Add("?", DbType.Int32).Value = user.Branch.Id_branch;
+                command.Parameters.Add("?", DbType.Int32).Value = user.Branch.IdBranch;
                 command.Parameters.Add("?", DbType.String).Value = user.Name;
                 command.Parameters.Add("?", DbType.String).Value = user.UserName;
                 command.Parameters.Add("?", DbType.String).Value = user.Password;
@@ -183,7 +183,7 @@ namespace Bibliotech.Model.DAO
 
                 command.Parameters.Clear();
                 command.Parameters.Add("?", DbType.Int32).Value = user.TypeUser;
-                command.Parameters.Add("?", DbType.Int32).Value = user.Branch.Id_branch;
+                command.Parameters.Add("?", DbType.Int32).Value = user.Branch.IdBranch;
                 command.Parameters.Add("?", DbType.String).Value = user.Name;
                 command.Parameters.Add("?", DbType.String).Value = user.UserName;
                 command.Parameters.Add("?", DbType.String).Value = user.Password;
@@ -296,9 +296,9 @@ namespace Bibliotech.Model.DAO
                         telephone = resultLong;
                     }
 
-                    School branch = new School()
+                    Branch branch = new Branch()
                     {
-                        Id_branch = idBranch,
+                        IdBranch = idBranch,
                         Name = nameBranch,
                     };
 

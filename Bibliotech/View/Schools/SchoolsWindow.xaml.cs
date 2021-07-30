@@ -15,9 +15,9 @@ namespace Bibliotech.View.Schools
     public partial class SchoolsWindow : Window
     {
         private readonly DialogService dialogService = new DialogService();
-        private readonly DAOSchool daoSchool = new DAOSchool();
+        private readonly DAOBranch daoSchool = new DAOBranch();
         private readonly Address address = new Address();
-        private readonly School school = new School();
+        private readonly Branch school = new Branch();
 
         public SchoolsWindow()
         {
@@ -32,7 +32,7 @@ namespace Bibliotech.View.Schools
 
         private async void ButtonOnOff_OnClick(object sender, RoutedEventArgs e)
         {
-            if (school.Id_branch < 1)
+            if (school.IdBranch < 1)
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace Bibliotech.View.Schools
             {
                 if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
                 {
-                    await daoSchool.OnOff(0, school.Id_branch);
+                    await daoSchool.OnOff(0, school.IdBranch);
                     dialogService.ShowSuccess("Desativado com sucesso!");
                 }
 
@@ -51,7 +51,7 @@ namespace Bibliotech.View.Schools
 
             if (dialogService.ShowQuestion("Tem certeza que deseja\nativar esta escola?", ""))
             {
-                await daoSchool.OnOff(1, school.Id_branch);
+                await daoSchool.OnOff(1, school.IdBranch);
                 dialogService.ShowSuccess("Ativado com sucesso!");
             }
 
@@ -61,7 +61,7 @@ namespace Bibliotech.View.Schools
         private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditSchoolWindow addEdit = new AddEditSchoolWindow();
-            addEdit.Id = school.Id_branch;
+            addEdit.Id = school.IdBranch;
             addEdit.Id_address = school.Address.IdAddress;
             addEdit.tfName.Text = school.Name;
             addEdit.tfCity.Text = address.City;
@@ -72,7 +72,7 @@ namespace Bibliotech.View.Schools
             addEdit.IsUpdate = true;
             addEdit.tbInfo.Text = "Editar Escola";
             
-            if (school.Id_branch >= 1)
+            if (school.IdBranch >= 1)
             {
                 addEdit.ShowDialog();
             }
@@ -107,7 +107,7 @@ namespace Bibliotech.View.Schools
                 address.Street = row_selected["street"].ToString();
                 address.Number = row_selected["number"].ToString();
 
-                school.Id_branch = Convert.ToInt32(row_selected["id_branch"].ToString());
+                school.IdBranch = Convert.ToInt32(row_selected["id_branch"].ToString());
                 school.Address = address;
                 school.Name = row_selected["name"].ToString();
 

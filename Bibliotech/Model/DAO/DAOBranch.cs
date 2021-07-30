@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
 {
-    public class DAOSchool : Connection
+    public class DAOBranch : Connection
     {
-        public async Task<bool> Insert(School school)
+        public async Task<bool> Insert(Branch school)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -56,7 +56,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<bool> Update(int id, School school)
+        public async Task<bool> Update(int id, Branch school)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -186,7 +186,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<School> GetById(int idBranch)
+        public async Task<Branch> GetById(int idBranch)
         {
             try
             {
@@ -200,13 +200,13 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = idBranch;
 
-                School school = new School();
+                Branch school = new Branch();
                 MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while (await reader.ReadAsync())
                 {
                     string name = await reader.GetFieldValueAsync<string>(0);
 
-                    school = new School(idBranch, name);
+                    school = new Branch(idBranch, name);
                 }
 
                 return school;

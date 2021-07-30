@@ -3,9 +3,9 @@ using System.ComponentModel;
 
 namespace Bibliotech.Model.Entities
 {
-    public class School : INotifyPropertyChanged
+    public class Branch : INotifyPropertyChanged
     {
-        public int Id_branch { get; set; }
+        public int IdBranch { get; set; }
         public string Name
         {
             get => name;
@@ -21,20 +21,20 @@ namespace Bibliotech.Model.Entities
 
         private string name;
 
-        public School()
+        public Branch()
         {
-            Id_branch = -1;
+            IdBranch = -1;
             Address = new Address();
         }
 
-        public School(int id_branch, string name)
+        public Branch(int idBranch, string name)
         {
-            Id_branch = id_branch;
+            IdBranch = idBranch;
             Name = name;
             Status = Status.Active;
         }
 
-        public School(string name, Address address, long telephone)
+        public Branch(string name, Address address, long telephone)
         {
             Name = name;
             Address = address;
@@ -42,9 +42,9 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
-        public School(int id_branch, string name, Address address, long telephone)
+        public Branch(int idBranch, string name, Address address, long telephone)
         {
-            Id_branch = id_branch;
+            IdBranch = idBranch;
             Name = name;
             Address = address;
             Telephone = telephone;

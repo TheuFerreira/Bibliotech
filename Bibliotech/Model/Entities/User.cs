@@ -7,7 +7,7 @@ namespace Bibliotech.Model.Entities
     {
         public int IdUser { get; set; }
         public TypeUser TypeUser { get; set; }
-        public School Branch { get; set; }
+        public Branch Branch { get; set; }
         public string Name { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
@@ -19,7 +19,7 @@ namespace Bibliotech.Model.Entities
         public User()
         {
             IdUser = -1;
-            Branch = new School();
+            Branch = new Branch();
             Address = new Address();
         }
 

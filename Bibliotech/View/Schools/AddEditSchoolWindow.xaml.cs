@@ -11,7 +11,7 @@ namespace Bibliotech.View.Schools
     public partial class AddEditSchoolWindow : Window
     {
         private readonly DialogService dialogService = new DialogService();
-        private readonly DAOSchool daoSchool = new DAOSchool();
+        private readonly DAOBranch daoSchool = new DAOBranch();
 
         public int Id { get; set; }
         public bool IsUpdate { get; set; }
@@ -98,7 +98,7 @@ namespace Bibliotech.View.Schools
                 Number = tfNumber.Text,
             };
 
-            School school = new School()
+            Branch school = new Branch()
             {
                 Name = tfName.Text,
                 Telephone = phone,

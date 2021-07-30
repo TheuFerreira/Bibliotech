@@ -10,15 +10,15 @@ namespace Bibliotech.View.Schools
     /// </summary>
     public partial class SearchSchoolWindow : Window
     {
-        public School Branch { get; set; }
+        public Branch Branch { get; set; }
 
-        private readonly DAOSchool daoSchool;
+        private readonly DAOBranch daoSchool;
 
         public SearchSchoolWindow()
         {
             InitializeComponent();
 
-            daoSchool = new DAOSchool();
+            daoSchool = new DAOBranch();
         }
 
         private async void LoadSchools()
