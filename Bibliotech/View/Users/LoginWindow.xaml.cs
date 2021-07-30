@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Services;
 using Bibliotech.Singletons;
 using Bibliotech.UserControls;
 using Bibliotech.UserControls.CustomDialog;
@@ -24,16 +25,12 @@ namespace Bibliotech.View.Users
     /// </summary>
     public partial class LoginWindow : Window
     { 
-        public static string NameBranch { get; set; }
         private readonly DAOUser DaoUser;
         public User User;
-        private readonly Session session;
-
         public LoginWindow()
         {
             InitializeComponent();
             DaoUser = new DAOUser();
-            
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -44,12 +41,12 @@ namespace Bibliotech.View.Users
         {
             textBox.Text = string.Empty;
         }
-        
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(tfUser.Text) || string.IsNullOrWhiteSpace(tfPassword.Text))
             {
                 ShowMessage("Atenção", "Usuário ou Senha inválida. Tente novamente", TypeDialog.Error);
+                return;
             }
 
             btnEnter.IsEnabled = false;
@@ -58,24 +55,22 @@ namespace Bibliotech.View.Users
             User = await DaoUser.IsValidUser(user, password);
             btnEnter.IsEnabled = true;
 
-            if(User != null)
+            if (User != null)
             {
                 this.Close();
             }
-            else
+            else if (User == null)
             {
-                
                 ShowMessage("Atenção", "Usuário não encontrado", TypeDialog.Error);
                 ClearControl(tfUser);
                 ClearControl(tfPassword);
                 return;
             }
-            
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void BtnDatabase_Click(object sender, RoutedEventArgs e)
@@ -83,5 +78,7 @@ namespace Bibliotech.View.Users
             ServerWindow server = new ServerWindow();
             server.ShowDialog();
         }
+
+       
     }
 }

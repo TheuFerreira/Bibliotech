@@ -18,12 +18,16 @@
         Background="White">
 
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
             <Border 
                 Height="40"
                 CornerRadius="35,35,0,0"
                 Background="{StaticResource BarSolidColor}"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Grid.ColumnSpan="2" >
 
                 <Grid>
                     <Image 
@@ -46,7 +50,7 @@
             <StackPanel
                 Orientation="Vertical" 
                 Margin="50,58,50,0"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Grid.ColumnSpan="2">
 
                 <Border
                     CornerRadius="180"
@@ -71,7 +75,7 @@
                     x:Name="tfUser"
                     Title="USUÁRIO:"
                     Placeholder="USUÁRIO"/>
-                
+
                 <uc:TextField
                     x:Name="tfPassword"
                     Margin="0,25,0,40"
@@ -91,7 +95,7 @@
                                         <Border
                                             CornerRadius="15"
                                             Background="{StaticResource ForegroundSolidColor}">
-                                            
+
                                             <TextBlock
                                                 Margin="5"
                                                 HorizontalAlignment="Center"
@@ -113,7 +117,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Width="75"
-                Height="45" Click="BtnDatabase_Click">
+                Height="45" Click="BtnDatabase_Click" Grid.ColumnSpan="2">
 
                 <Button.Style>
                     <Style TargetType="Button">
@@ -134,9 +138,9 @@
                         </Setter>
                     </Style>
                 </Button.Style>
-                
+
             </Button>
-            
+
         </Grid>
 
     </Border>
