@@ -32,8 +32,6 @@ namespace Bibliotech.View
         private  User User;
         private readonly DialogService dialogService;
 
-        
-
         public MainWindow()
         {
             InitializeComponent();
@@ -44,7 +42,7 @@ namespace Bibliotech.View
 
             User = loginWindow.User;
             
-            if(User == null)
+           if(User == null)
             {
                 return;
             }
@@ -85,17 +83,22 @@ namespace Bibliotech.View
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (User == null) return;
+
             bool result = dialogService.ShowQuestion("ATENÇÃO", "Deseja sair do programa?");
             
             if (!result)
             {
                 e.Cancel = true;
             }
+
+
         }
 
         private void BtnLectors_OnClick(object sender, RoutedEventArgs e)
         {
             LectorsWindow lectorsWindow = new LectorsWindow();
+            lectorsWindow.Show();
         }
 
         private void BtnLendings_OnClick(object sender, RoutedEventArgs e)
