@@ -113,7 +113,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Width="75"
-                Height="45">
+                Height="45" Click="BtnDatabase_Click">
 
                 <Button.Style>
                     <Style TargetType="Button">

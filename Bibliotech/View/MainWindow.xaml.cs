@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bibliotech.Model.Entities;
+using Bibliotech.View.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,22 @@ namespace Bibliotech.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly User User;
         public MainWindow()
         {
             InitializeComponent();
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.ShowDialog();
+
+            if(User.IdUser < 0)
+            {
+                return;
+            }
+
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

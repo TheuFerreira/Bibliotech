@@ -24,7 +24,9 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand cmd = new MySqlCommand(select, SqlConnection);
                 cmd.Parameters.AddWithValue("@user", user);
                 cmd.Parameters.AddWithValue("@password", password);
-                MySqlDataReader reader = await cmd.ExecuteReaderAsync(System.Data.CommandBehavior.CloseConnection);
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                User User = null;
+
                 while (await reader.ReadAsync())
                 {
                     int idUser = reader.GetInt32(0);
@@ -39,7 +41,6 @@ namespace Bibliotech.Model.DAO
                     Address address = new Address();
                     address.IdAddress = idAddressBranch;
                     Branch school = new Branch(idBranch, nameBranch, address, telephone);
-
                 }
 
                 return User;
