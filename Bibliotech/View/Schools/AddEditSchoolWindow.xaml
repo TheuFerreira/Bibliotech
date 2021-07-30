@@ -54,7 +54,8 @@
                 <uc:TextField 
                     x:Name="tfPhone"
                     VerticalAlignment="Top"
-                    MaxLength="11"
+                    MaxLength="15"
+                    Mask="Telephone"
                     FieldType="Number"
                     Title="TELEFONE:"
                     Placeholder="(DD) 00000-0000" 

@@ -28,14 +28,14 @@
                 VerticalAlignment="Center"/>
 
             <TextBox
-                x:Name="textBox"
                 Background="Transparent"
                 BorderBrush="Transparent"
                 FontSize="14"
                 Text="{Binding ElementName=uc, Path=Text}"
                 MaxLength="{Binding ElementName=uc, Path=MaxLength}"
                 TextChanged="TextBox_TextChanged"
-                PreviewTextInput="TextBox_PreviewTextInput">
+                PreviewTextInput="TextBox_PreviewTextInput"
+                PreviewKeyDown="TextBox_PreviewKeyDown">
 
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">

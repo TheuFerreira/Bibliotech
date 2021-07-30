@@ -172,6 +172,7 @@
       <DependentUpon>TextFieldDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CustomDialog\TypeDialog.cs" />
+    <Compile Include="UserControls\CustomEnums\FieldMask.cs" />
     <Compile Include="UserControls\CustomEnums\FieldType.cs" />
     <Compile Include="UserControls\SearchField.xaml.cs">
       <DependentUpon>SearchField.xaml</DependentUpon>
