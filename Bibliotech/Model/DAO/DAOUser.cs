@@ -55,7 +55,7 @@ namespace Bibliotech.Model.DAO
             }
 
         }
-        public async Task<DataView> SearchByText(string text)
+        public async Task<DataView> SearchByText(TypeSearch typeSearch, string text, Branch branch)
         {
             try
             {
@@ -68,9 +68,12 @@ namespace Bibliotech.Model.DAO
                     "INNER JOIN address AS a ON u.id_address = a.id_address " +
                     "WHERE u.status = 1 " +
                         "AND u.name LIKE ? " +
+                        "AND IF(? = 0, u.id_branch = ?, TRUE) " +
                     "ORDER BY u.name ASC; ";
                 MySqlCommand command = new MySqlCommand(str, SqlConnection);
                 command.Parameters.Add("?", DbType.String).Value = '%' + text + '%';
+                command.Parameters.Add("?", DbType.Int32).Value = typeSearch;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
                 MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);

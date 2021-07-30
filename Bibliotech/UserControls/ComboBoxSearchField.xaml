@@ -177,11 +177,10 @@
         <Grid>
 
             <ComboBox
+                x:Name="cb"
                 MinWidth="100"
                 HorizontalAlignment="Left"
                 SelectedIndex="0">
-                <ComboBoxItem Content="ATUAL"/>
-                <ComboBoxItem Content="OUTRAS"/>
             </ComboBox>
 
             <TextBlock

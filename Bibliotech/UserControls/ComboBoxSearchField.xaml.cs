@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Bibliotech.UserControls
@@ -20,6 +21,24 @@ namespace Bibliotech.UserControls
         {
             get => tb.Text;
             set => tb.Text = value;
+        }
+
+        public object SelectedItem
+        {
+            get => cb.SelectedItem;
+            set => cb.SelectedItem = true;
+        }
+
+        public int SelectedIndex
+        {
+            get => cb.SelectedIndex;
+            set => cb.SelectedIndex = value;
+        }
+
+        public IEnumerable ItemsSource
+        {
+            get => cb.ItemsSource;
+            set => cb.ItemsSource = value;
         }
 
         public event RoutedEventHandler Click;

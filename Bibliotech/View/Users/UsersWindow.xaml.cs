@@ -1,7 +1,12 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
+using EnumsNET;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows;
 
 namespace Bibliotech.View.Users
@@ -13,6 +18,7 @@ namespace Bibliotech.View.Users
     {
         private readonly DAOUser daoUser;
         private readonly DialogService dialogService;
+        private TypeSearch typeSearch;
 
         public UsersWindow()
         {
@@ -20,13 +26,29 @@ namespace Bibliotech.View.Users
 
             daoUser = new DAOUser();
             dialogService = new DialogService();
+
+            List<string> typesSearch = Enum.GetValues(typeof(TypeSearch))
+                .Cast<TypeSearch>()
+                .Select(x => x.AsString(EnumFormat.Description))
+                .ToList();
+            searchField.ItemsSource = typesSearch;
+
+            typeSearch = TypeSearch.Current;
+            searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
         }
 
         private async void LoadUsers()
         {
             string text = searchField.Text;
+            typeSearch = Enums.Parse<TypeSearch>(searchField.SelectedItem.ToString(), false, EnumFormat.Description);
 
-            dataGrid.ItemsSource = await daoUser.SearchByText(text);
+            // ALTERAR QUANDO TIVERMOS SINGLETON
+            Branch currentBranch = new Branch()
+            {
+                IdBranch = 1
+            };
+
+            dataGrid.ItemsSource = await daoUser.SearchByText(typeSearch, text, currentBranch);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

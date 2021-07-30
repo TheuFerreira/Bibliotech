@@ -144,6 +144,7 @@
     <Compile Include="Model\Entities\Author.cs" />
     <Compile Include="Model\Entities\Book.cs" />
     <Compile Include="Model\Entities\Enums\Status.cs" />
+    <Compile Include="Model\Entities\Enums\TypeSearch.cs" />
     <Compile Include="Model\Entities\Enums\TypeUser.cs" />
     <Compile Include="Model\Entities\Exemplary.cs" />
     <Compile Include="Model\Entities\Lector.cs" />
