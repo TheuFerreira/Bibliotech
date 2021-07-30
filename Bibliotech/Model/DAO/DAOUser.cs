@@ -9,7 +9,7 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOUser : Connection
     {
-
+        public User User = new User();
         public async Task<User> IsValidUser(string user, string password)
         {
 
@@ -25,34 +25,26 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.AddWithValue("@user", user);
                 cmd.Parameters.AddWithValue("@password", password);
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(System.Data.CommandBehavior.CloseConnection);
-
-                if (!await reader.ReadAsync())
-                {
-                    return null;
-                }
-                else
+                while (await reader.ReadAsync())
                 {
                     int idUser = reader.GetInt32(0);
-                    TypeUser typeUser = (TypeUser)reader.GetInt32("u.id_type_user");
+                    TypeUser typeUser = (TypeUser)reader.GetInt32(1);
                     string nameUser = reader.GetString(2);
-                    int statusUser = reader.GetInt32(3);
-                    int idBranch = reader.GetInt32(4);
-                    string nameBranch = reader.GetString(5);
-                    int idAddressBranch = reader.GetInt32(6);
-                    long telephone = reader.GetInt64(7);
+                    int idBranch = reader.GetInt32(3);
+                    string nameBranch = reader.GetString(4);
+                    int idAddressBranch = reader.GetInt32(5);
+                    long telephone = reader.GetInt64(6);
 
-                    Address address = new Address() 
-                    {
-                        IdAddress = idAddressBranch,
-                    };
-
-                    User User = new User(idUser, typeUser, nameUser);
+                    User = new User(idUser, typeUser, nameUser);
+                    Address address = new Address();
+                    address.IdAddress = idAddressBranch;
                     Branch school = new Branch(idBranch, nameBranch, address, telephone);
 
-                    return User;
                 }
 
+                return User;
             }
+
             catch (MySqlException ex)
             {
                 throw ex;
@@ -63,7 +55,6 @@ namespace Bibliotech.Model.DAO
             }
 
         }
-
         public async Task<DataView> SearchByText(string text)
         {
             try
