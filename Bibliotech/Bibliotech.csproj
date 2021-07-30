@@ -159,6 +159,9 @@
     <Compile Include="UserControls\ButtonImage.xaml.cs">
       <DependentUpon>ButtonImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CustomComboBox.xaml.cs">
+      <DependentUpon>CustomComboBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ComboBoxSearchField.xaml.cs">
       <DependentUpon>ComboBoxSearchField.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ButtonImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomComboBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

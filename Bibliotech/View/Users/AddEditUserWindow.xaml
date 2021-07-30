@@ -37,9 +37,10 @@
                     Title="NOME:*"
                     Placeholder="INSIRA O NOME"/>
 
-                <ComboBox 
+                <uc:CustomComboBox 
                     x:Name="cbTypeUser"
                     Margin="130,0,0,0"
+                    Title="Tipo de Usuário:*"
                     HorizontalAlignment="Center"
                     Width="250"/>
 
