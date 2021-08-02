@@ -440,9 +440,6 @@
     <Resource Include="Resources\img_ok.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\img_error.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\img_delete.png" />
   </ItemGroup>
   <ItemGroup>
@@ -450,6 +447,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_exemplary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_print.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_lost.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
