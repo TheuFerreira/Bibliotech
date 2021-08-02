@@ -4,9 +4,187 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="AddEditBookWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="AddEditBookWindow" Height="469" Width="890" ResizeMode="NoResize">
     <Grid>
-        
+
+        <TextBlock 
+            x:Name="tbInfo"
+            Margin="0,10"
+            FontSize="25"
+            Text="ADICIONAR/EDITAR LIVRO"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"/>
+
+        <Grid 
+            x:Name="gridFields"
+            Margin="20,40"
+            VerticalAlignment="Top">
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10">
+
+                <uc:TextField 
+                    x:Name="tfTitle"
+                    MaxLength="200"
+                    HorizontalAlignment="Left"
+                    Width="330"
+                    Title="TÍTULO:*"
+                    Placeholder="INSIRA O TÍTULO"/>
+
+                <uc:TextField 
+                    x:Name="cbSubtitle"
+                    MaxLength="200"
+                    Margin="130,0,0,0"
+                    Title="SUBTÍTULO:*"
+                    Placeholder="INSIRA O SUBTÍTULO"
+                    HorizontalAlignment="Center"
+                    Width="250"/>
+
+                <uc:TextField 
+                    x:Name="tfCompanyPublishing"
+                    MaxLength="50"
+                    HorizontalAlignment="Right"
+                    Width="200"
+                    Title="EDITORA:*"
+                    Placeholder="EDITORA"/>
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,70,10,10">
+
+                <uc:TextField 
+                    x:Name="tfAuthor"
+                    MaxLength="200"
+                    VerticalAlignment="Top"
+                    Title="AUTOR(ES):*"
+                    Placeholder="AUTOR"
+                    HorizontalAlignment="Left" 
+                    Width="298"/>
+
+                <uc:TextField 
+                    x:Name="tfGender"
+                    MaxLength="50"
+                    VerticalAlignment="Top"
+                    Title="GÊNERO:"
+                    Placeholder="GÊNERO"
+                    HorizontalAlignment="Center"
+                    Width="153" 
+                    Margin="320,0,351,0"/>
+
+                <uc:TextField 
+                    x:Name="tfEdition"
+                    MaxLength="50"
+                    VerticalAlignment="Top"
+                    Title="EDIÇÃO:"
+                    Placeholder="EDIÇÃO"
+                    HorizontalAlignment="Center"
+                    Width="167" 
+                    Margin="488,0,169,0"/>
+
+                <uc:TextField 
+                    x:Name="tfNumberPages"
+                    VerticalAlignment="Top"
+                    MaxLength="5"
+                    FieldType="Number"
+                    Title="Nº DE PÁGINAS:"
+                    Placeholder="555" 
+                    HorizontalAlignment="Right" Width="150" />
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,130,10,10">
+
+                <uc:TextField 
+                    x:Name="tfYear"
+                    MaxLength="4"
+                    VerticalAlignment="Top"
+                    Title="ANO DE PUBLICAÇÃO:"
+                    Placeholder="2021"
+                    FieldType="Number"
+                    HorizontalAlignment="Left" 
+                    Width="175"/>
+
+                <uc:TextField 
+                    x:Name="tfLanguage"
+                    MaxLength="50"
+                    VerticalAlignment="Top"
+                    Title="IDIOMA:"
+                    Placeholder="PORTUGUÊS"
+                    HorizontalAlignment="Center" 
+                    Margin="195,0,437,0" 
+                    Width="192"/>
+
+                <uc:TextField 
+                    x:Name="tfVolume"
+                    MaxLength="50"
+                    VerticalAlignment="Top"
+                    Title="VOLUME:"
+                    Placeholder="VOLUME"
+                    HorizontalAlignment="Center" 
+                    Width="200" Margin="405,0,219,0"/>
+
+                <uc:TextField 
+                    x:Name="tfColletion"
+                    MaxLength="50"
+                    VerticalAlignment="Top"
+                    Title="COLEÇÃO:"
+                    Placeholder="COLEÇÃO"
+                    HorizontalAlignment="Right" 
+                    Width="200" 
+                    Margin="0,0,0,0"/>
+
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,190,10,10">
+
+                <uc:TextField 
+                    x:Name="tfBarCode"
+                    MaxLength="50"
+                    IsEnabled="False"
+                    VerticalAlignment="Top"
+                    Title="CÓDIGO DE BARRAS:*"
+                    Text="005050"
+                    HorizontalAlignment="Left" 
+                    Width="285"/>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid
+            Margin="30,0,0,30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom">
+
+            <uc:Button
+                Source="/Bibliotech;component/Resources/img_zoom.png"
+                VerticalAlignment="Bottom"
+                Height="30"
+                MarginImage="10,3,0,3"
+                Width="200"
+                CornerRadius="15"
+                FontSize="16"
+                Text="EXEMPLARES"/>
+        </Grid>
+
+        <uc:ButtonImage 
+            x:Name="save"
+            Text="SALVAR"
+            Width="140"
+            Height="110"
+            Margin="10"
+            Source="/Bibliotech;component/Resources/img_save.png"
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"/>
+
     </Grid>
 </Window>
