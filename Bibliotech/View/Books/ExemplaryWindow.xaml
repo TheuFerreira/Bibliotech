@@ -4,9 +4,72 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="ExemplaryWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Loaded="Window_Loaded"
+        Title="Exemplares" Height="720" Width="1280">
     <Grid>
-        
+
+        <uc:ComboBoxSearchField
+            x:Name="searchField"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            Placeholder="PESQUISAR EXEMPLARES"
+            BorderBrush="Transparent"
+            VerticalAlignment="Top"
+            Width="450"/>
+
+        <uc:CustomComboBox
+            Margin="0,5,50,0"
+            Title="FILTRAR:"
+            Width="200"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"/>
+
+        <DataGrid
+            x:Name="dataGrid"
+            Margin="0,87,0,143"
+            ItemsSource="{Binding}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=number}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}"/>
+                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=school}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}"/>
+                <DataGridTextColumn Header="STATUS" Width="200" Binding="{Binding Path=status}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+
+            <uc:ButtonImage
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Text="EXTRAVIOU"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_add.png"
+                Text="NOVO"
+                Margin="364,0,708,0"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Text="IMPRIMIR"
+                Margin="750,0,322,0"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_delete.png"
+                Text="DELETAR"/>
+        </Grid>
     </Grid>
 </Window>

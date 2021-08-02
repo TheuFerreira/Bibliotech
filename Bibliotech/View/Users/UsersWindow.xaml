@@ -16,7 +16,7 @@
             x:Name="searchField"
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
-            Placeholder="Pesquisar Usuários"
+            Placeholder="PESQUISAR USUÁRIOS"
             BorderBrush="Transparent"
             VerticalAlignment="Top"
             Width="450"
