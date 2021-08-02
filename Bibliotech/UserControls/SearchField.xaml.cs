@@ -8,6 +8,14 @@ namespace Bibliotech.UserControls
     /// </summary>
     public partial class SearchField : UserControl
     {
+        public static readonly DependencyProperty PlaceholderProperty = DependencyProperty.Register("Placeholder", typeof(string), typeof(SearchField), new PropertyMetadata(string.Empty));
+
+        public string Placeholder
+        {
+            get => (string)GetValue(PlaceholderProperty);
+            set => SetValue(PlaceholderProperty, value);
+        }
+
         public string Text
         {
             get => tb.Text;

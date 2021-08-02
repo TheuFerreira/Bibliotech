@@ -4,9 +4,58 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="BooksWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Livros" Height="720" Width="1280">
     <Grid>
-        
+        <uc:SearchField
+            x:Name="searchField"
+            Placeholder="PESQUISAR LIVROS"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            VerticalAlignment="Top"
+            Width="350"/>
+
+        <DataGrid 
+            x:Name="dataGrid"
+            Margin="0,87,0,143" 
+            IsSynchronizedWithCurrentItem="True" 
+            ItemsSource="{Binding}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=author}" Width="*"/>
+                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=publishingCompany}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+
+            <uc:ButtonImage
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_edit.png"
+                Text="EDITAR"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_add.png"
+                Text="NOVO"/>
+
+            <uc:ButtonImage
+                Source="/Bibliotech;component/Resources/img_exemplary.png"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Text="EXEMPLARES"/>
+        </Grid>
     </Grid>
 </Window>
