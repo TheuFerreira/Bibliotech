@@ -163,6 +163,9 @@
   <data name="img_logo_vgp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_logo_vgp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_lost" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_lost.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_manual" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_manual.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -171,6 +174,9 @@
   </data>
   <data name="img_power" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_power.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_print" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_print.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="img_question" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_question.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -189,6 +195,9 @@
   </data>
   <data name="img_users" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_users.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\img_warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="img_zoom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\img_zoom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -50,6 +50,7 @@
             <uc:ButtonImage
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_lost.png"
                 Text="EXTRAVIOU"/>
 
             <uc:ButtonImage
@@ -63,6 +64,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Text="IMPRIMIR"
+                Source="/Bibliotech;component/Resources/img_print.png"
                 Margin="750,0,322,0"/>
 
             <uc:ButtonImage

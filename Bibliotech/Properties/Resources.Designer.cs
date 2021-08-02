@@ -213,6 +213,16 @@ namespace Bibliotech.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap img_lost {
+            get {
+                object obj = ResourceManager.GetObject("img_lost", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap img_manual {
             get {
                 object obj = ResourceManager.GetObject("img_manual", resourceCulture);
@@ -236,6 +246,16 @@ namespace Bibliotech.Properties {
         internal static System.Drawing.Bitmap img_power {
             get {
                 object obj = ResourceManager.GetObject("img_power", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap img_print {
+            get {
+                object obj = ResourceManager.GetObject("img_print", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -296,6 +316,16 @@ namespace Bibliotech.Properties {
         internal static System.Drawing.Bitmap img_users {
             get {
                 object obj = ResourceManager.GetObject("img_users", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap img_warning {
+            get {
+                object obj = ResourceManager.GetObject("img_warning", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
