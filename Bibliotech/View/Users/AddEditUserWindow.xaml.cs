@@ -26,6 +26,7 @@ namespace Bibliotech.View.Users
         private User user;
         private readonly DialogService dialogService;
         private readonly DAOUser daoUser;
+        private readonly bool isFirstUser = false;
 
         private void FillScreenWithDatas()
         {
@@ -45,13 +46,14 @@ namespace Bibliotech.View.Users
             tfComplement.Text = user.Address.Complement;
         }
 
-        public AddEditUserWindow(User user)
+        public AddEditUserWindow(User user, bool isFirstUser = false)
         {
             InitializeComponent();
 
             dialogService = new DialogService();
             daoUser = new DAOUser();
             Branch = user.Branch;
+            this.isFirstUser = isFirstUser;
 
             List<string> typesUser = Enum.GetValues(typeof(TypeUser))
                 .Cast<TypeUser>()
@@ -252,6 +254,13 @@ namespace Bibliotech.View.Users
 
                 Branch.IdBranch = -1;
                 Branch.Name = string.Empty;
+
+                if (isFirstUser)
+                {
+                    dialogService.ShowInformation("Agora você poderá fazer login no BIBLIOTECH, com o usuário cadastrado!!!");
+
+                    Close();
+                }
             }
             else
             {

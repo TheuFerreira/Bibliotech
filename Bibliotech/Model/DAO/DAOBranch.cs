@@ -130,7 +130,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<int> Count()
+        public async Task<int> UsersCount()
         {
             await Connect();
             int number;
@@ -152,6 +152,30 @@ namespace Bibliotech.Model.DAO
             }
 
             return number;
+        }
+
+        public async Task<int> Total()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT COUNT(id_branch) FROM branch WHERE status = 1;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                object result = await command.ExecuteScalarAsync();
+
+                return Convert.ToInt32(result);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
         }
 
         public async Task<DataTable> FillDataGrid(String query)

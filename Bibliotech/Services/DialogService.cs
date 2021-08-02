@@ -21,5 +21,10 @@ namespace Bibliotech.Services
 
             return questionDialog.DialogResult.Value;
         }
+
+        public void ShowInformation(string description)
+        {
+           _ = new InformationDialog("INFORMAÇÃO", description, TypeDialog.Information).ShowDialog();
+        }
     }
 }

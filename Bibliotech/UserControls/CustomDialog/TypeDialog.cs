@@ -3,6 +3,7 @@
     public enum TypeDialog
     {
         Error,
-        Success
+        Success,
+        Information
     }
 }

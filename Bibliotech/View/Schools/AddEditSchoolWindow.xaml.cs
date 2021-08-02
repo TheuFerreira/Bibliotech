@@ -12,14 +12,19 @@ namespace Bibliotech.View.Schools
     {
         private readonly DialogService dialogService = new DialogService();
         private readonly DAOBranch daoSchool = new DAOBranch();
+        private readonly bool isFirstBranch;
 
         public int Id { get; set; }
         public bool IsUpdate { get; set; }
         public int Id_address { get; set; }
 
-        public AddEditSchoolWindow()
+        public AddEditSchoolWindow(bool isUpdate = false, bool isFirstBranch = false)
         {
             InitializeComponent();
+
+            IsUpdate = isUpdate;
+
+            this.isFirstBranch = isFirstBranch;
         }
 
         public bool ValidateFields()
@@ -109,8 +114,14 @@ namespace Bibliotech.View.Schools
             {
                 if (await daoSchool.Insert(school))
                 {
-                    dialogService.ShowSuccess("Usuário salvo com sucesso");
+                    dialogService.ShowSuccess("Escola salva com sucesso");
                     ClearFields();
+
+                    if (isFirstBranch)
+                    {
+                        dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
+                        Close();
+                    }
                     return;
                 }
             }
@@ -118,7 +129,7 @@ namespace Bibliotech.View.Schools
             {
                 if (await daoSchool.Update(Id, school))
                 {
-                    dialogService.ShowSuccess("Usuário salvo com sucesso");
+                    dialogService.ShowSuccess("Escola salva com sucesso");
                     Close();
                     return;
                 }
@@ -129,7 +140,7 @@ namespace Bibliotech.View.Schools
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int aux = await daoSchool.Count();
+            int aux = await daoSchool.UsersCount();
             tfUsers.Text = aux.ToString();
         }
     }

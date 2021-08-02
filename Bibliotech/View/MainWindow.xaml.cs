@@ -1,26 +1,15 @@
-﻿using Bibliotech.Model.Entities;
-using Bibliotech.View.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
+using Bibliotech.View.Books;
+using Bibliotech.View.Devolutions;
 using Bibliotech.View.Lectors;
 using Bibliotech.View.Lendings;
-using Bibliotech.View.Devolutions;
-using Bibliotech.View.Books;
 using Bibliotech.View.Reports;
 using Bibliotech.View.Schools;
+using Bibliotech.View.Users;
+using System.Windows;
 
 namespace Bibliotech.View
 {
@@ -29,20 +18,65 @@ namespace Bibliotech.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        private  User User;
+        private User User;
         private readonly DialogService dialogService;
+
+        private async void FirstLogin()
+        {
+            Server serverSettings = Session.Instance.Server;
+            if (string.IsNullOrEmpty(serverSettings.ServerName))
+            {
+                bool? result = new ServerWindow().ShowDialog();
+                if (result.Value != true)
+                {
+                    return;
+                }
+            }
+
+            DAOBranch daoBranch = new DAOBranch();
+            int totalBranches = await daoBranch.Total();
+            if (totalBranches == 0)
+            {
+                dialogService.ShowInformation("Você será redirecionado para a tela de Escolas, para cadastrar a primeira escola!!!");
+
+                AddEditSchoolWindow addEditSchool = new AddEditSchoolWindow(false, true);
+                bool? result = addEditSchool.ShowDialog();
+
+                if (result != true)
+                {
+                    return;
+                }
+            }
+
+            DAOUser daoUser = new DAOUser();
+            int totalUsers = await daoUser.Total();
+            if (totalUsers == 0)
+            {
+                AddEditUserWindow addEditUser = new AddEditUserWindow(new User(), true);
+                bool? result = addEditUser.ShowDialog();
+
+                if (result != true)
+                {
+                    return;
+                }
+            }
+
+            return;
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             dialogService = new DialogService();
 
+            FirstLogin();
+
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.ShowDialog();
 
             User = loginWindow.User;
-            
-           if(User == null)
+
+            if (User == null)
             {
                 return;
             }
@@ -56,7 +90,7 @@ namespace Bibliotech.View
 
             LoginWindow loginWindow = new LoginWindow();
             loginWindow.ShowDialog();
-            
+
             User = loginWindow.User;
 
             if (User != null)
@@ -73,7 +107,7 @@ namespace Bibliotech.View
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if(User == null)
+            if (User == null)
             {
                 Close();
                 return;
@@ -86,7 +120,7 @@ namespace Bibliotech.View
             if (User == null) return;
 
             bool result = dialogService.ShowQuestion("ATENÇÃO", "Deseja sair do programa?");
-            
+
             if (!result)
             {
                 e.Cancel = true;

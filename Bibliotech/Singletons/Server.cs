@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 
 namespace Bibliotech.Singletons
 {
@@ -19,7 +14,9 @@ namespace Bibliotech.Singletons
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Bibliotech\Bibliotech");
             if (key == null)
+            {
                 return;
+            }
 
             string result = key.GetValue("Server").ToString();
             key.Close();

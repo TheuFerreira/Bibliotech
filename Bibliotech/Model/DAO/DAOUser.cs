@@ -334,5 +334,29 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
+
+        public async Task<int> Total()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT COUNT(id_user) FROM users WHERE status = 1;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                object result = await command.ExecuteScalarAsync();
+
+                return Convert.ToInt32(result);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
     }
 }
