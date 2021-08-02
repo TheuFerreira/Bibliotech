@@ -4,9 +4,55 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="LectorsWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Leitores" Height="720" Width="1280">
     <Grid>
-        
+        <uc:ComboBoxSearchField
+            x:Name="searchField"
+            Placeholder="PESQUISAR LEITORES"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Width="450"/>
+
+        <DataGrid 
+            x:Name="dataGrid"
+            Margin="0,87,0,143" 
+            ItemsSource="{Binding}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
+                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=address}" Width="*"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO" Binding="{Binding Path=birthDate}" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+
+            <uc:ButtonImage
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_edit.png"
+                Text="EDITAR"/>
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_add.png"
+                Text="NOVO"/>
+
+            <uc:ButtonImage
+                Source="/Bibliotech;component/Resources/img_delete.png"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Text="EXCLUIR"/>
+        </Grid>
     </Grid>
 </Window>

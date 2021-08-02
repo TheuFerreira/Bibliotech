@@ -8,7 +8,6 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
-        Loaded="Window_Loaded"
         Title="Exemplares" Height="720" Width="1280">
     <Grid>
 
@@ -39,6 +38,7 @@
                 <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=school}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}"/>
                 <DataGridTextColumn Header="STATUS" Width="200" Binding="{Binding Path=status}"/>
+                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}"/>
             </DataGrid.Columns>
         </DataGrid>
 

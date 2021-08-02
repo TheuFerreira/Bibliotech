@@ -4,7 +4,163 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="AddEditLectorWindow" Height="450" Width="800">
-    <Grid Background="White"/>
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="AddEditLectorWindow" Height="469" Width="890" ResizeMode="NoResize">
+    <Grid>
+
+        <TextBlock 
+            x:Name="tbInfo"
+            Margin="0,10"
+            FontSize="25"
+            Text="ADICIONAR/EDITAR LEITOR"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"/>
+
+        <Grid 
+            x:Name="gridFields"
+            Margin="20,40"
+            VerticalAlignment="Top">
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10">
+
+                <uc:TextField 
+                    x:Name="tfUserRegistration"
+                    MaxLength="6"
+                    Title="REGISTRO DE USUÁRIO:*"
+                    Placeholder="15"
+                    FieldType="Number"
+                    HorizontalAlignment="Left"
+                    Width="166"/>
+
+                <uc:TextField 
+                    x:Name="tfName"
+                    MaxLength="200"
+                    HorizontalAlignment="Center"
+                    Width="233"
+                    Title="NOME:*"
+                    Placeholder="INSIRA O NOME" 
+                    Margin="185,0,406,0"/>
+
+                <uc:TextField 
+                    x:Name="tfResponsible"
+                    MaxLength="50"
+                    HorizontalAlignment="Right"
+                    Width="200"
+                    Title="RESPONSÁVEL:"
+                    Placeholder="RESPONSÁVEL" Margin="0,0,185,0"/>
+
+                <uc:TextField 
+                    x:Name="tfBirthDate"
+                    MaxLength="10"
+                    HorizontalAlignment="Right"
+                    Width="168"
+                    FieldType="Number"
+                    Mask="Date"
+                    Title="DATA DE NASCIMENTO:"
+                    Placeholder="DIA/MÊS/ANO"/>
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,70,10,10">
+
+                <uc:TextField 
+                    x:Name="tfCity"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="CIDADE:"
+                    Placeholder="CIDADE"
+                    HorizontalAlignment="Left" 
+                    Width="215"/>
+
+                <uc:TextField 
+                    x:Name="tfDistrict"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="BAIRRO:"
+                    Placeholder="BAIRRO"
+                    HorizontalAlignment="Center"
+                    Width="242" 
+                    Margin="232,0,350,0"/>
+
+                <uc:TextField 
+                    x:Name="tfStreet"
+                    MaxLength="100"
+                    VerticalAlignment="Top"
+                    Title="RUA:"
+                    Placeholder="AV/RUA"
+                    HorizontalAlignment="Right"
+                    Width="336"/>
+            </Grid>
+
+            <Grid
+                VerticalAlignment="Top"
+                Margin="10,130,10,10">
+
+                <uc:TextField 
+                    x:Name="tfNumber"
+                    MaxLength="5"
+                    VerticalAlignment="Top"
+                    Title="NÚMERO:"
+                    Placeholder="2021"
+                    HorizontalAlignment="Left" 
+                    Width="175"/>
+
+                <uc:TextField 
+                    x:Name="tfComplement"
+                    MaxLength="45"
+                    VerticalAlignment="Top"
+                    Title="COMPLEMENTO:"
+                    Placeholder="COMPLEMENTO"
+                    HorizontalAlignment="Center" 
+                    Margin="253,0,281,0" 
+                    Width="290"/>
+
+                <uc:TextField 
+                    x:Name="tfTelephone"
+                    MaxLength="15"
+                    VerticalAlignment="Top"
+                    Title="TELEFONE:"
+                    Placeholder="(DD) 00000-0000"
+                    FieldType="Number"
+                    Mask="Telephone"
+                    HorizontalAlignment="Right" 
+                    Width="200" />
+
+            </Grid>
+
+        </Grid>
+
+        <Grid
+            Margin="30,0,0,30"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom">
+
+            <uc:Button
+                Source="/Bibliotech;component/Resources/img_zoom.png"
+                VerticalAlignment="Bottom"
+                Height="30"
+                MarginImage="10,3,0,3"
+                Width="200"
+                CornerRadius="15"
+                FontSize="16"
+                Text="HISTÓRICO"/>
+        </Grid>
+
+        <uc:ButtonImage 
+            x:Name="save"
+            Text="SALVAR"
+            Width="140"
+            Height="110"
+            Margin="10"
+            Source="/Bibliotech;component/Resources/img_save.png"
+            HorizontalAlignment="Right" 
+            VerticalAlignment="Bottom"/>
+
+    </Grid>
 </Window>

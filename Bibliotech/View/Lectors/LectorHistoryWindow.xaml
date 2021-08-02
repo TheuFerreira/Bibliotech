@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
         mc:Ignorable="d"
-        Title="LectorHistoryWindow" Height="450" Width="800">
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Histórico" Height="720" Width="1280">
     <Grid>
-        
+
+        <uc:SearchField
+            x:Name="searchField"
+            Margin="0,20,0,0"
+            HorizontalAlignment="Center"
+            Placeholder="PESQUISAR LIVROS"
+            VerticalAlignment="Top"
+            Width="350"/>
+
+        <DataGrid
+            x:Name="dataGrid"
+            Margin="0,87,0,0"
+            ItemsSource="{Binding}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=exemplary}"/>
+                <DataGridTextColumn Header="EMPRÉSITMO" Width="150"/>
+                <DataGridTextColumn Header="DEVOLUÇÃO" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>
