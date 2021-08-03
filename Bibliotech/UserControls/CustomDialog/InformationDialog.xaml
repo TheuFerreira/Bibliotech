@@ -40,6 +40,10 @@
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Success">
                                 <Setter Property="Source" Value="/Bibliotech;component/Resources/img_ok.png"/>
                             </DataTrigger>
+
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeDialog}" Value="Information">
+                                <Setter Property="Source" Value="/Bibliotech;component/Resources/img_information.png"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Image.Style>

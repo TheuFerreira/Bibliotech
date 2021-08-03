@@ -120,6 +120,7 @@ namespace Bibliotech.View.Schools
                     if (isFirstBranch)
                     {
                         dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
+                        DialogResult = true;
                         Close();
                     }
                     return;

@@ -460,5 +460,8 @@
   <ItemGroup>
     <Resource Include="Resources\img_lost.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_information.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
