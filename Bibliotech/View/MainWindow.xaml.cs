@@ -126,7 +126,6 @@ namespace Bibliotech.View
                 e.Cancel = true;
             }
 
-
         }
 
         private void BtnLectors_OnClick(object sender, RoutedEventArgs e)

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Bibliotech.View.Schools;
 using Bibliotech.View.Users;
+using Bibliotech.View.Books;
 using Bibliotech.View;
 
 namespace Bibliotech
@@ -20,7 +21,7 @@ namespace Bibliotech
         {
             base.OnStartup(e);
 
-            MainWindow = new MainWindow();
+            MainWindow = new AddEditBookWindow();
             MainWindow.ShowDialog();
         }
     }

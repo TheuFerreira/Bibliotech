@@ -37,7 +37,7 @@
                     Placeholder="INSIRA O TÍTULO"/>
 
                 <uc:TextField 
-                    x:Name="cbSubtitle"
+                    x:Name="tfSubtitle"
                     MaxLength="200"
                     Margin="130,0,0,0"
                     Title="SUBTÍTULO:*"
@@ -46,7 +46,7 @@
                     Width="250"/>
 
                 <uc:TextField 
-                    x:Name="tfCompanyPublishing"
+                    x:Name="tfPublishingCompany"
                     MaxLength="50"
                     HorizontalAlignment="Right"
                     Width="200"
@@ -177,14 +177,14 @@
         </Grid>
 
         <uc:ButtonImage 
-            x:Name="save"
+            x:Name="btnSave"
             Text="SALVAR"
             Width="140"
             Height="110"
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom"/>
+            VerticalAlignment="Bottom" OnClick="BtnSave_OnClick"/>
 
     </Grid>
 </Window>
