@@ -16,18 +16,18 @@
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="450"/>
+            Width="450" Click="searchField_Click" LostFocus="searchField_LostFocus"/>
 
         <DataGrid 
             x:Name="dataGrid"
             Margin="0,87,0,143" 
-            ItemsSource="{Binding}">
+            ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50"/>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
-                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=address}" Width="*"/>
-                <DataGridTextColumn Header="DATA DE NASCIMENTO" Binding="{Binding Path=birthDate}" Width="200"/>
+                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
+                <DataGridTextColumn Header="DATA DE NASCIMENTO" Binding="{Binding Path=birth_date}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -40,7 +40,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
-                Text="EDITAR"/>
+                Text="EDITAR" OnClick="ButtonEdit_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"

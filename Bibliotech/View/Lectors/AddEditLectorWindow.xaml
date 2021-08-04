@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
-        Title="AddEditLectorWindow" Height="469" Width="890" ResizeMode="NoResize">
+        Title="AddEditLectorWindow" Height="469" Width="890" ResizeMode="NoResize" SizeToContent="Width">
     <Grid>
 
         <TextBlock 
@@ -73,29 +73,29 @@
                     x:Name="tfCity"
                     MaxLength="45"
                     VerticalAlignment="Top"
-                    Title="CIDADE:"
+                    Title="CIDADE:*"
                     Placeholder="CIDADE"
                     HorizontalAlignment="Left" 
-                    Width="215"/>
+                    Width="196" Margin="0,23,0,-23"/>
 
                 <uc:TextField 
                     x:Name="tfDistrict"
                     MaxLength="45"
                     VerticalAlignment="Top"
-                    Title="BAIRRO:"
+                    Title="BAIRRO:*"
                     Placeholder="BAIRRO"
                     HorizontalAlignment="Center"
-                    Width="242" 
-                    Margin="232,0,350,0"/>
+                    Width="214" 
+                    Margin="244,23,366,-23"/>
 
                 <uc:TextField 
                     x:Name="tfStreet"
                     MaxLength="100"
                     VerticalAlignment="Top"
-                    Title="RUA:"
+                    Title="RUA:*"
                     Placeholder="AV/RUA"
                     HorizontalAlignment="Right"
-                    Width="336"/>
+                    Width="321" Margin="0,23,0,-23"/>
             </Grid>
 
             <Grid
@@ -106,10 +106,10 @@
                     x:Name="tfNumber"
                     MaxLength="5"
                     VerticalAlignment="Top"
-                    Title="NÚMERO:"
+                    Title="NÚMERO:*"
                     Placeholder="2021"
                     HorizontalAlignment="Left" 
-                    Width="175"/>
+                    Width="165" Margin="0,44,0,-44"/>
 
                 <uc:TextField 
                     x:Name="tfComplement"
@@ -118,11 +118,11 @@
                     Title="COMPLEMENTO:"
                     Placeholder="COMPLEMENTO"
                     HorizontalAlignment="Center" 
-                    Margin="253,0,281,0" 
-                    Width="290"/>
+                    Margin="237,44,282,-44" 
+                    Width="305"/>
 
                 <uc:TextField 
-                    x:Name="tfTelephone"
+                    x:Name="tfPhone"
                     MaxLength="15"
                     VerticalAlignment="Top"
                     Title="TELEFONE:"
@@ -130,7 +130,7 @@
                     FieldType="Number"
                     Mask="Telephone"
                     HorizontalAlignment="Right" 
-                    Width="200" />
+                    Width="206" Margin="0,44,0,-44" />
 
             </Grid>
 
@@ -160,7 +160,7 @@
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom"/>
+            VerticalAlignment="Bottom" OnClick="save_OnClick"/>
 
     </Grid>
 </Window>
