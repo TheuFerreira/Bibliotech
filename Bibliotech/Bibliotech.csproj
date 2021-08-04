@@ -130,6 +130,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\EnumValueConverter.cs" />
     <Compile Include="Model\DAO\Connection.cs" />
     <Compile Include="Model\DAO\DAOAddress.cs" />
     <Compile Include="Model\DAO\DAOAuthor.cs" />

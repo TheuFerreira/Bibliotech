@@ -1,16 +1,7 @@
-﻿using System;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bibliotech.View.Books
 {
@@ -19,9 +10,23 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class ExemplaryWindow : Window
     {
+        private readonly DAOBook daoBook;
+        private readonly DAOExamplary daoExemplary;
+
         public ExemplaryWindow()
         {
             InitializeComponent();
+
+            daoBook = new DAOBook();
+            daoExemplary = new DAOExamplary();
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Book book = await daoBook.GetById(1);
+            List<Exemplary> exemplaries = await daoExemplary.GetExemplarysByBook(book);
+
+            dataGrid.ItemsSource = exemplaries;
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bibliotech.Model.Entities.Enums;
 
 namespace Bibliotech.Model.Entities
 {
-    class Exemplary
+    public class Exemplary
     {
+        public int IdExemplary { get; set; }
+        public Book Book { get; set; }
+        public Branch Branch { get; set; }
+        public int IdIndex { get; set; }
+        public Status Status { get; set; }
+
+        public Exemplary()
+        {
+            IdExemplary = -1;
+        }
     }
 }

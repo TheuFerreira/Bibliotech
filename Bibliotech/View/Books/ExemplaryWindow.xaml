@@ -5,10 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Exemplares" Height="720" Width="1280">
+    <Window.Resources>
+        <converters:EnumValueConverter x:Key="EnumConverter"/>
+    </Window.Resources>
     <Grid>
 
         <uc:ComboBoxSearchField
@@ -33,12 +38,37 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=number}"/>
-                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}"/>
-                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=school}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}"/>
-                <DataGridTextColumn Header="STATUS" Width="200" Binding="{Binding Path=status}"/>
-                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}"/>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat={}{0:0º}}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Book.Title}"/>
+                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Book.Author.Name}"/>
+                <DataGridTextColumn Header="STATUS" Width="100" Binding="{Binding Path=Status, Converter={StaticResource EnumConverter}}"/>
+                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Grid 
+                                            x:Name="grid">
+                                            
+                                            <Image
+                                                Width="25" 
+                                                Height="25" 
+                                                Source="/Bibliotech;component/Resources/img_print.png"/>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 
