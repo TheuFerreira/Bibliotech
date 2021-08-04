@@ -8,7 +8,6 @@
         xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Exemplares" Height="720" Width="1280">
     <Window.Resources>
@@ -20,9 +19,10 @@
             x:Name="searchField"
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
-            Placeholder="PESQUISAR EXEMPLARES"
+            Placeholder="PESQUISAR Nª DO EXEMPLAR"
             BorderBrush="Transparent"
             VerticalAlignment="Top"
+            Click="SearchField_Click"
             Width="450"/>
 
         <uc:CustomComboBox
@@ -38,9 +38,9 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat={}{0:0º}}"/>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat=D2}"/>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Book.Title}"/>
-                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}"/>
+                <DataGridTextColumn x:Name="columnSchool" Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Book.Author.Name}"/>
                 <DataGridTextColumn Header="STATUS" Width="100" Binding="{Binding Path=Status, Converter={StaticResource EnumConverter}}"/>
                 <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}">
@@ -50,6 +50,7 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="DataGridCell">
                                         <Grid 
+                                            MouseLeftButtonDown="CellPrint_MouseLeftButtonDown"
                                             x:Name="grid">
                                             
                                             <Image

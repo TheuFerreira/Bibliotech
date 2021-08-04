@@ -9,7 +9,7 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOExamplary : Connection
     {
-        public async Task<List<Exemplary>> GetExemplarysByBook(Book book)
+        public async Task<List<Exemplary>> GetExemplarysByBook(Book book, TypeSearch typeSearch, Branch currentBranch, string text)
         {
             try
             {
@@ -22,10 +22,16 @@ namespace Bibliotech.Model.DAO
                     "FROM exemplary AS e " +
                     "INNER JOIN branch AS b ON b.id_branch = e.id_branch " +
                     "WHERE e.id_book = ? " +
+                        "AND IF(? = 1, TRUE, b.id_branch = ?) " +
+                        "AND IF(? = '', TRUE, e.id_exemplary = ?) " +
                     "ORDER BY e.id_index ASC; ";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+                command.Parameters.Add("?", DbType.Int32).Value = typeSearch;
+                command.Parameters.Add("?", DbType.Int32).Value = currentBranch.IdBranch;
+                command.Parameters.Add("?", DbType.String).Value = text;
+                command.Parameters.Add("?", DbType.String).Value = text;
 
                 List<Exemplary> exemplaries = new List<Exemplary>();
                 MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
