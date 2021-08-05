@@ -181,14 +181,14 @@ namespace Bibliotech.View.Users
 
         private bool ValidatedPassword()
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog();
-            bool? result = fieldDialog.ShowDialog();
-            if (result == false)
+            string text = dialogService.ShowPasswordDialog("Para salvar, é necessário verificar sua identidade!!!");
+
+            if (string.IsNullOrEmpty(text))
             {
                 return false;
             }
 
-            if (tfPassword.Text != fieldDialog.Text)
+            if (tfPassword.Text != text)
             {
                 dialogService.ShowError("As Senhas não coincidem!!!");
                 return false;

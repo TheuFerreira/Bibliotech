@@ -183,6 +183,7 @@
             Foreground="Black"/>
 
         <ComboBox
-            x:Name="cb"/>
+            x:Name="cb"
+            SelectionChanged="ComboBox_SelectionChanged"/>
     </StackPanel>
 </UserControl>

@@ -5,27 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Exemplares" Height="720" Width="1280">
+    <Window.Resources>
+        <converters:EnumValueConverter x:Key="EnumConverter"/>
+    </Window.Resources>
     <Grid>
 
         <uc:ComboBoxSearchField
             x:Name="searchField"
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
-            Placeholder="PESQUISAR EXEMPLARES"
+            Placeholder="PESQUISAR Nª DO EXEMPLAR"
             BorderBrush="Transparent"
             VerticalAlignment="Top"
+            Click="SearchField_Click"
             Width="450"/>
 
         <uc:CustomComboBox
+            x:Name="filter"
             Margin="0,5,50,0"
             Title="FILTRAR:"
             Width="200"
             HorizontalAlignment="Right"
-            VerticalAlignment="Top"/>
+            VerticalAlignment="Top"
+            SelectionChanged="Filter_SelectionChanged"/>
 
         <DataGrid
             x:Name="dataGrid"
@@ -33,12 +40,38 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=number}"/>
-                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}"/>
-                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=school}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}"/>
-                <DataGridTextColumn Header="STATUS" Width="200" Binding="{Binding Path=status}"/>
-                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}"/>
+                <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat=D2}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Book.Title}"/>
+                <DataGridTextColumn x:Name="columnSchool" Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Book.Author.Name}"/>
+                <DataGridTextColumn Header="STATUS" Width="100" Binding="{Binding Path=Status, Converter={StaticResource EnumConverter}}"/>
+                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Grid 
+                                            MouseLeftButtonDown="CellPrint_MouseLeftButtonDown"
+                                            x:Name="grid">
+                                            
+                                            <Image
+                                                Width="25" 
+                                                Height="25" 
+                                                Source="/Bibliotech;component/Resources/img_print.png"/>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -48,30 +81,38 @@
             VerticalAlignment="Bottom">
 
             <uc:ButtonImage
+                x:Name="btnLost"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_lost.png"
-                Text="EXTRAVIOU"/>
+                Text="EXTRAVIOU"
+                OnClick="BtnLost_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnNew"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
                 Text="NOVO"
-                Margin="364,0,708,0"/>
+                Margin="364,0,708,0"
+                OnClick="BtnNew_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnPrint"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Text="IMPRIMIR"
                 Source="/Bibliotech;component/Resources/img_print.png"
-                Margin="750,0,322,0"/>
+                Margin="750,0,322,0"
+                OnClick="BtnPrint_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnInactive"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_delete.png"
-                Text="DELETAR"/>
+                Text="DELETAR"
+                OnClick="BtnInactive_OnClick"/>
         </Grid>
     </Grid>
 </Window>

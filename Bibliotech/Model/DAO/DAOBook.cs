@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bibliotech.Model.Entities;
+﻿using Bibliotech.Model.Entities;
 using MySqlConnector;
+using System;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
 {
@@ -14,7 +11,7 @@ namespace Bibliotech.Model.DAO
         private readonly Author author;
         public async void InsertBook(Book book, Author author)
         {
-            await Connect ();
+            await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
@@ -32,7 +29,7 @@ namespace Bibliotech.Model.DAO
 
                 string insertBook = "insert into book(id_author, title, subtitle, publishing_company, gender, " +
                     "edition, pages, year_publication, language, volume, collection, status ) values  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1) ;";
-                
+
                 cmd.Parameters.Clear();
                 cmd.CommandText = insertBook;
                 cmd.Parameters.Add("?", DbType.Int32).Value = author.IdAuthor;
@@ -53,7 +50,57 @@ namespace Bibliotech.Model.DAO
             }
             catch (MySqlException ex)
             {
-                await transaction .RollbackAsync();
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<Book> GetById(int idBook)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT " +
+                        "b.title, " +
+                        "at.id_author, at.name " +
+                    "FROM book AS b " +
+                    "INNER JOIN author AS at ON at.id_author = b.id_author " +
+                    "WHERE id_book = ?;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = idBook;
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                _ = await reader.ReadAsync();
+
+                string title = await reader.GetFieldValueAsync<string>(0);
+
+                int idAuthor = await reader.GetFieldValueAsync<int>(1);
+                string nameAuthor = await reader.GetFieldValueAsync<string>(2);
+
+                Author author = new Author
+                {
+                    IdAuthor = idAuthor,
+                    Name = nameAuthor,
+                };
+
+                Book book = new Book
+                {
+                    IdBook = idBook,
+                    Title = title,
+                    Author = author,
+                };
+
+                return book;
+            }
+            catch (MySqlException ex)
+            {
                 throw ex;
             }
             finally

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Bibliotech.UserControls.CustomEnums;
+using System.Windows;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
@@ -7,11 +8,17 @@ namespace Bibliotech.UserControls.CustomDialog
     /// </summary>
     public partial class TextFieldDialog : Window
     {
+        public TypeTextFieldDialog TypeTextFieldDialog { get; set; }
         public string Text { get; set; }
 
-        public TextFieldDialog()
+        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog, FieldType fieldType)
         {
             InitializeComponent();
+
+            tbPassword.FieldType = fieldType;
+            tbPassword.Title = textFieldTitle;
+            tbTitle.Text = description;
+            TypeTextFieldDialog = typeTextFieldDialog;
         }
 
         public void ButtonCancel_Click(object sender, RoutedEventArgs e)
