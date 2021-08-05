@@ -20,7 +20,7 @@ namespace Bibliotech.UserControls
         public object SelectedItem
         {
             get => cb.SelectedItem;
-            set => cb.SelectedItem = true;
+            set => cb.SelectedItem = value;
         }
 
         public int SelectedIndex
@@ -35,9 +35,16 @@ namespace Bibliotech.UserControls
             set => cb.ItemsSource = value;
         }
 
+        public event SelectionChangedEventHandler SelectionChanged;
+
         public CustomComboBox()
         {
             InitializeComponent();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectionChanged?.Invoke(this, e);
         }
     }
 }

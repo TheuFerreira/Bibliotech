@@ -4,6 +4,8 @@ namespace Bibliotech.Model.Entities.Enums
 {
     public enum Status
     {
+        [Description("Todos")]
+        All = -1,
         [Description("Inativo")]
         Inactive = 0,
         [Description("Ativo")]

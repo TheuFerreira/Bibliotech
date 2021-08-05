@@ -26,11 +26,13 @@
             Width="450"/>
 
         <uc:CustomComboBox
+            x:Name="filter"
             Margin="0,5,50,0"
             Title="FILTRAR:"
             Width="200"
             HorizontalAlignment="Right"
-            VerticalAlignment="Top"/>
+            VerticalAlignment="Top"
+            SelectionChanged="Filter_SelectionChanged"/>
 
         <DataGrid
             x:Name="dataGrid"
@@ -79,10 +81,12 @@
             VerticalAlignment="Bottom">
 
             <uc:ButtonImage
+                x:Name="btnLost"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_lost.png"
-                Text="EXTRAVIOU"/>
+                Text="EXTRAVIOU"
+                OnClick="BtnLost_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"
@@ -99,10 +103,12 @@
                 Margin="750,0,322,0"/>
 
             <uc:ButtonImage
+                x:Name="btnInactive"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_delete.png"
-                Text="DELETAR"/>
+                Text="DELETAR"
+                OnClick="BtnInactive_OnClick"/>
         </Grid>
     </Grid>
 </Window>
