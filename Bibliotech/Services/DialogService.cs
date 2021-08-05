@@ -26,5 +26,21 @@ namespace Bibliotech.Services
         {
            _ = new InformationDialog("INFORMAÇÃO", description, TypeDialog.Information).ShowDialog();
         }
+
+        public string ShowPasswordDialog(string description)
+        {
+            TextFieldDialog fieldDialog = new TextFieldDialog("REPETIR SENHA:", description, TypeTextFieldDialog.Password);
+            bool? result = fieldDialog.ShowDialog();
+
+            return result == false ? string.Empty : fieldDialog.Text;
+        }
+
+        public string ShowAddDialog(string description, string textFieldTitle)
+        {
+            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add);
+            bool? result = fieldDialog.ShowDialog();
+
+            return result == false ? string.Empty : fieldDialog.Text;
+        }
     }
 }

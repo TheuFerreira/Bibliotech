@@ -7,11 +7,15 @@ namespace Bibliotech.UserControls.CustomDialog
     /// </summary>
     public partial class TextFieldDialog : Window
     {
+        public TypeTextFieldDialog TypeTextFieldDialog { get; set; }
         public string Text { get; set; }
-
-        public TextFieldDialog()
+        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog)
         {
             InitializeComponent();
+
+            tbPassword.Title = textFieldTitle;
+            tbTitle.Text = description;
+            TypeTextFieldDialog = typeTextFieldDialog;
         }
 
         public void ButtonCancel_Click(object sender, RoutedEventArgs e)

@@ -27,16 +27,28 @@
 
             <Image
                 x:Name="img"
-                Source="/Bibliotech;component/Resources/img_key.png"
                 Height="65"
                 Margin="0,15,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top">
+
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeTextFieldDialog}" Value="Add">
+                                <Setter Property="Source" Value="/Bibliotech;component/Resources/img_add.png"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=TypeTextFieldDialog}" Value="Password">
+                                <Setter Property="Source" Value="/Bibliotech;component/Resources/img_key.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
             </Image>
 
             <TextBlock
                 x:Name="tbTitle"
-                Text="Para salvar, é necessário verificar sua identidade!!!"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 FontSize="16"

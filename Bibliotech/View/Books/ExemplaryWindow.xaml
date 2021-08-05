@@ -89,11 +89,13 @@
                 OnClick="BtnLost_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnNew"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
                 Text="NOVO"
-                Margin="364,0,708,0"/>
+                Margin="364,0,708,0"
+                OnClick="BtnNew_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"

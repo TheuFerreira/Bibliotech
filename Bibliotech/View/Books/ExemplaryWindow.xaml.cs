@@ -105,7 +105,7 @@ namespace Bibliotech.View.Books
             }
 
             int idIndex = exemplary.IdIndex;
-            bool result = dialogService.ShowQuestion("EXTRAVIAR", $"Tem certeza de que deseja marcar o exemplar {idIndex}, como EXTRAVIADO???");
+            bool result = dialogService.ShowQuestion("EXTRAVIAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como EXTRAVIADO???");
             if (result == false)
             {
                 return;
@@ -135,7 +135,7 @@ namespace Bibliotech.View.Books
             }
 
             int idIndex = exemplary.IdIndex;
-            bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja marcar o exemplar {idIndex}, como INATIVO???");
+            bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como INATIVO???");
             if (result == false)
             {
                 return;
@@ -151,5 +151,9 @@ namespace Bibliotech.View.Books
             dialogService.ShowInformation("Livro Inativo!!!");
         }
 
+        private void BtnNew_OnClick(object sender, RoutedEventArgs e)
+        {
+            string value = dialogService.ShowAddDialog("Deseja adicionar quantos exemplares?", "QUANTIDADE DE EXEMPLARES:");
+        }
     }
 }
