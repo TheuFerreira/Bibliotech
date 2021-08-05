@@ -53,7 +53,7 @@
                 Source="/Bibliotech;component/Resources/img_delete.png"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Text="EXCLUIR"/>
+                Text="EXCLUIR" OnClick="ButtonDelete_OnClick"/>
         </Grid>
     </Grid>
 </Window>

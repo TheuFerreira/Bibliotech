@@ -10,10 +10,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace Bibliotech.Model.DAO
 {
     public class DAOLector: Connection
     {
+
         public async Task<bool> Insert(int idBranch, Lector lector, Address address)
         {
             await Connect();
@@ -71,6 +73,38 @@ namespace Bibliotech.Model.DAO
 
         }
 
+        public async Task<bool> Delete(int idLector)
+        {
+            await Connect();
+
+            MySqlTransaction transaction = SqlConnection.BeginTransaction();
+
+            string strSql = "update lector set status = " + ((int)Status.Inactive) + " where id_lector = @idLector;";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+
+                cmd.Parameters.AddWithValue("@idLector", idLector);
+
+                await cmd.ExecuteNonQueryAsync();
+
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                return false;
+                throw;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
 
         public async Task<DataTable> FillDataGrid(string query, int branch, TypeSearch typeSearch)
         {
@@ -83,7 +117,7 @@ namespace Bibliotech.Model.DAO
                          "FROM lector AS l " +
                          "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
                          "INNER JOIN address as a ON a.id_address = l.id_address " +
-                         "WHERE l.name like '%" + query + "%' and b.id_branch = " + branch +
+                         "WHERE l.name like '%" + query + "%' and b.id_branch = " + branch + " and l.status = " + ((int)Status.Active) +
                          " LIMIT 30";
             }
             else
@@ -92,7 +126,7 @@ namespace Bibliotech.Model.DAO
                          "FROM lector AS l " +
                          "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
                          "INNER JOIN address as a ON a.id_address = l.id_address " +
-                         "WHERE l.name like '%" + query + "%'" +
+                         "WHERE l.name like '%" + query + "%'" + " and l.status = "+ ((int)Status.Active) +
                          " LIMIT 30";
             }
 

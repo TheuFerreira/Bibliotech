@@ -43,7 +43,7 @@ namespace Bibliotech.View.Lectors
         public LectorsWindow()
         {
             InitializeComponent();
-            UpdateGrid();
+            
 
             List<string> typesSearch = Enum.GetValues(typeof(TypeSearch))
               .Cast<TypeSearch>()
@@ -53,7 +53,8 @@ namespace Bibliotech.View.Lectors
 
             typeSearch = TypeSearch.Current;
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
-            
+
+            UpdateGrid();
 
         }
 
@@ -199,6 +200,49 @@ namespace Bibliotech.View.Lectors
 
             _ = addEditLectorWindow.ShowDialog();
             UpdateGrid();
+        }
+
+        private async void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
+        {
+            /* if (dataGrid.SelectedItem != null)
+             {
+                 if((dialogServices.ShowQuestion("Tem certeza que deseja excluir este leitor?", "Não é possível desfazer esta ação.")))
+                 {
+                     if(await daoLector.Delete(lector.IdLector))
+                     {
+                         dialogServices.ShowSuccess("Leitor excluído com sucesso!");
+                         UpdateGrid();
+                         return;
+                     }
+                     dialogServices.ShowError("Algo deu errado!\nTente novamente.");
+                     return;
+                 }
+             }
+             dialogServices.ShowError("Escolha algo primeiro.");*/
+
+
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogServices.ShowError("Escolha algo primeiro.");
+                return;
+            }
+
+            bool result = dialogServices.ShowQuestion("Tem certeza que deseja excluir este leitor?", "Não é possível desfazer esta ação.");
+            if (result == false)
+            {
+                return;
+            }
+
+            result = await daoLector.Delete(lector.IdLector);
+            if (result == false)
+            {
+                dialogServices.ShowError("Algo deu errado!\nTente novamente.");
+                return;
+            }
+
+            dialogServices.ShowSuccess("Leitor excluído com sucesso!");
+            UpdateGrid();
+
         }
     }
 }
