@@ -98,11 +98,13 @@
                 OnClick="BtnNew_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnPrint"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Text="IMPRIMIR"
                 Source="/Bibliotech;component/Resources/img_print.png"
-                Margin="750,0,322,0"/>
+                Margin="750,0,322,0"
+                OnClick="BtnPrint_OnClick"/>
 
             <uc:ButtonImage
                 x:Name="btnInactive"

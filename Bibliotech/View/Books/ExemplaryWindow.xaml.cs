@@ -151,9 +151,33 @@ namespace Bibliotech.View.Books
             dialogService.ShowInformation("Livro Inativo!!!");
         }
 
-        private void BtnNew_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnNew_OnClick(object sender, RoutedEventArgs e)
         {
-            string value = dialogService.ShowAddDialog("Deseja adicionar quantos exemplares?", "QUANTIDADE DE EXEMPLARES:");
+            string text = dialogService.ShowAddDialog("Deseja adicionar quantos exemplares?", "QUANTIDADE DE EXEMPLARES:");
+            if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            int numberExemplaries = int.Parse(text);
+            if (numberExemplaries <= 0)
+            {
+                dialogService.ShowError("A quantidade precisa ser maior que 0!");
+            }
+
+            bool result = await daoExemplary.AddExemplaries(currentBranch, book, numberExemplaries);
+            if (result == false)
+            {
+                return;
+            }
+
+            dialogService.ShowSuccess($"{numberExemplaries} Exemplares adicionados!");
+            SearchEemplaries();
+        }
+
+        private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new Exception("MÉTODO AINDA NÃO IMPLEMENTADO");
         }
     }
 }

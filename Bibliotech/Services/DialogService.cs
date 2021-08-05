@@ -1,4 +1,5 @@
 ﻿using Bibliotech.UserControls.CustomDialog;
+using Bibliotech.UserControls.CustomEnums;
 
 namespace Bibliotech.Services
 {
@@ -24,12 +25,12 @@ namespace Bibliotech.Services
 
         public void ShowInformation(string description)
         {
-           _ = new InformationDialog("INFORMAÇÃO", description, TypeDialog.Information).ShowDialog();
+            _ = new InformationDialog("INFORMAÇÃO", description, TypeDialog.Information).ShowDialog();
         }
 
         public string ShowPasswordDialog(string description)
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog("REPETIR SENHA:", description, TypeTextFieldDialog.Password);
+            TextFieldDialog fieldDialog = new TextFieldDialog("REPETIR SENHA:", description, TypeTextFieldDialog.Password, FieldType.String);
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;
@@ -37,7 +38,7 @@ namespace Bibliotech.Services
 
         public string ShowAddDialog(string description, string textFieldTitle)
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add);
+            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.Number);
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;

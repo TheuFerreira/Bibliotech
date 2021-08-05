@@ -1,6 +1,7 @@
 ﻿using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
+using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace Bibliotech.Model.DAO
                     "WHERE e.id_book = ? " +
                         "AND IF(? = 1, TRUE, b.id_branch = ?) " +
                         "AND IF(? = '', TRUE, e.id_exemplary = ?) " +
-                        "AND IF(? = -1, TRUE, e.status = ?) " +
+                        "AND IF(? = -1, e.status != ?, e.status = ?) " +
                     "ORDER BY e.id_index ASC; ";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -34,6 +35,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.String).Value = text;
                 command.Parameters.Add("?", DbType.String).Value = text;
                 command.Parameters.Add("?", DbType.Int32).Value = filterStatus;
+                command.Parameters.Add("?", DbType.Int32).Value = Status.Inactive;
                 command.Parameters.Add("?", DbType.Int32).Value = filterStatus;
 
                 ObservableCollection<Exemplary> exemplaries = new ObservableCollection<Exemplary>();
@@ -94,6 +96,57 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = exemplary.IdExemplary;
 
                 _ = await command.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<bool> AddExemplaries(Branch branch, Book book, int numberExemplaries)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                string sql = "" +
+                    "SELECT MAX(e.id_index) " +
+                    "FROM book AS b " +
+                    "INNER JOIN exemplary AS e ON b.id_book = e.id_book " +
+                    "WHERE b.id_book = ? " +
+                        "AND e.status != 0;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection, transaction);
+                command.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+
+                object result = await command.ExecuteScalarAsync();
+                int lastindex = Convert.ToInt32(result);
+                int nextIndex = lastindex + 1;
+
+                for (int i = 0; i < numberExemplaries; i++)
+                {
+                    command.Parameters.Clear();
+
+                    sql = "INSERT INTO exemplary(id_book, id_branch, id_index, status) VALUES (?, ?, ?, ?);";
+                    command.CommandText = sql;
+                    command.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+                    command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
+                    command.Parameters.Add("?", DbType.Int32).Value = nextIndex;
+                    command.Parameters.Add("?", DbType.Int32).Value = Status.Stock;
+
+                    _ = await command.ExecuteNonQueryAsync();
+
+                    nextIndex++;
+                }
+
                 await transaction.CommitAsync();
 
                 return true;

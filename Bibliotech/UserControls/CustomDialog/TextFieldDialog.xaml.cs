@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Bibliotech.UserControls.CustomEnums;
+using System.Windows;
 
 namespace Bibliotech.UserControls.CustomDialog
 {
@@ -9,10 +10,12 @@ namespace Bibliotech.UserControls.CustomDialog
     {
         public TypeTextFieldDialog TypeTextFieldDialog { get; set; }
         public string Text { get; set; }
-        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog)
+
+        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog, FieldType fieldType)
         {
             InitializeComponent();
 
+            tbPassword.FieldType = fieldType;
             tbPassword.Title = textFieldTitle;
             tbTitle.Text = description;
             TypeTextFieldDialog = typeTextFieldDialog;
