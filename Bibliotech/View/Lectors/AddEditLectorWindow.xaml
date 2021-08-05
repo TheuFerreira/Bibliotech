@@ -35,7 +35,7 @@
                     Placeholder="15"
                     FieldType="Number"
                     HorizontalAlignment="Left"
-                    Width="166"/>
+                    Width="166" IsEnabled="False"/>
 
                 <uc:TextField 
                     x:Name="tfName"

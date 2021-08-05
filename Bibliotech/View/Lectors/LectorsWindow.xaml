@@ -25,9 +25,10 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50"/>
-                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="400" CanUserResize="False"/>
                 <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
-                <DataGridTextColumn Header="DATA DE NASCIMENTO" Binding="{Binding Path=birth_date}" Width="200"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone}" Width="130"/>
+                <DataGridTextColumn Header="ESCOLA" Binding="{Binding Path=s_name}" Width="*" Visibility="Collapsed"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -46,7 +47,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
-                Text="NOVO"/>
+                Text="NOVO" OnClick="ButtonAdd_OnClick"/>
 
             <uc:ButtonImage
                 Source="/Bibliotech;component/Resources/img_delete.png"

@@ -14,6 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using EnumsNET;
+using Bibliotech.Model.Entities.Enums;
+using Bibliotech.Services;
 
 namespace Bibliotech.View.Lectors
 {
@@ -23,20 +26,57 @@ namespace Bibliotech.View.Lectors
     public partial class LectorsWindow : Window
     {
         DAOLector daoLector = new DAOLector();
+
         Lector lector = new Lector();
+
         Address address = new Address();
+
         Branch branch = new Branch();
+
+        DialogService dialogServices = new DialogService();
+
+        private TypeSearch typeSearch;
+
+        //mudar depois, este dado deverá vir a partir do usário atual
+        int idBranch = 22;
+
         public LectorsWindow()
         {
             InitializeComponent();
             UpdateGrid();
-         
+
+            List<string> typesSearch = Enum.GetValues(typeof(TypeSearch))
+              .Cast<TypeSearch>()
+              .Select(x => x.AsString(EnumFormat.Description))
+              .ToList();
+            searchField.ItemsSource = typesSearch;
+
+            typeSearch = TypeSearch.Current;
+            searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
+            
+
         }
 
         private async void UpdateGrid()
         {
-            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, 22);
-            dataGrid.ItemsSource = dataTable.DefaultView;
+            
+            if (searchField.SelectedIndex == ((int)TypeSearch.All))
+            {
+
+                typeSearch = TypeSearch.All;
+                dataGrid.Columns[4].Visibility = Visibility.Visible;
+            }
+            else
+            {
+                typeSearch = TypeSearch.Current;
+                dataGrid.Columns[4].Visibility = Visibility.Collapsed;
+            }
+
+            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch , typeSearch);
+            if (dataTable != null)
+            {
+                dataGrid.ItemsSource = dataTable.DefaultView;
+            }
         }
 
         private void SplitAddress(string temp)
@@ -44,17 +84,25 @@ namespace Bibliotech.View.Lectors
             string[] result = temp.Split(',');
 
             address.City = result[0];
-            address.City.Trim();
+            _ = address.City.Trim();
 
             address.Neighborhood = result[1];
-            address.Neighborhood.Trim();
+            _ = address.Neighborhood.Trim();
 
             address.Street = result[2];
-            address.Street.Trim();
+            _ = address.Street.Trim();
 
             address.Number = result[3];
-            address.Number.Trim();
-            
+            _ = address.Number.Trim();
+
+            try
+            {
+                address.Complement = result[4];
+                _ = address.Complement.Trim();
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+            }
 
         }
 
@@ -62,9 +110,10 @@ namespace Bibliotech.View.Lectors
         {
             DataGrid gd = (DataGrid)sender;
             DataRowView row_selected = gd.SelectedItem as DataRowView;
+
             if (row_selected != null)
             {
-                int a = Convert.ToInt32(row_selected["id_branch"].ToString());
+                branch.IdBranch = Convert.ToInt32(row_selected["id_branch"].ToString());
 
                 lector.IdLector = Convert.ToInt32(row_selected["id_lector"].ToString());
 
@@ -106,7 +155,7 @@ namespace Bibliotech.View.Lectors
 
         private void FillFieldsToUpdate()
         {
-            AddEditLectorWindow addEditLector = new AddEditLectorWindow();
+            AddEditLectorWindow addEditLector = new AddEditLectorWindow(idBranch, true);
 
             addEditLector.tfName.Text = lector.Name;
 
@@ -124,6 +173,8 @@ namespace Bibliotech.View.Lectors
 
             addEditLector.tfNumber.Text = address.Number;
 
+            addEditLector.tfComplement.Text = address.Complement;
+
             addEditLector.tfPhone.Text = lector.Phone.ToString();
 
             addEditLector.ShowDialog();
@@ -133,8 +184,21 @@ namespace Bibliotech.View.Lectors
         {
             if (lector.IdLector > 0)
             {
+                if (branch.IdBranch != idBranch)
+                {
+                    dialogServices.ShowError("Você não pode editar usuários de outra escola.");
+                    return;
+                }
                 FillFieldsToUpdate();
             }
+        }
+
+        private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
+        {
+            AddEditLectorWindow addEditLectorWindow = new AddEditLectorWindow(idBranch, false);
+
+            _ = addEditLectorWindow.ShowDialog();
+            UpdateGrid();
         }
     }
 }

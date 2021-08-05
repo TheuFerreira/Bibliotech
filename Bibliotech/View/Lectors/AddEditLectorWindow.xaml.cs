@@ -1,4 +1,5 @@
-﻿using Bibliotech.Model.Entities;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using Bibliotech.Services;
 using System;
 using System.Collections.Generic;
@@ -21,14 +22,25 @@ namespace Bibliotech.View.Lectors
     /// </summary>
     public partial class AddEditLectorWindow : Window
     {
-        DialogService dialogService = new DialogService();
-        bool isUpdate;
+        //mudar depois
+        private int idBranch = 22;
 
-        public bool IsUpdate { get => isUpdate; set => isUpdate = value; }
+        private DialogService dialogService = new DialogService();
 
-        public AddEditLectorWindow()
+        private DAOLector daoLector = new DAOLector();
+
+        private Lector lector = new Lector();
+
+        private Address address = new Address();
+
+        public bool IsUpdate { get; set; }
+
+        public AddEditLectorWindow(int id_branch, bool is_update)
         {
             InitializeComponent();
+
+            idBranch = id_branch;
+            IsUpdate = is_update;
         }
 
         private bool ValidateFields()
@@ -90,10 +102,50 @@ namespace Bibliotech.View.Lectors
             return true;
         }
 
-
-        private void save_OnClick(object sender, RoutedEventArgs e)
+        private void GroupArguments()
         {
-            ValidateFields();
+            lector.Name = tfName.Text;
+
+            lector.Responsible = tfResponsible.Text;
+
+            lector.BirthDate = null;
+            if(DateTime.TryParse(tfBirthDate.Text, out DateTime temp))
+            {
+                lector.BirthDate = temp;
+            }
+
+            lector.Phone = null;
+            if (!string.IsNullOrEmpty(tfPhone.Text))
+            {
+                lector.Phone = Convert.ToInt64(tfPhone.Text);
+            }
+
+            address.City = tfCity.Text;
+
+            address.Neighborhood = tfDistrict.Text;
+
+            address.Street = tfStreet.Text;
+
+            address.Number = tfNumber.Text;
+
+            address.Complement = tfComplement.Text;
+        }
+
+        private async void save_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ValidateFields())
+            {
+                if (dialogService.ShowQuestion("Tem certeza que deseja adicionar este usuário?", ""))
+                {
+                    GroupArguments();
+                    if (!await daoLector.Insert(idBranch, lector, address))
+                    {
+                        dialogService.ShowError("Algo deu errado!\nTente novamente.");
+                        return;
+                    }
+                    dialogService.ShowSuccess("Leitor adicionado com sucesso!");
+                }
+            }
         }
     }
 }
