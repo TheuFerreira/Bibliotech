@@ -134,8 +134,9 @@ namespace Bibliotech.View.Lectors
                 {
                     telephone = result;
                 }
-                lector.Phone = telephone; 
+                lector.Phone = telephone;
 
+                address.IdAddress = Convert.ToInt32(row_selected["id_address"].ToString());
                 string temp = row_selected["endereco"].ToString();
                 SplitAddress(temp);
             }
@@ -156,7 +157,7 @@ namespace Bibliotech.View.Lectors
 
         private void FillFieldsToUpdate()
         {
-            AddEditLectorWindow addEditLector = new AddEditLectorWindow(idBranch, true);
+            AddEditLectorWindow addEditLector = new AddEditLectorWindow(idBranch, true, address.IdAddress);
 
             addEditLector.tfName.Text = lector.Name;
 
@@ -191,12 +192,13 @@ namespace Bibliotech.View.Lectors
                     return;
                 }
                 FillFieldsToUpdate();
+                UpdateGrid();
             }
         }
 
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            AddEditLectorWindow addEditLectorWindow = new AddEditLectorWindow(idBranch, false);
+            AddEditLectorWindow addEditLectorWindow = new AddEditLectorWindow(idBranch, false, address.IdAddress);
 
             _ = addEditLectorWindow.ShowDialog();
             UpdateGrid();

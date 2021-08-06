@@ -15,7 +15,6 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOLector: Connection
     {
-
         public async Task<bool> Insert(int idBranch, Lector lector, Address address)
         {
             await Connect();
@@ -73,6 +72,55 @@ namespace Bibliotech.Model.DAO
 
         }
 
+        public async Task<bool> Update(Lector lector, Address address)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+
+                string strSql = "update lector " +
+                                "set name = @name, responsible = @resp, birth_date = @birth, telephone = @phone " +
+                                "where id_lector = @idLector;";
+
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+
+                cmd.Parameters.AddWithValue("@name", lector.Name);
+                cmd.Parameters.AddWithValue("@resp", lector.Responsible);
+                cmd.Parameters.AddWithValue("@birth", lector.BirthDate);
+                cmd.Parameters.AddWithValue("@phone", lector.Phone);
+                cmd.Parameters.AddWithValue("@idLector", lector.IdLector);
+
+                await cmd.ExecuteNonQueryAsync();
+
+                strSql = "update address " +
+                         "set city = @city, neighborhood = @dist, street = @street, number = @number, complement = @complement " +
+                         "where id_address = @idAddress;";
+
+                cmd.CommandText = strSql;
+
+                cmd.Parameters.AddWithValue("@city", address.City);
+                cmd.Parameters.AddWithValue("@dist", address.Neighborhood);
+                cmd.Parameters.AddWithValue("@street", address.Street);
+                cmd.Parameters.AddWithValue("@number", address.Number);
+                cmd.Parameters.AddWithValue("@complement", address.Complement);
+                cmd.Parameters.AddWithValue("@idAddress", address.IdAddress);
+
+                await cmd.ExecuteNonQueryAsync();
+
+                await transaction.CommitAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction .RollbackAsync();
+
+                throw;
+            }
+        }
+
         public async Task<bool> Delete(int idLector)
         {
             await Connect();
@@ -104,7 +152,6 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-
 
         public async Task<DataTable> FillDataGrid(string query, int branch, TypeSearch typeSearch)
         {

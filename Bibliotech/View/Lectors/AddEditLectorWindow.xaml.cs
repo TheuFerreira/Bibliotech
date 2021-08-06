@@ -35,12 +35,13 @@ namespace Bibliotech.View.Lectors
 
         public bool IsUpdate { get; set; }
 
-        public AddEditLectorWindow(int id_branch, bool is_update)
+        public AddEditLectorWindow(int id_branch, bool is_update, int idAddress)
         {
             InitializeComponent();
 
             idBranch = id_branch;
             IsUpdate = is_update;
+            address.IdAddress = idAddress;
         }
 
         private bool ValidateFields()
@@ -104,6 +105,11 @@ namespace Bibliotech.View.Lectors
 
         private void GroupArguments()
         {
+            if (IsUpdate)
+            {
+                lector.IdLector = Convert.ToInt32(tfUserRegistration.Text);
+            }
+
             lector.Name = tfName.Text;
 
             lector.Responsible = tfResponsible.Text;
@@ -133,19 +139,38 @@ namespace Bibliotech.View.Lectors
 
         private async void save_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ValidateFields())
+            if (!ValidateFields())
             {
-                if (dialogService.ShowQuestion("Tem certeza que deseja adicionar este usuário?", ""))
-                {
-                    GroupArguments();
-                    if (!await daoLector.Insert(idBranch, lector, address))
-                    {
-                        dialogService.ShowError("Algo deu errado!\nTente novamente.");
-                        return;
-                    }
-                    dialogService.ShowSuccess("Leitor adicionado com sucesso!");
-                }
+                return;
             }
+
+            GroupArguments();
+            if (!IsUpdate)
+            {
+                if (!dialogService.ShowQuestion("Tem certeza que deseja adicionar este usuário?", ""))
+                {
+                    return;
+                }
+                if (!await daoLector.Insert(idBranch, lector, address))
+                {
+                    dialogService.ShowError("Algo deu errado!\nTente novamente.");
+                    return;
+                }
+                dialogService.ShowSuccess("Leitor adicionado com sucesso!");
+                return;
+            }
+
+            if(await daoLector.Update(lector, address))
+            {
+                if (!dialogService.ShowQuestion("Tem certeza que deseja alterar este usuário?", ""))
+                {
+                    return;
+                }
+                dialogService.ShowSuccess("Leitor alterado coom sucesso!");
+                Close();
+                return;
+            }
+            dialogService.ShowError("Algo deu errado!\nTente novamente.");
         }
     }
 }
