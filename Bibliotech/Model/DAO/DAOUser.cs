@@ -9,9 +9,6 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOUser : Connection
     {
-#pragma warning disable IDE0017 // Simplificar a inicialização de objeto
-
-        public User User = new User();
         public async Task<User> IsValidUser(string user, string password)
         {
             try
@@ -23,30 +20,48 @@ namespace Bibliotech.Model.DAO
                     " where binary user_name = @user and aes_decrypt(password, 'bibliotech2021') = @password;";
 
                 MySqlCommand cmd = new MySqlCommand(select, SqlConnection);
-                cmd.Parameters.AddWithValue("@user", user);
-                cmd.Parameters.AddWithValue("@password", password);
-                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                User User = null;
+                _ = cmd.Parameters.AddWithValue("@user", user);
+                _ = cmd.Parameters.AddWithValue("@password", password);
 
+                User User = null;
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while (await reader.ReadAsync())
                 {
                     int idUser = reader.GetInt32(0);
                     TypeUser typeUser = (TypeUser)reader.GetInt32(1);
                     string nameUser = reader.GetString(2);
+
                     int idBranch = reader.GetInt32(3);
                     string nameBranch = reader.GetString(4);
-                    int idAddressBranch = reader.GetInt32(5);
                     long telephone = reader.GetInt64(6);
 
-                    User = new User(idUser, typeUser, nameUser);
-                    Address address = new Address();
-                    address.IdAddress = idAddressBranch;
-                    Branch school = new Branch(idBranch, nameBranch, address, telephone);
+                    int idAddressBranch = reader.GetInt32(5);
+
+                    Address address = new Address
+                    {
+                        IdAddress = idAddressBranch
+                    };
+
+                    Branch branch = new Branch
+                    {
+                        IdBranch = idBranch,
+                        Name = nameBranch,
+                        Address = address,
+                        Telephone = telephone,
+                    };
+
+                    User = new User(idUser, typeUser, nameUser)
+                    {
+                        IdUser = idUser,
+                        TypeUser = typeUser,
+                        Name = nameUser,
+                        UserName = user,
+                        Branch = branch,
+                    };
                 }
 
                 return User;
             }
-
             catch (MySqlException ex)
             {
                 throw ex;
@@ -55,8 +70,8 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
-
         }
+
         public async Task<DataView> SearchByText(TypeSearch typeSearch, string text, Branch branch)
         {
             try

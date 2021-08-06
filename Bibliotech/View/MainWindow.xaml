@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Bibliotech"
         xmlns:ctrl="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Bibliotech" Height="720" Width="1280" Loaded="MainWindow_Loaded" Closing="MainWindow_Closing">
     <Grid>

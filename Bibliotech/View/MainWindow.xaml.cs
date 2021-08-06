@@ -18,7 +18,6 @@ namespace Bibliotech.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        private User User;
         private readonly DialogService dialogService;
 
         private async void FirstLogin()
@@ -71,29 +70,21 @@ namespace Bibliotech.View
 
             FirstLogin();
 
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.ShowDialog();
+            _ = new LoginWindow().ShowDialog();
 
-            User = loginWindow.User;
-
-            if (User == null)
+            if (Session.Instance.User == null)
             {
                 return;
             }
-
-            WindowState = WindowState.Maximized;
         }
 
         private void BtnOut_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            Hide();
 
-            LoginWindow loginWindow = new LoginWindow();
-            loginWindow.ShowDialog();
+            _ = new LoginWindow().ShowDialog();
 
-            User = loginWindow.User;
-
-            if (User != null)
+            if (Session.Instance.User != null)
             {
                 Show();
                 MainWindow_Loaded(sender, e);
@@ -107,17 +98,20 @@ namespace Bibliotech.View
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (User == null)
+            if (Session.Instance.User == null)
             {
                 Close();
                 return;
             }
 
-            tbText.Text = "BEM VINDO, " + User.Name;
+            tbText.Text = "BEM VINDO, " + Session.Instance.User.Name;
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (User == null) return;
+            if (Session.Instance.User == null)
+            {
+                return;
+            }
 
             bool result = dialogService.ShowQuestion("ATENÇÃO", "Deseja sair do programa?");
 

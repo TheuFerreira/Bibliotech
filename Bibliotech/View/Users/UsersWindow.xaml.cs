@@ -2,6 +2,7 @@
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
 using EnumsNET;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Bibliotech.View.Users
         private readonly DAOUser daoUser;
         private readonly DialogService dialogService;
         private TypeSearch typeSearch;
+        private readonly Branch currentBranch;
 
         public UsersWindow()
         {
@@ -35,18 +37,14 @@ namespace Bibliotech.View.Users
 
             typeSearch = TypeSearch.Current;
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
+
+            currentBranch = Session.Instance.User.Branch;
         }
 
         private async void LoadUsers()
         {
             string text = searchField.Text;
             typeSearch = Enums.Parse<TypeSearch>(searchField.SelectedItem.ToString(), false, EnumFormat.Description);
-
-            // ALTERAR QUANDO TIVERMOS SINGLETON
-            Branch currentBranch = new Branch()
-            {
-                IdBranch = 1
-            };
 
             dataGrid.ItemsSource = await daoUser.SearchByText(typeSearch, text, currentBranch);
         }

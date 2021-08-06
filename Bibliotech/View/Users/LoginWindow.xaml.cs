@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using Bibliotech.Model.DAO;
+﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
-using Bibliotech.Services;
 using Bibliotech.Singletons;
 using Bibliotech.UserControls;
 using Bibliotech.UserControls.CustomDialog;
+using System.Windows;
 
 namespace Bibliotech.View.Users
 {
@@ -24,48 +11,55 @@ namespace Bibliotech.View.Users
     /// Lógica interna para LoginWindow.xaml
     /// </summary>
     public partial class LoginWindow : Window
-    { 
+    {
         private readonly DAOUser DaoUser;
-        public User User;
+
         public LoginWindow()
         {
             InitializeComponent();
             DaoUser = new DAOUser();
         }
+
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
-            InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
-            dialog.Show();
+            _ = new InformationDialog(title, contents, typeDialog).ShowDialog();
         }
+
         private void ClearControl(TextField textBox)
         {
             textBox.Text = string.Empty;
         }
+
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(tfUser.Text) || string.IsNullOrWhiteSpace(tfPassword.Text))
+            if (string.IsNullOrWhiteSpace(tfUser.Text)
+                || string.IsNullOrWhiteSpace(tfPassword.Text))
             {
                 ShowMessage("Atenção", "Usuário ou Senha inválida. Tente novamente", TypeDialog.Error);
                 return;
             }
 
             btnEnter.IsEnabled = false;
-            String user = tfUser.Text;
-            String password = tfPassword.Text;
-            User = await DaoUser.IsValidUser(user, password);
+
+            string userName = tfUser.Text;
+            string password = tfPassword.Text;
+
+            User user = await DaoUser.IsValidUser(userName, password);
             btnEnter.IsEnabled = true;
 
-            if (User != null)
-            {
-                this.Close();
-            }
-            else if (User == null)
+            if (user == null)
             {
                 ShowMessage("Atenção", "Usuário não encontrado", TypeDialog.Error);
+
                 ClearControl(tfUser);
                 ClearControl(tfPassword);
+
                 return;
             }
+
+            Session.Instance.User = user;
+
+            Close();
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
@@ -75,10 +69,7 @@ namespace Bibliotech.View.Users
 
         private void BtnDatabase_Click(object sender, RoutedEventArgs e)
         {
-            ServerWindow server = new ServerWindow();
-            server.ShowDialog();
+            _ = new ServerWindow().ShowDialog();
         }
-
-       
     }
 }
