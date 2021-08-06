@@ -19,8 +19,10 @@ namespace Bibliotech.View.Users
     {
         private readonly DAOUser daoUser;
         private readonly DialogService dialogService;
-        private TypeSearch typeSearch;
+        private readonly User loggedUser;
         private readonly Branch currentBranch;
+        private TypeSearch typeSearch;
+        private List<User> users;
 
         public UsersWindow()
         {
@@ -29,40 +31,43 @@ namespace Bibliotech.View.Users
             daoUser = new DAOUser();
             dialogService = new DialogService();
 
+            loggedUser = Session.Instance.User;
+            currentBranch = loggedUser.Branch;
+
             List<string> typesSearch = Enum.GetValues(typeof(TypeSearch))
                 .Cast<TypeSearch>()
+                .Where(x => !loggedUser.IsUser() || x != TypeSearch.All)
                 .Select(x => x.AsString(EnumFormat.Description))
                 .ToList();
             searchField.ItemsSource = typesSearch;
 
             typeSearch = TypeSearch.Current;
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
-
-            currentBranch = Session.Instance.User.Branch;
         }
 
-        private async void LoadUsers()
+        private async void SearchUsers()
         {
             string text = searchField.Text;
             typeSearch = Enums.Parse<TypeSearch>(searchField.SelectedItem.ToString(), false, EnumFormat.Description);
 
-            dataGrid.ItemsSource = await daoUser.SearchByText(typeSearch, text, currentBranch);
+            users = await daoUser.SearchByText(typeSearch, text, currentBranch);
+            dataGrid.ItemsSource = users;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadUsers();
+            SearchUsers();
         }
 
         private void SearchField_Click(object sender, RoutedEventArgs e)
         {
-            LoadUsers();
+            SearchUsers();
         }
 
-        private int GetIdUserInSelectedRow()
+        private User GetUserInSelectedRow()
         {
-            DataRowView row = dataGrid.SelectedItem as DataRowView;
-            return int.Parse(row["id_user"].ToString());
+            int selectedRow = dataGrid.SelectedIndex;
+            return users[selectedRow];
         }
 
         private async void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
@@ -72,19 +77,34 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            int idUser = GetIdUserInSelectedRow();
+            User selectedUser = GetUserInSelectedRow();
 
-            User user = await daoUser.GetUserById(idUser);
-            _ = new AddEditUserWindow(user).ShowDialog();
+            if (loggedUser.Equals(selectedUser) == false)
+            {
+                dialogService.ShowError("Você não pode editar outro usuário!!!");
+                return;
+            }
 
-            LoadUsers();
+            int idUser = selectedUser.IdUser;
+            selectedUser = await daoUser.GetUserById(idUser);
+
+            _ = new AddEditUserWindow(selectedUser).ShowDialog();
+
+            SearchUsers();
         }
 
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            _ = new AddEditUserWindow(new User()).ShowDialog();
+            User newUser = new User();
 
-            LoadUsers();
+            if (loggedUser.IsController() == false)
+            {
+                newUser.Branch = currentBranch;
+            }
+
+            _ = new AddEditUserWindow(newUser).ShowDialog();
+
+            SearchUsers();
         }
 
         private async void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
@@ -94,20 +114,34 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            DataRowView row = dataGrid.SelectedItem as DataRowView;
-            string name = row["name"].ToString();
+            User selectedUser = GetUserInSelectedRow();
 
-            bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja excluir o Usuário {name}?");
+            if (loggedUser.IsUser()
+                && selectedUser.IsController())
+            {
+                dialogService.ShowError($"Você não pode excluir o usuário {selectedUser.Name}!!!");
+                return;
+            }
+
+            if (loggedUser.Equals(selectedUser))
+            {
+                dialogService.ShowError("Você não pode se excluir do BIBLIOTECH!!!");
+                return;
+            }
+
+            string nameUser = selectedUser.Name;
+
+            bool result = dialogService.ShowQuestion("EXCLUSÃO", $"Tem certeza de que deseja excluir o Usuário {nameUser}?");
             if (result == false)
             {
                 return;
             }
 
-            int idUser = GetIdUserInSelectedRow();
+            int idUser = selectedUser.IdUser;
             await daoUser.Delete(idUser);
 
-            dialogService.ShowSuccess($"Usuário {name}, excluído com sucesso!!!");
-            LoadUsers();
+            dialogService.ShowSuccess($"Usuário {nameUser}, excluído com sucesso!!!");
+            SearchUsers();
         }
     }
 }

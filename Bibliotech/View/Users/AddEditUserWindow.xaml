@@ -167,6 +167,7 @@
                 IsEnabled="False"/>
 
             <uc:Button
+                x:Name="btnSearchSchools"
                 Source="/Bibliotech;component/Resources/img_zoom.png"
                 VerticalAlignment="Bottom"
                 Height="25"

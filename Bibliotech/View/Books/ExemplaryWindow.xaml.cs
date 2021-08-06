@@ -4,7 +4,7 @@ using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
 using EnumsNET;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +17,7 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class ExemplaryWindow : Window
     {
-        private ObservableCollection<Exemplary> exemplaries;
+        private List<Exemplary> exemplaries;
 
         private readonly DAOBook daoBook;
         private readonly DAOExamplary daoExemplary;

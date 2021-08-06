@@ -2,6 +2,7 @@
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
 using Bibliotech.UserControls;
 using Bibliotech.View.Schools;
 using EnumsNET;
@@ -22,10 +23,10 @@ namespace Bibliotech.View.Users
     {
         public Branch Branch { get; set; }
 
-        private User user;
         private readonly DialogService dialogService;
         private readonly DAOUser daoUser;
         private readonly bool isFirstUser = false;
+        private User user;
 
         private void FillScreenWithDatas()
         {
@@ -54,8 +55,26 @@ namespace Bibliotech.View.Users
             Branch = user.Branch;
             this.isFirstUser = isFirstUser;
 
+            User loggedUser = Session.Instance.User;
             List<string> typesUser = Enum.GetValues(typeof(TypeUser))
                 .Cast<TypeUser>()
+                .Where(x =>
+                {
+                    if (isFirstUser && x == TypeUser.User)
+                    {
+                        return false;
+                    }
+                    else if (isFirstUser && x == TypeUser.Controller)
+                    {
+                        return true;
+                    }
+                    else if (loggedUser.IsUser() && x == TypeUser.Controller)
+                    {
+                        return false;
+                    }
+
+                    return true;
+                })
                 .Select(x => x.AsString(EnumFormat.Description))
                 .ToList();
             cbTypeUser.ItemsSource = typesUser;
@@ -64,6 +83,8 @@ namespace Bibliotech.View.Users
             this.user = user;
             Title = "Adicionar Usuário";
             tbInfo.Text = "Adicionar Usuário";
+
+            btnSearchSchools.IsEnabled = loggedUser.IsController();
 
             if (user.IdUser == -1)
             {
