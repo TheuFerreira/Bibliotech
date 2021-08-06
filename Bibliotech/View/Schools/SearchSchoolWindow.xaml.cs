@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 
@@ -13,6 +14,7 @@ namespace Bibliotech.View.Schools
         public Branch Branch { get; set; }
 
         private readonly DAOBranch daoSchool;
+        private List<Branch> branches;
 
         public SearchSchoolWindow()
         {
@@ -25,7 +27,8 @@ namespace Bibliotech.View.Schools
         {
             string text = searchField.Text;
 
-            dataGrid.ItemsSource = (await daoSchool.FillDataGrid(text)).DefaultView;
+            branches = await daoSchool.FillDataGrid(text);
+            dataGrid.ItemsSource = branches;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -38,12 +41,12 @@ namespace Bibliotech.View.Schools
             LoadSchools();
         }
 
-        private int GetIdInSelectedRow()
+        private Branch GetBranchInSelectedRow()
         {
-            DataRowView row = dataGrid.SelectedItem as DataRowView;
-            return int.Parse(row["id_branch"].ToString());
+            int selectedIndex = dataGrid.SelectedIndex;
+            return branches[selectedIndex];
         }
-        
+
         private async void ButtonSelect_Click(object sender, RoutedEventArgs e)
         {
             if (dataGrid.SelectedItem == null)
@@ -51,7 +54,8 @@ namespace Bibliotech.View.Schools
                 return;
             }
 
-            int idBranch = GetIdInSelectedRow();
+            Branch branch = GetBranchInSelectedRow();
+            int idBranch = branch.IdBranch;
 
             Branch = await daoSchool.GetById(idBranch);
             DialogResult = true;

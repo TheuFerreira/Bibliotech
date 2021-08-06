@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Schools"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStartupLocation="CenterScreen"
         Title="Procurar Escola" Height="469" Width="890" ResizeMode="NoResize">
+    <Window.Resources>
+        <converters:EnumValueConverter x:Key="StatusConverter"/>
+    </Window.Resources>
     <Grid>
         <uc:SearchField
             x:Name="searchField"
@@ -25,10 +29,10 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="150"/>
-                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="*"/>
-                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
-                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=description}" Width="175"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=Telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="150"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*"/>
+                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=Address}" Width="*"/>
+                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=Status, Converter={StaticResource StatusConverter}}" Width="175"/>
             </DataGrid.Columns>
         </DataGrid>
 

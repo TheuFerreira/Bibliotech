@@ -64,6 +64,8 @@ namespace Bibliotech.View.Users
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
+            Session.Instance.User = null;
+
             Close();
         }
 

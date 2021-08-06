@@ -19,6 +19,7 @@ namespace Bibliotech.View
     public partial class MainWindow : Window
     {
         private readonly DialogService dialogService;
+        private User loggedUser;
 
         private async void FirstLogin()
         {
@@ -38,7 +39,7 @@ namespace Bibliotech.View
             {
                 dialogService.ShowInformation("Você será redirecionado para a tela de Escolas, para cadastrar a primeira escola!!!");
 
-                AddEditSchoolWindow addEditSchool = new AddEditSchoolWindow(false, true);
+                AddEditSchoolWindow addEditSchool = new AddEditSchoolWindow(new Branch(), true);
                 bool? result = addEditSchool.ShowDialog();
 
                 if (result != true)
@@ -72,7 +73,8 @@ namespace Bibliotech.View
 
             _ = new LoginWindow().ShowDialog();
 
-            if (Session.Instance.User == null)
+            loggedUser = Session.Instance.User;
+            if (loggedUser == null)
             {
                 return;
             }
@@ -84,7 +86,9 @@ namespace Bibliotech.View
 
             _ = new LoginWindow().ShowDialog();
 
-            if (Session.Instance.User != null)
+            loggedUser = Session.Instance.User;
+
+            if (loggedUser != null)
             {
                 Show();
                 MainWindow_Loaded(sender, e);
@@ -124,44 +128,46 @@ namespace Bibliotech.View
 
         private void BtnLectors_OnClick(object sender, RoutedEventArgs e)
         {
-            LectorsWindow lectorsWindow = new LectorsWindow();
-            lectorsWindow.Show();
+            _ = new LectorsWindow().ShowDialog();
         }
 
         private void BtnLendings_OnClick(object sender, RoutedEventArgs e)
         {
-            LendingWindow lendingWindow = new LendingWindow();
-            lendingWindow.Show();
+            _ = new LendingWindow().ShowDialog();
         }
 
         private void BtnDevolutions_OnClick(object sender, RoutedEventArgs e)
         {
-            DevolutionWindow devolutionWindow = new DevolutionWindow();
-            devolutionWindow.Show();
+            _ = new DevolutionWindow().ShowDialog();
         }
 
         private void BtnBooks_OnClick(object sender, RoutedEventArgs e)
         {
-            BooksWindow booksWindow = new BooksWindow();
-            booksWindow.Show();
+            _ = new BooksWindow().ShowDialog();
         }
 
         private void BtnUsers_OnClick(object sender, RoutedEventArgs e)
         {
-            UsersWindow usersWindow = new UsersWindow();
-            usersWindow.Show();
+            _ = new UsersWindow().ShowDialog();
         }
 
         private void BtnReports_OnClick(object sender, RoutedEventArgs e)
         {
-            ReportsWindow reportsWindow = new ReportsWindow();
-            reportsWindow.Show();
+            _ = new ReportsWindow().ShowDialog();
         }
 
-        private void BtnSchools_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnSchools_OnClick(object sender, RoutedEventArgs e)
         {
-            SchoolsWindow schoolsWindow = new SchoolsWindow();
-            schoolsWindow.Show();
+            if (loggedUser.IsController())
+            {
+                _ = new SchoolsWindow().ShowDialog();
+                return;
+            }
+
+            int idBranch = loggedUser.Branch.IdBranch;
+            Branch branch = await new DAOBranch().GetById(idBranch);
+
+            _ = new AddEditSchoolWindow(branch).ShowDialog();
         }
     }
 }

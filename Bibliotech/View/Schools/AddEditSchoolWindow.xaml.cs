@@ -13,18 +13,32 @@ namespace Bibliotech.View.Schools
         private readonly DialogService dialogService = new DialogService();
         private readonly DAOBranch daoSchool = new DAOBranch();
         private readonly bool isFirstBranch;
+        private readonly int id;
+        private readonly int idAddress;
 
-        public int Id { get; set; }
-        public bool IsUpdate { get; set; }
-        public int Id_address { get; set; }
-
-        public AddEditSchoolWindow(bool isUpdate = false, bool isFirstBranch = false)
+        public AddEditSchoolWindow(Branch branch, bool isFirstBranch = false)
         {
             InitializeComponent();
 
-            IsUpdate = isUpdate;
-
             this.isFirstBranch = isFirstBranch;
+            tbInfo.Text = "Adicionar Escola";
+            Title = tbInfo.Text;
+
+            if (branch.IdBranch == -1)
+            {
+                return;
+            }
+
+            id = branch.IdBranch;
+            idAddress = branch.Address.IdAddress;
+            tfName.Text = branch.Name;
+            tfCity.Text = branch.Address.City;
+            tfDistrict.Text = branch.Address.Neighborhood;
+            tfPhone.Text = branch.Telephone.ToString();
+            tfStreet.Text = branch.Address.Street;
+            tfNumber.Text = branch.Address.Number;
+            tbInfo.Text = "Editar Escola";
+            Title = tbInfo.Text;
         }
 
         public bool ValidateFields()
@@ -96,23 +110,24 @@ namespace Bibliotech.View.Schools
 
             Address address = new Address()
             {
-                IdAddress = Id_address,
+                IdAddress = idAddress,
                 City = tfCity.Text,
                 Neighborhood = tfDistrict.Text,
                 Street = tfStreet.Text,
                 Number = tfNumber.Text,
             };
 
-            Branch school = new Branch()
+            Branch branch = new Branch()
             {
+                IdBranch = id,
                 Name = tfName.Text,
                 Telephone = phone,
                 Address = address,
             };
 
-            if (!IsUpdate)
+            if (id == -1)
             {
-                if (await daoSchool.Insert(school))
+                if (await daoSchool.Insert(branch))
                 {
                     dialogService.ShowSuccess("Escola salva com sucesso");
                     ClearFields();
@@ -128,7 +143,7 @@ namespace Bibliotech.View.Schools
             }
             else
             {
-                if (await daoSchool.Update(Id, school))
+                if (await daoSchool.Update(branch))
                 {
                     dialogService.ShowSuccess("Escola salva com sucesso");
                     Close();
