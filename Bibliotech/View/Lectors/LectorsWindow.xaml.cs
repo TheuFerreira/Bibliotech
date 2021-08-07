@@ -85,21 +85,21 @@ namespace Bibliotech.View.Lectors
             string[] result = temp.Split(',');
 
             address.City = result[0];
-            _ = address.City.Trim();
+            address.City = address.City.Trim();
 
             address.Neighborhood = result[1];
-            _ = address.Neighborhood.Trim();
+            address.Neighborhood = address.Neighborhood.Trim();
 
             address.Street = result[2];
-            _ = address.Street.Trim();
+            address.Street = address.Street.Trim();
 
             address.Number = result[3];
-            _ = address.Number.Trim();
+            address.Number = address.Number.Trim();
 
             try
             {
                 address.Complement = result[4];
-                _ = address.Complement.Trim();
+                address.Complement = address.Complement.Trim();
             }
             catch (System.IndexOutOfRangeException)
             {
