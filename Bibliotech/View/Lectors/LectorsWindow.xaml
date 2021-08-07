@@ -24,7 +24,24 @@
             ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50"/>
+                <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Grid>
+                                            <Image
+                                                Width="25"
+                                                Height="25"
+                                                Source="/Bibliotech;component/Resources/img_warning.png"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="400" CanUserResize="False"/>
                 <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
                 <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone}" Width="130"/>

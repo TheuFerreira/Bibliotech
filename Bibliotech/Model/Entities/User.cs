@@ -41,5 +41,25 @@ namespace Bibliotech.Model.Entities
             return Telephone.ToString();
         }
 
+        public bool IsController()
+        {
+            return TypeUser == TypeUser.Controller;
+        }
+
+        public bool IsUser()
+        {
+            return TypeUser == TypeUser.User;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is User user &&
+                   IdUser == user.IdUser;
+        }
+
+        public override int GetHashCode()
+        {
+            return -2101027685 + IdUser.GetHashCode();
+        }
     }
 }

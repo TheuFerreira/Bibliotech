@@ -31,7 +31,7 @@
                 <uc:TextField 
                     x:Name="tfUserRegistration"
                     MaxLength="6"
-                    Title="REGISTRO DE USUÁRIO:*"
+                    Title="REGISTRO DE LEITOR:*"
                     Placeholder="15"
                     FieldType="Number"
                     HorizontalAlignment="Left"

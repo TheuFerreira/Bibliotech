@@ -2,7 +2,7 @@
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOExamplary : Connection
     {
-        public async Task<ObservableCollection<Exemplary>> GetExemplarysByBook(Book book, TypeSearch typeSearch, Branch currentBranch, string text, Status filterStatus)
+        public async Task<List<Exemplary>> GetExemplarysByBook(Book book, TypeSearch typeSearch, Branch currentBranch, string text, Status filterStatus)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = Status.Inactive;
                 command.Parameters.Add("?", DbType.Int32).Value = filterStatus;
 
-                ObservableCollection<Exemplary> exemplaries = new ObservableCollection<Exemplary>();
+                List<Exemplary> exemplaries = new List<Exemplary>();
                 MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while (await reader.ReadAsync())
                 {

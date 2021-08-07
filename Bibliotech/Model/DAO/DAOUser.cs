@@ -2,6 +2,7 @@
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -9,9 +10,6 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOUser : Connection
     {
-#pragma warning disable IDE0017 // Simplificar a inicialização de objeto
-
-        public User User = new User();
         public async Task<User> IsValidUser(string user, string password)
         {
             try
@@ -23,30 +21,48 @@ namespace Bibliotech.Model.DAO
                     " where binary user_name = @user and aes_decrypt(password, 'bibliotech2021') = @password;";
 
                 MySqlCommand cmd = new MySqlCommand(select, SqlConnection);
-                cmd.Parameters.AddWithValue("@user", user);
-                cmd.Parameters.AddWithValue("@password", password);
-                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                User User = null;
+                _ = cmd.Parameters.AddWithValue("@user", user);
+                _ = cmd.Parameters.AddWithValue("@password", password);
 
+                User User = null;
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while (await reader.ReadAsync())
                 {
                     int idUser = reader.GetInt32(0);
                     TypeUser typeUser = (TypeUser)reader.GetInt32(1);
                     string nameUser = reader.GetString(2);
+
                     int idBranch = reader.GetInt32(3);
                     string nameBranch = reader.GetString(4);
-                    int idAddressBranch = reader.GetInt32(5);
                     long telephone = reader.GetInt64(6);
 
-                    User = new User(idUser, typeUser, nameUser);
-                    Address address = new Address();
-                    address.IdAddress = idAddressBranch;
-                    Branch school = new Branch(idBranch, nameBranch, address, telephone);
+                    int idAddressBranch = reader.GetInt32(5);
+
+                    Address address = new Address
+                    {
+                        IdAddress = idAddressBranch
+                    };
+
+                    Branch branch = new Branch
+                    {
+                        IdBranch = idBranch,
+                        Name = nameBranch,
+                        Address = address,
+                        Telephone = telephone,
+                    };
+
+                    User = new User(idUser, typeUser, nameUser)
+                    {
+                        IdUser = idUser,
+                        TypeUser = typeUser,
+                        Name = nameUser,
+                        UserName = user,
+                        Branch = branch,
+                    };
                 }
 
                 return User;
             }
-
             catch (MySqlException ex)
             {
                 throw ex;
@@ -55,19 +71,22 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
-
         }
-        public async Task<DataView> SearchByText(TypeSearch typeSearch, string text, Branch branch)
+
+        public async Task<List<User>> SearchByText(TypeSearch typeSearch, string text, Branch branch)
         {
             try
             {
                 await Connect();
 
                 string str = "" +
-                    "SELECT u.id_user, u.name, u.telephone, CONCAT(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) AS address, u.birth_date, tu.description " +
+                    "SELECT " +
+                        "u.id_user, u.name, u.id_type_user, u.telephone, " +
+                        "a.id_address, a.city, a.neighborhood, a.street, a.number, a.complement, " +
+                        "b.id_branch, b.name " +
                     "FROM users AS u " +
-                    "INNER JOIN type_users AS tu ON u.id_type_user = tu.id_type_user " +
                     "INNER JOIN address AS a ON u.id_address = a.id_address " +
+                    "INNER JOIN branch AS b ON u.id_branch = b.id_branch " +
                     "WHERE u.status = 1 " +
                         "AND u.name LIKE ? " +
                         "AND IF(? = 0, u.id_branch = ?, TRUE) " +
@@ -77,11 +96,59 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = typeSearch;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
-                DataTable dt = new DataTable();
-                MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);
-                _ = dataAdapter.Fill(dt);
+                List<User> users = new List<User>();
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int idUser = await reader.GetFieldValueAsync<int>(0);
+                    string name = await reader.GetFieldValueAsync<string>(1);
+                    TypeUser typeUser = (TypeUser)await reader.GetFieldValueAsync<int>(2);
+                    long? telephone = null;
 
-                return dt.DefaultView;
+                    if (await reader.IsDBNullAsync(3) == false)
+                    {
+                        telephone = await reader.GetFieldValueAsync<long>(3);
+                    }
+
+                    int idAddress = await reader.GetFieldValueAsync<int>(4);
+                    string city = await reader.GetFieldValueAsync<string>(5);
+                    string neighborhood = await reader.GetFieldValueAsync<string>(6);
+                    string street = await reader.GetFieldValueAsync<string>(7);
+                    string number = await reader.GetFieldValueAsync<string>(8);
+                    string complement = await reader.GetFieldValueAsync<string>(9);
+
+                    int idBranch = await reader.GetFieldValueAsync<int>(10);
+                    string nameBranch = await reader.GetFieldValueAsync<string>(11);
+
+                    Address address = new Address
+                    {
+                        IdAddress = idAddress,
+                        City = city,
+                        Neighborhood = neighborhood,
+                        Street = street,
+                        Number = number,
+                    };
+
+                    Branch userBranch = new Branch
+                    {
+                        IdBranch = idBranch,
+                        Name = nameBranch,
+                    };
+
+                    User user = new User
+                    {
+                        IdUser = idUser,
+                        Name = name,
+                        TypeUser = typeUser,
+                        Telephone = telephone,
+                        Address = address,
+                        Branch = userBranch,
+                    };
+
+                    users.Add(user);
+                }
+
+                return users;
             }
             catch (MySqlException ex)
             {

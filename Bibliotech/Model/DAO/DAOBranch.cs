@@ -1,6 +1,8 @@
 ﻿using Bibliotech.Model.Entities;
+using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -8,7 +10,7 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOBranch : Connection
     {
-        public async Task<bool> Insert(Branch school)
+        public async Task<bool> Insert(Branch branch)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -21,13 +23,13 @@ namespace Bibliotech.Model.DAO
 
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
 
-                _ = cmd.Parameters.AddWithValue("@city", school.Address.City);
-                _ = cmd.Parameters.AddWithValue("@dist", school.Address.Neighborhood);
-                _ = cmd.Parameters.AddWithValue("@street", school.Address.Street);
-                _ = cmd.Parameters.AddWithValue("@number", school.Address.Number);
+                _ = cmd.Parameters.AddWithValue("@city", branch.Address.City);
+                _ = cmd.Parameters.AddWithValue("@dist", branch.Address.Neighborhood);
+                _ = cmd.Parameters.AddWithValue("@street", branch.Address.Street);
+                _ = cmd.Parameters.AddWithValue("@number", branch.Address.Number);
 
                 object result = await cmd.ExecuteScalarAsync();
-                school.Address.IdAddress = Convert.ToInt32(result.ToString());
+                branch.Address.IdAddress = Convert.ToInt32(result.ToString());
 
                 strSql = " insert into branch(name, id_address, telephone, status) " +
                                       "values(@name, @id, @phone, 1);";
@@ -35,9 +37,9 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Clear();
 
                 cmd.CommandText = strSql;
-                _ = cmd.Parameters.AddWithValue("@name", school.Name);
-                _ = cmd.Parameters.AddWithValue("@id", school.Address.IdAddress);
-                _ = cmd.Parameters.AddWithValue("@phone", school.Telephone);
+                _ = cmd.Parameters.AddWithValue("@name", branch.Name);
+                _ = cmd.Parameters.AddWithValue("@id", branch.Address.IdAddress);
+                _ = cmd.Parameters.AddWithValue("@phone", branch.Telephone);
 
                 _ = await cmd.ExecuteNonQueryAsync();
 
@@ -56,7 +58,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<bool> Update(int id, Branch school)
+        public async Task<bool> Update(Branch branch)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -69,23 +71,23 @@ namespace Bibliotech.Model.DAO
 
                 MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
 
-                _ = cmd.Parameters.AddWithValue("@city", school.Address.City);
-                _ = cmd.Parameters.AddWithValue("@dist", school.Address.Neighborhood);
-                _ = cmd.Parameters.AddWithValue("@street", school.Address.Street);
-                _ = cmd.Parameters.AddWithValue("@number", school.Address.Number);
-                _ = cmd.Parameters.AddWithValue("@id_address", school.Address.IdAddress);
+                _ = cmd.Parameters.AddWithValue("@city", branch.Address.City);
+                _ = cmd.Parameters.AddWithValue("@dist", branch.Address.Neighborhood);
+                _ = cmd.Parameters.AddWithValue("@street", branch.Address.Street);
+                _ = cmd.Parameters.AddWithValue("@number", branch.Address.Number);
+                _ = cmd.Parameters.AddWithValue("@id_address", branch.Address.IdAddress);
 
                 _ = await cmd.ExecuteNonQueryAsync();
 
                 strSql = "update branch " +
-                             "set name = '" + school.Name + "', telephone = @phone " +
+                             "set name = '" + branch.Name + "', telephone = @phone " +
                              " where id_branch = @id;";
 
                 cmd.Parameters.Clear();
 
                 cmd.CommandText = strSql;
-                _ = cmd.Parameters.AddWithValue("@id", id);
-                _ = cmd.Parameters.AddWithValue("@phone", school.Telephone);
+                _ = cmd.Parameters.AddWithValue("@id", branch.IdBranch);
+                _ = cmd.Parameters.AddWithValue("@phone", branch.Telephone);
 
                 _ = await cmd.ExecuteNonQueryAsync();
 
@@ -105,19 +107,18 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task OnOff(int status, int id)
+        public async Task OnOff(Status status, Branch branch)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
-            String strSql = "update branch set status = " + status + " where id_branch = " + id + ";";
-
             try
             {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
-                await cmd.ExecuteNonQueryAsync();
-                await transaction.CommitAsync();
+                string sql = "update branch set status = " + (int)status + " where id_branch = " + branch.IdBranch + ";";
 
+                MySqlCommand cmd = new MySqlCommand(sql, SqlConnection, transaction);
+                _ = await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
             }
             catch (Exception)
             {
@@ -132,26 +133,24 @@ namespace Bibliotech.Model.DAO
 
         public async Task<int> UsersCount()
         {
-            await Connect();
-            int number;
-            String strSql = "select count(id_user) from users where status = 1;";
-
             try
             {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+                await Connect();
+                string sql = "select count(id_user) from users where status = 1;";
+
+                MySqlCommand cmd = new MySqlCommand(sql, SqlConnection);
                 object result = await cmd.ExecuteScalarAsync();
-                number = Convert.ToInt32(result.ToString());
+
+                return Convert.ToInt32(result.ToString());
             }
-            catch (MySqlException)
+            catch (MySqlException ex)
             {
-                number = -1;
+                throw ex;
             }
             finally
             {
                 await Disconnect();
             }
-
-            return number;
         }
 
         public async Task<int> Total()
@@ -178,31 +177,64 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataTable> FillDataGrid(String query)
+        public async Task<List<Branch>> FillDataGrid(string query)
         {
-            await Connect();
-
-            String strSql = "select b.id_branch, b.name, b.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number) as endereco, s.description, b.id_address, a.city, a.neighborhood, a.street, a.number " +
-                            "from branch as b " +
-                            "inner join address as a on b.id_address = a.id_address " +
-                            "inner join status as s on s.id_status = b.status " +
-                            "where b.name like \"%" + query + "%\";";
-
             try
             {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
-                await cmd.ExecuteNonQueryAsync();
+                await Connect();
 
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable("branch");
+                string sql = "select b.id_branch, b.name, b.telephone, b.status, b.id_address, a.city, a.neighborhood, a.street, a.number " +
+                                "from branch as b " +
+                                "inner join address as a on b.id_address = a.id_address " +
+                                "where b.name like \"%" + query + "%\";";
 
-                adapter.Fill(dt);
-                return dt;
+                MySqlCommand cmd = new MySqlCommand(sql, SqlConnection);
+
+                List<Branch> branches = new List<Branch>();
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int idBranch = await reader.GetFieldValueAsync<int>(0);
+                    string name = await reader.GetFieldValueAsync<string>(1);
+                    long? telephone = null;
+                    if (await reader.IsDBNullAsync(2) == false)
+                    {
+                        telephone = await reader.GetFieldValueAsync<long>(2);
+                    }
+                    Status status = (Status)await reader.GetFieldValueAsync<int>(3);
+
+                    int idAddress = await reader.GetFieldValueAsync<int>(4);
+                    string city = await reader.GetFieldValueAsync<string>(5);
+                    string neighborhood = await reader.GetFieldValueAsync<string>(6);
+                    string street = await reader.GetFieldValueAsync<string>(7);
+                    string number = await reader.GetFieldValueAsync<string>(8);
+
+                    Address address = new Address
+                    {
+                        IdAddress = idAddress,
+                        City = city,
+                        Neighborhood = neighborhood,
+                        Street = street,
+                        Number = number,
+                    };
+
+                    Branch branch = new Branch
+                    {
+                        IdBranch = idBranch,
+                        Name = name,
+                        Telephone = telephone,
+                        Address = address,
+                        Status = status,
+                    };
+
+                    branches.Add(branch);
+                }
+
+                return branches;
             }
-            catch (Exception)
+            catch (MySqlException ex)
             {
-                return null;
-                throw;
+                throw ex;
             }
             finally
             {
@@ -217,8 +249,11 @@ namespace Bibliotech.Model.DAO
                 await Connect();
 
                 string sql = "" +
-                    "SELECT name " +
-                    "FROM branch " +
+                    "SELECT " +
+                        "b.name, b.telephone, " +
+                        "a.id_address, a.city, a.neighborhood, a.street, a.number " +
+                    "FROM branch AS b " +
+                    "INNER JOIN address AS a ON b.id_address = a.id_address " +
                     "WHERE id_branch = ?;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -229,8 +264,34 @@ namespace Bibliotech.Model.DAO
                 while (await reader.ReadAsync())
                 {
                     string name = await reader.GetFieldValueAsync<string>(0);
+                    long? telephone = null;
+                    if (await reader.IsDBNullAsync(1) == false)
+                    {
+                        telephone = await reader.GetFieldValueAsync<long>(1);
+                    }
 
-                    school = new Branch(idBranch, name);
+                    int idAddress = await reader.GetFieldValueAsync<int>(2);
+                    string city = await reader.GetFieldValueAsync<string>(3);
+                    string neighborhood = await reader.GetFieldValueAsync<string>(4);
+                    string street = await reader.GetFieldValueAsync<string>(5);
+                    string number = await reader.GetFieldValueAsync<string>(6);
+
+                    Address address = new Address
+                    {
+                        IdAddress = idAddress,
+                        City = city,
+                        Neighborhood = neighborhood,
+                        Street = street,
+                        Number = number,
+                    };
+
+                    school = new Branch
+                    {
+                        IdBranch = idBranch,
+                        Name = name,
+                        Telephone = telephone,
+                        Address = address,
+                    };
                 }
 
                 return school;

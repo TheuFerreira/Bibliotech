@@ -25,6 +25,7 @@ namespace Bibliotech.Model.Entities
         {
             IdBranch = -1;
             Address = new Address();
+            Status = Status.Active;
         }
 
         public Branch(int idBranch, string name)
@@ -34,21 +35,9 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
-        public Branch(string name, Address address, long telephone)
+        public bool IsActive()
         {
-            Name = name;
-            Address = address;
-            Telephone = telephone;
-            Status = Status.Active;
-        }
-
-        public Branch(int idBranch, string name, Address address, long telephone)
-        {
-            IdBranch = idBranch;
-            Name = name;
-            Address = address;
-            Telephone = telephone;
-            Status = Status.Active;
+            return Status == Status.Active;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

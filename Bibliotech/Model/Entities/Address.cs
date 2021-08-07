@@ -32,5 +32,10 @@
             Number = number;
             Complement = complement;
         }
+
+        public override string ToString()
+        {
+            return City + ", " + Neighborhood + ", " + Street + " - " + Number + " " + Complement;
+        }
     }
 }
