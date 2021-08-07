@@ -17,7 +17,7 @@
             HorizontalAlignment="Center"
             Placeholder="PESQUISAR LIVROS"
             VerticalAlignment="Top"
-            Width="350"/>
+            Width="350" Click="searchField_Click" LostFocus="searchField_LostFocus"/>
 
         <DataGrid
             x:Name="dataGrid"
