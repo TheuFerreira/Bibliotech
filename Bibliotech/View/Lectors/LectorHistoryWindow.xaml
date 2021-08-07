@@ -25,11 +25,11 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}"/>
+                <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=status}"/>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}"/>
-                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=exemplary}"/>
-                <DataGridTextColumn Header="EMPRÉSITMO" Width="150"/>
-                <DataGridTextColumn Header="DEVOLUÇÃO" Width="150"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=id_exemplary}"/>
+                <DataGridTextColumn Header="EMPRÉSITMO" Width="200" Binding="{Binding Path=loan_date}"/>
+                <DataGridTextColumn Header="DEVOLUÇÃO" Width="200" Binding="{Binding Path=return_date1}"/>
             </DataGrid.Columns>
         </DataGrid>
 

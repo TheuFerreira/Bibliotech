@@ -141,7 +141,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom">
 
-            <uc:Button
+            <uc:Button x:Name="HistoryButton"
                 Source="/Bibliotech;component/Resources/img_zoom.png"
                 VerticalAlignment="Bottom"
                 Height="30"
@@ -149,7 +149,7 @@
                 Width="200"
                 CornerRadius="15"
                 FontSize="16"
-                Text="HISTÓRICO"/>
+                Text="HISTÓRICO" Click="HistoryButton_Click"/>
         </Grid>
 
         <uc:ButtonImage 

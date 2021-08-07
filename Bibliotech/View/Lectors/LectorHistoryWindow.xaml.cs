@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Bibliotech.Model.DAO;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +21,22 @@ namespace Bibliotech.View.Lectors
     /// </summary>
     public partial class LectorHistoryWindow : Window
     {
-        public LectorHistoryWindow()
+        private int idLector;
+        DAOLector daoLector = new DAOLector();
+        public LectorHistoryWindow(int idLector)
         {
             InitializeComponent();
+            this.idLector = idLector;
+            UpdateGrid();
+        }
+
+        private async void UpdateGrid()
+        {
+            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idLector);
+            if (dataTable != null)
+            {
+                dataGrid.ItemsSource = dataTable.DefaultView;
+            }
         }
     }
 }

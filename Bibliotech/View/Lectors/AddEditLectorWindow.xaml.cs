@@ -172,5 +172,17 @@ namespace Bibliotech.View.Lectors
             }
             dialogService.ShowError("Algo deu errado!\nTente novamente.");
         }
+
+        private void HistoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            GroupArguments();
+
+            LectorHistoryWindow historyWindow = new LectorHistoryWindow(lector.IdLector);
+
+            if (IsUpdate)
+            {
+                _ = historyWindow.ShowDialog();
+            }
+        }
     }
 }
