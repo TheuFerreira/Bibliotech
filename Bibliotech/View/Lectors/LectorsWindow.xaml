@@ -32,10 +32,17 @@
                                     <ControlTemplate TargetType="DataGridCell">
                                         <Grid>
                                             <Image
+                                                x:Name="img"
                                                 Width="25"
                                                 Height="25"
                                                 Source="/Bibliotech;component/Resources/img_warning.png"/>
                                         </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=icon}" Value="0">
+                                                <Setter TargetName="img" Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -44,7 +51,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="400" CanUserResize="False"/>
                 <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
-                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone}" Width="130"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="130"/>
                 <DataGridTextColumn Header="ESCOLA" Binding="{Binding Path=s_name}" Width="*" Visibility="Collapsed"/>
             </DataGrid.Columns>
         </DataGrid>

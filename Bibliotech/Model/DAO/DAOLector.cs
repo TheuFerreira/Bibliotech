@@ -2,18 +2,13 @@
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 
 namespace Bibliotech.Model.DAO
 {
-    public class DAOLector: Connection
+    public class DAOLector : Connection
     {
         public async Task<bool> Insert(int idBranch, Lector lector, Address address)
         {
@@ -21,8 +16,8 @@ namespace Bibliotech.Model.DAO
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             //mudar formato de data
-           /* DateTime.TryParseExact(lector.BirthDate.ToString(), "yyyy/MM/dd hh:mm:ss tt", CultureInfo.InvariantCulture,
-           DateTimeStyles.None, out DateTime date2);*/
+            /* DateTime.TryParseExact(lector.BirthDate.ToString(), "yyyy/MM/dd hh:mm:ss tt", CultureInfo.InvariantCulture,
+            DateTimeStyles.None, out DateTime date2);*/
 
             try
             {
@@ -115,7 +110,7 @@ namespace Bibliotech.Model.DAO
             }
             catch (Exception)
             {
-                await transaction .RollbackAsync();
+                await transaction.RollbackAsync();
 
                 throw;
             }
@@ -158,26 +153,13 @@ namespace Bibliotech.Model.DAO
             await Connect();
             string strSql;
 
-            if (typeSearch == TypeSearch.Current)
-            {
-                strSql = "SELECT if(len.id_lending is null, '0', '1') as icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
-                         "FROM lector AS l " +
-                         "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
-                         "INNER JOIN address as a ON a.id_address = l.id_address " +
-                         "Left JOIN lending as len on len.id_reader = l.id_lector " +
-                         "WHERE l.name like '%" + query + "%' and b.id_branch = " + branch + " and l.status = " + ((int)Status.Active) +
-                         " LIMIT 30";
-            }
-            else
-            {
-                strSql = "SELECT if(len.id_lending is null, '0', '1') as icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
-                         "FROM lector AS l " +
-                         "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
-                         "INNER JOIN address as a ON a.id_address = l.id_address " +
-                         "Left JOIN lending as len on len.id_reader = l.id_lector " +
-                         "WHERE l.name like '%" + query + "%'" + " and l.status = "+ ((int)Status.Active) +
-                         " LIMIT 30";
-            }
+            strSql = "SELECT if(len.id_lending is null, '0', '1') as icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
+                     "FROM lector AS l " +
+                     "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
+                     "INNER JOIN address as a ON a.id_address = l.id_address " +
+                     "Left JOIN lending as len on len.id_lending = l.id_lector " +
+                     "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 0, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
+                     " LIMIT 30";
 
             try
             {
@@ -201,7 +183,7 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
 
-            
+
         }
 
         public async Task<DataTable> FillDataGrid(string query, int idlector)
@@ -211,11 +193,11 @@ namespace Bibliotech.Model.DAO
 
             strSql = "select exe.status, bk.title, exe.id_exemplary, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
                      "from lending as len " +
-                     "inner join lector as lec on lec.id_lector = len.id_reader " +
+                     "inner join lector as lec on lec.id_lector = len.id_lector " +
                      "inner join exemplary as exe on exe.id_exemplary = len.id_exemplary " +
                      "inner join book as bk on bk.id_book = exe.id_book " +
                      "where lec.id_lector = " + idlector + " and bk.title like '%" + query + "%';";
-            
+
 
 
             try
@@ -229,10 +211,9 @@ namespace Bibliotech.Model.DAO
                 _ = adapter.Fill(dt);
                 return dt;
             }
-            catch (Exception)
+            catch (MySqlException ex)
             {
-                return null;
-                throw;
+                throw ex;
             }
             finally
             {
