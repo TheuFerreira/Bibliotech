@@ -38,5 +38,15 @@ namespace Bibliotech.View.Lectors
                 dataGrid.ItemsSource = dataTable.DefaultView;
             }
         }
+
+        private void searchField_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
+
+        private void searchField_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
     }
 }

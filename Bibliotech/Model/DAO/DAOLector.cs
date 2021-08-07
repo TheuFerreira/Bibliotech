@@ -157,8 +157,9 @@ namespace Bibliotech.Model.DAO
                      "FROM lector AS l " +
                      "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
                      "INNER JOIN address as a ON a.id_address = l.id_address " +
-                     "Left JOIN lending as len on len.id_lending = l.id_lector " +
-                     "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 0, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
+                     "Left JOIN lending as len on len.id_lector = l.id_lector " +
+                     "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 1, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
+                     " group by l.id_lector " +
                      " LIMIT 30";
 
             try
