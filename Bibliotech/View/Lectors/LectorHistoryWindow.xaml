@@ -38,6 +38,20 @@
                                                 Height="25"
                                                 Source="/Bibliotech;component/Resources/img_ok.png"/>
                                         </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Path=status}" Value="2">
+                                                <Setter TargetName="img" Property="Source" Value="/Bibliotech;component/Resources/img_lendings.png"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Path=status}" Value="4">
+                                                <Setter TargetName="img" Property="Source" Value="/Bibliotech;component/Resources/img_error.png"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Path=status}" Value="5">
+                                                <Setter TargetName="img" Property="Source" Value="/Bibliotech;component/Resources/img_warning.png"/>
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>

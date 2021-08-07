@@ -191,7 +191,15 @@ namespace Bibliotech.Model.DAO
             await Connect();
             string strSql;
 
-            strSql = "select exe.status, bk.title, exe.id_exemplary, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
+            strSql = "select IF (len.return_date IS NOT NULL, " +
+                    "3, " +
+                    "IF(NOW() > len.expected_date, " +
+                        "5, " +
+                        "IF(exe.status = 4, " +
+                            "4, " +
+                            "2) " +
+                        ") " +
+                    ") AS status, bk.title, exe.id_exemplary, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
                      "from lending as len " +
                      "inner join lector as lec on lec.id_lector = len.id_lector " +
                      "inner join exemplary as exe on exe.id_exemplary = len.id_exemplary " +
