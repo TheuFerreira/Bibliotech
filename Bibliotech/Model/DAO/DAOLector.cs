@@ -153,13 +153,19 @@ namespace Bibliotech.Model.DAO
             await Connect();
             string strSql;
 
-            strSql = "SELECT if(len.id_lending is null, '0', '1') as icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
+            strSql = "SELECT IF(len.status IS NULL, 0, 1) AS icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
                      "FROM lector AS l " +
                      "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
                      "INNER JOIN address as a ON a.id_address = l.id_address " +
-                     "Left JOIN lending as len on len.id_lending = l.id_lector " +
+                     "LEFT JOIN ( " +
+                        "SELECT len.*, exe.status " +
+                        "FROM lending AS len " +
+                        "INNER JOIN exemplary AS exe ON len.id_exemplary = exe.id_exemplary " +
+                        "WHERE len.return_date IS NULL " +
+                        ") AS len ON len.id_lector = l.id_lector " +
                      "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 0, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
-                     " LIMIT 30";
+                     " GROUP BY l.id_lector " +
+                     "LIMIT 30";
 
             try
             {
@@ -175,7 +181,6 @@ namespace Bibliotech.Model.DAO
             }
             catch (Exception)
             {
-                return null;
                 throw;
             }
             finally
