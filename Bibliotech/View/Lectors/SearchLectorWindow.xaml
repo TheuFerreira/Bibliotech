@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
-        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStartupLocation="CenterScreen"
