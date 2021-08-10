@@ -196,6 +196,9 @@
     <Compile Include="View\Books\ExemplaryWindow.xaml.cs">
       <DependentUpon>ExemplaryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Books\SearchBookWindow.xaml.cs">
+      <DependentUpon>SearchBookWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Devolutions\DevolutionWindow.xaml.cs">
       <DependentUpon>DevolutionWindow.xaml</DependentUpon>
     </Compile>
@@ -287,6 +290,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Books\ExemplaryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Books\SearchBookWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
