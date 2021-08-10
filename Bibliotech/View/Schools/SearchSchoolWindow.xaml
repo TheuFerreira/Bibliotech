@@ -20,6 +20,7 @@
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
+            Placeholder="PESQUISAR ESCOLA"
             Width="350"
             Click="ButtonSearch_Click"/>
 

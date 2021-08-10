@@ -208,6 +208,9 @@
     <Compile Include="View\Lectors\LectorsWindow.xaml.cs">
       <DependentUpon>LectorsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Lectors\SearchLectorWindow.xaml.cs">
+      <DependentUpon>SearchLectorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Lendings\LendingWindow.xaml.cs">
       <DependentUpon>LendingWindow.xaml</DependentUpon>
     </Compile>
@@ -300,6 +303,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Lectors\LectorsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Lectors\SearchLectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
