@@ -25,10 +25,10 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=author}" Width="*"/>
-                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=publishingCompany}" Width="*"/>
+                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=author}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=publishingCompany}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 

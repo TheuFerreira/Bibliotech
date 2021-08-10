@@ -29,10 +29,10 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=Telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="150"/>
-                <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*"/>
-                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=Address}" Width="*"/>
-                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=Status, Converter={StaticResource StatusConverter}}" Width="175"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=Telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="150" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=Address}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="STATUS" Binding="{Binding Path=Status, Converter={StaticResource StatusConverter}}" Width="175" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -182,5 +182,9 @@
                 Background="{TemplateBinding Background}" />
         </ControlTemplate>
 
+        <Style x:Key="ColumnText" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        
     </Application.Resources>
 </Application>
