@@ -180,7 +180,8 @@
                 x:Name="cb"
                 MinWidth="100"
                 HorizontalAlignment="Left"
-                SelectedIndex="0">
+                SelectedIndex="0"
+                SelectionChanged="Cb_SelectionChanged">
             </ComboBox>
 
             <TextBlock
@@ -196,6 +197,7 @@
                 FontSize="16"
                 Margin="100,0,25,0"
                 TextChanged="Tb_TextChanged"
+                PreviewKeyDown="Tb_PreviewKeyDown"
                 Style="{StaticResource SearchField}"/>
 
             <Button

@@ -27,7 +27,8 @@
                 FontSize="16"
                 Margin="0,0,25,0"
                 TextChanged="Tb_TextChanged"
-                Style="{StaticResource SearchField}"/>
+                Style="{StaticResource SearchField}"
+                PreviewKeyDown="Tb_PreviewKeyDown"/>
 
             <Button
                 HorizontalAlignment="Right"

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Bibliotech.UserControls
 {
@@ -55,7 +56,20 @@ namespace Bibliotech.UserControls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Click?.Invoke(sender, e);
+            Click?.Invoke(this, e);
+        }
+
+        private void Tb_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Click?.Invoke(this, e);
+            }
+        }
+
+        private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Click?.Invoke(this, e);
         }
     }
 }
