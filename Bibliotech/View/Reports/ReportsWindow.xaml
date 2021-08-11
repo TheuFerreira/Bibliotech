@@ -4,9 +4,203 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Reports"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
-        Title="ReportsWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Relatórios" Height="720" Width="1280">
+    <TabControl>
+        <TabItem Header="EMPRÉSTIMOS">
+            <Grid>
+                <Grid 
+                    Margin="10"
+                    VerticalAlignment="Top">
+
+                    <Grid 
+                        Margin="10"
+                        VerticalAlignment="Top">
+
+                        <uc:CustomComboBox 
+                            Title="PERÍODO:"
+                            Width="150"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top"/>
+
+                        <uc:CustomDatePicker
+                            Title="DATA:"
+                            Margin="200,0,0,0"
+                            HorizontalAlignment="Left"
+                            Width="250"/>
+
+                        <uc:Button
+                            Text="EXPORTAR"
+                            Width="200"
+                            Height="30"
+                            CornerRadius="8"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"/>
+
+                    </Grid>
+
+                    <Grid 
+                        Margin="10,80,10,10"
+                        VerticalAlignment="Top">
+
+                        <uc:CustomComboBox 
+                            Title="TIPO:"
+                            Width="150"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top"/>
+
+                        <uc:Button
+                            Text="PESQUISAR"
+                            Width="250"
+                            Margin="200,0,0,0"
+                            Height="30"
+                            Source="/Bibliotech;component/Resources/img_zoom.png"
+                            CornerRadius="15"
+                            MarginImage="8,5,5,5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"/>
+                        
+                    </Grid>
+
+                </Grid>
+
+                <DataGrid
+                    Margin="0,170,0,0">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="EXEMPLAR" Width="100"/>
+                        <DataGridTextColumn Header="TÍTULO" Width="*"/>
+                        <DataGridTextColumn Header="SUBTÍTULO" Width="*"/>
+                        <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
+                        <DataGridTextColumn Header="LEITOR" Width="*"/>
+                        <DataGridTextColumn Width="50"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                
+            </Grid>
+        </TabItem>
+        <TabItem Header="LEITORES">
+            <Grid>
+                <Grid 
+                    Margin="10"
+                    VerticalAlignment="Top">
+
+                    <Grid 
+                        Margin="10"
+                        VerticalAlignment="Top">
+
+                        <uc:CustomComboBox 
+                            Title="PERÍODO:"
+                            Width="150"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top"/>
+
+                        <uc:CustomDatePicker
+                            Title="DATA:"
+                            Margin="200,0,0,0"
+                            HorizontalAlignment="Left"
+                            Width="250"/>
+
+                        <uc:Button
+                            Text="EXPORTAR"
+                            Width="200"
+                            Height="30"
+                            CornerRadius="8"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"/>
+
+                    </Grid>
+
+                    <Grid 
+                        Margin="10,80,10,10"
+                        VerticalAlignment="Top"
+                        Height="42">
+
+                        <uc:Button
+                            Text="PESQUISAR"
+                            Width="250"
+                            Margin="200,0,0,0"
+                            Height="30"
+                            Source="/Bibliotech;component/Resources/img_zoom.png"
+                            CornerRadius="15"
+                            MarginImage="8,5,5,5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"/>
+
+                    </Grid>
+
+                </Grid>
+
+                <DataGrid
+                    Margin="0,170,0,0">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
+                        <DataGridTextColumn Header="LEITOR" Width="*"/>
+                        <DataGridTextColumn Header="LIVROS PEGOS" Width="250"/>
+                        <DataGridTextColumn Header="LIVROS ENTREGUES" Width="250"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="LIVROS">
+            <Grid>
+                <Grid 
+                    Margin="10"
+                    VerticalAlignment="Top">
+
+                    <Grid 
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        Height="45">
+
+                        <uc:Button
+                            Text="EXPORTAR"
+                            Width="200"
+                            Height="30"
+                            CornerRadius="8"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"/>
+
+                    </Grid>
+
+                    <Grid 
+                        Margin="10,80,10,10"
+                        VerticalAlignment="Top"
+                        Height="42">
+
+                        <uc:CustomComboBox 
+                            Title="TIPO:"
+                            Width="150"
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top"/>
+                        
+                        <uc:Button
+                            Text="PESQUISAR"
+                            Width="250"
+                            Margin="200,0,0,0"
+                            Height="30"
+                            Source="/Bibliotech;component/Resources/img_zoom.png"
+                            CornerRadius="15"
+                            MarginImage="8,5,5,5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"/>
+
+                    </Grid>
+
+                </Grid>
+
+                <DataGrid
+                    Margin="0,170,0,0">
+
+                    <DataGrid.Columns>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
