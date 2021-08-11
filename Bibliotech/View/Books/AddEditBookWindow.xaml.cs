@@ -25,24 +25,63 @@ namespace Bibliotech.View.Books
     {
         private Book book = new Book();
         private Author author = new Author();
-        private DAOAuthor DAOAuthor = new DAOAuthor();
-        private DAOBook DAOBook = new DAOBook();
-        public AddEditBookWindow()
+        private readonly DAOAuthor DAOAuthor;
+        private readonly DAOBook DAOBook;
+        private  List<Book> returnBooksOnDataBase;
+        public AddEditBookWindow(Book book)
         {
             InitializeComponent();
+            DAOAuthor = new DAOAuthor();
+            DAOBook = new DAOBook();
+
             Title = "Adicionar Livro";
             tbInfo.Text = "Adicionar Livro";
 
-           
+            if (book.IdBook == -1)
+            {
+                return;
+            }
+            
+            EditBook();
 
+        } 
+        
+        private async void EditBook()
+        {
+            Title = "Editar Livros";
+            tbInfo.Text = "Editar Livros";
+
+            tfBarCode.Text = book.IdBook.ToString();
+            tfTitle.Text = book.Title;
+            tfSubtitle.Text = book.Subtitle;
+            tfAuthor.Text = book.Author.Name;
+            tfGender.Text = book.Gender;
+            tfEdition.Text = book.Edition;
+            tfNumberPages.Text = book.Pages.ToString();
+            tfYear.Text = book.YearPublication.ToString();
+            tfLanguage.Text = book.Language;
+            tfVolume.Text = book.Volume;
+            tfColletion.Text = book.Collection;
+
+        }
+        private async Task<bool> CompareBook()
+        {
+            // consertar
+            List<Book> returnDataBase = new List<Book>();
+
+           // returnDataBase = await DAOBook.ListBooks();
+
+            var emComum = returnDataBase.Intersect(returnBooksOnDataBase);
+            if (emComum.Count() > 1) return true;
+            else return false;
+           
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
             InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
             dialog.ShowDialog();
         }
-        
-        private void BtnSave_OnClick(object sender, RoutedEventArgs e)
+        private bool VerifyFields()
         {
             if (string.IsNullOrWhiteSpace(tfTitle.Text)
                || string.IsNullOrWhiteSpace(tfSubtitle.Text)
@@ -50,37 +89,38 @@ namespace Bibliotech.View.Books
                || string.IsNullOrWhiteSpace(tfAuthor.Text))
             {
                 ShowMessage("Atenção", "Preencha os espaços com * !!!", TypeDialog.Error);
-                return;
+                return false;
             }
 
+            book.Pages = (string.IsNullOrWhiteSpace(tfNumberPages.Text) ? 0 : Convert.ToInt32(tfNumberPages.Text));
+            book.YearPublication = (string.IsNullOrWhiteSpace(tfYear.Text) ? 0 : Convert.ToInt32(tfYear.Text));
+            return true;
+        }
+       
+
+        private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
+        {
+            returnBooksOnDataBase = new List<Book>();
+            if (!VerifyFields()) return;
             book.Title = tfTitle.Text;
             book.Subtitle = tfSubtitle.Text;
             book.PublishingCompany = tfPublishingCompany.Text;
             author.Name = tfAuthor.Text;
             book.Gender = tfGender.Text;
             book.Edition = tfEdition.Text;
-            if (string.IsNullOrWhiteSpace(tfNumberPages.Text))
-            {
-                book.Pages = 0;
-            }
-            else
-            {
-                book.Pages = Convert.ToInt32(tfNumberPages.Text);
-            }
-
-            if (string.IsNullOrWhiteSpace(tfYear.Text))
-            {
-                book.YearPublication = 0;
-            }
-            else
-            {
-                book.YearPublication = Convert.ToInt32(tfYear.Text);
-            }
             book.Language = tfLanguage.Text;
             book.Volume = tfVolume.Text;
             book.Collection = tfColletion.Text;
 
-            DAOBook.InsertBook(book, author);
+            returnBooksOnDataBase.Add(book);
+            /*if (await CompareBook())
+            {
+                ShowMessage(" ", "Livro já inserido", TypeDialog.Error);
+            }*/
+
+           await DAOAuthor.InsertAuthor(author);
+           await DAOBook.InsertBook(book);
+           await DAOBook.BookHasAuthor();
 
             ShowMessage(" ", "Livro cadastrado com sucesso", TypeDialog.Success);
         }

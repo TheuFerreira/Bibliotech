@@ -17,8 +17,8 @@ namespace Bibliotech.Model.Entities
         public string PublishingCompany { get; set; }
         public string Gender { get; set; }
         public string Edition { get; set; }
-        public int Pages { get; set; }
-        public int YearPublication { get; set; }
+        public int? Pages { get; set; }
+        public int? YearPublication { get; set; }
         public string Language { get; set; }
         public string Volume { get; set; }
         public string Collection { get; set; }

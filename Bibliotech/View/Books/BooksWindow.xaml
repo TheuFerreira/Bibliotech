@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Livros" Height="720" Width="1280">
-    <Grid>
+    <Grid Loaded="BooksWindow_Loaded">
         <uc:SearchField
             x:Name="searchField"
             Placeholder="PESQUISAR LIVROS"
@@ -41,13 +41,13 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
-                Text="EDITAR"/>
+                Text="EDITAR" OnClick="BtnEdit_OnClick"/>
 
             <uc:ButtonImage
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
-                Text="NOVO"/>
+                Text="NOVO" OnClick="BtnAdd_OnClick"/>
 
             <uc:ButtonImage
                 Source="/Bibliotech;component/Resources/img_exemplary.png"
