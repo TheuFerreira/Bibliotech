@@ -4,12 +4,14 @@ using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
 using Bibliotech.Singletons;
 using Bibliotech.UserControls;
+using Bibliotech.UserControls.CustomDialog;
 using Bibliotech.View.Schools;
 using EnumsNET;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -234,6 +236,22 @@ namespace Bibliotech.View.Users
             return address;
         }
 
+        private void SetUser()
+        {
+            user.Name = tfName.Text;
+            user.TypeUser = ComboBoxToEnum();
+            user.UserName = tfUserName.Text;
+            user.Password = tfPassword.Text;
+            user.Branch = Branch;
+            user.Address = SetAddress();
+        }
+
+        private void SetButtons(bool isEnabled)
+        {
+            save.IsEnabled = isEnabled;
+            btnSearchSchools.IsEnabled = isEnabled;
+        }
+
         private async void ButtonSave_OnClick(object sender, RoutedEventArgs e)
         {
             if (await ValidatedFields() == false)
@@ -256,14 +274,12 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            user.Name = tfName.Text;
-            user.TypeUser = ComboBoxToEnum();
-            user.UserName = tfUserName.Text;
-            user.Password = tfPassword.Text;
-            user.Branch = Branch;
-            user.Address = SetAddress();
+            SetUser();
+            SetButtons(false);
 
             await daoUser.Save(user);
+
+            SetButtons(true);
             dialogService.ShowSuccess("Usuário Salvo com Sucesso!!!");
 
             if (user.IdUser == -1)

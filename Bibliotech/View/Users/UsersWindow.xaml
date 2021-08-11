@@ -48,6 +48,7 @@
             VerticalAlignment="Bottom">
 
             <uc:ButtonImage
+                x:Name="btnEdit"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
@@ -55,6 +56,7 @@
                 OnClick="ButtonEdit_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnNew"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
@@ -62,6 +64,7 @@
                 OnClick="ButtonAdd_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnDel"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_delete.png"

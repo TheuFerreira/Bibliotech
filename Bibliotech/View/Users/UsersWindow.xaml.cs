@@ -45,13 +45,25 @@ namespace Bibliotech.View.Users
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
         }
 
+        private void SetControls(bool isEnabled)
+        {
+            searchField.IsEnabled = isEnabled;
+            btnEdit.IsEnabled = isEnabled;
+            btnNew.IsEnabled = isEnabled;
+            btnDel.IsEnabled = isEnabled;
+        }
+
         private async void SearchUsers()
         {
             string text = searchField.Text;
             typeSearch = Enums.Parse<TypeSearch>(searchField.SelectedItem.ToString(), false, EnumFormat.Description);
 
+            SetControls(false);
+
             users = await daoUser.SearchByText(typeSearch, text, currentBranch);
             dataGrid.ItemsSource = users;
+
+            SetControls(true);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -85,8 +97,12 @@ namespace Bibliotech.View.Users
                 return;
             }
 
+            SetControls(false);
+
             int idUser = selectedUser.IdUser;
             selectedUser = await daoUser.GetUserById(idUser);
+
+            SetControls(true);
 
             _ = new AddEditUserWindow(selectedUser).ShowDialog();
 
@@ -137,8 +153,12 @@ namespace Bibliotech.View.Users
                 return;
             }
 
+            SetControls(false);
+
             int idUser = selectedUser.IdUser;
             await daoUser.Delete(idUser);
+
+            SetControls(true);
 
             dialogService.ShowSuccess($"Usuário {nameUser}, excluído com sucesso!!!");
             SearchUsers();
