@@ -69,7 +69,7 @@ namespace Bibliotech.UserControls
 
         private void Cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Click?.Invoke(this, e);
+            //Click?.Invoke(this, e);
         }
     }
 }
