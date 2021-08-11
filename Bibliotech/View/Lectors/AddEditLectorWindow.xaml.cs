@@ -23,7 +23,7 @@ namespace Bibliotech.View.Lectors
     public partial class AddEditLectorWindow : Window
     {
         //mudar depois
-        private int idBranch = 22;
+        private int idBranch = 1;
 
         private DialogService dialogService = new DialogService();
 

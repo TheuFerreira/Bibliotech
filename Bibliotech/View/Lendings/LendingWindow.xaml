@@ -61,16 +61,14 @@
                 Margin="10,70,10,10"
                 VerticalAlignment="Top">
 
-                <uc:TextField
+                <uc:CustomDatePicker
                     Title="DATA DE EMPRÉSTIMO:"
-                    Placeholder="000000"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top" 
                     Width="250"/>
 
-                <uc:TextField
+                <uc:CustomDatePicker
                     Title="DATA PREVISTA:"
-                    Placeholder="Exemplo"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top" 
                     Width="250"/>

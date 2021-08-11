@@ -168,6 +168,9 @@
     <Compile Include="UserControls\ComboBoxSearchField.xaml.cs">
       <DependentUpon>ComboBoxSearchField.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CustomDatePicker.xaml.cs">
+      <DependentUpon>CustomDatePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CustomDialog\InformationDialog.xaml.cs">
       <DependentUpon>InformationDialog.xaml</DependentUpon>
     </Compile>
@@ -258,6 +261,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ComboBoxSearchField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CustomDatePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
