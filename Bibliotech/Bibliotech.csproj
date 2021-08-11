@@ -496,10 +496,13 @@
     <Resource Include="Resources\img_warning.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\img_lost.png" />
+    <Resource Include="Resources\img_information.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\img_information.png" />
+    <Resource Include="Resources\img_export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_lost.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
