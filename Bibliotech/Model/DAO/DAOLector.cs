@@ -163,7 +163,7 @@ namespace Bibliotech.Model.DAO
                         "INNER JOIN exemplary AS exe ON len.id_exemplary = exe.id_exemplary " +
                         "WHERE len.return_date IS NULL " +
                         ") AS len ON len.id_lector = l.id_lector " +
-                     "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 0, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
+                     "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 1, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
                      " GROUP BY l.id_lector " +
                      "LIMIT 30";
 

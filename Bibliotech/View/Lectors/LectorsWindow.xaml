@@ -61,19 +61,19 @@
             Height="110"
             VerticalAlignment="Bottom">
 
-            <uc:ButtonImage
+            <uc:ButtonImage x:Name="btnEdit"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_edit.png"
                 Text="EDITAR" OnClick="ButtonEdit_OnClick"/>
 
-            <uc:ButtonImage
+            <uc:ButtonImage x:Name="btnAdd"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_add.png"
                 Text="NOVO" OnClick="ButtonAdd_OnClick"/>
 
-            <uc:ButtonImage
+            <uc:ButtonImage x:Name="btnDelete"
                 Source="/Bibliotech;component/Resources/img_delete.png"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"

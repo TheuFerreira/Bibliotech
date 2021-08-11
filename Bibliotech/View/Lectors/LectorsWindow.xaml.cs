@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using EnumsNET;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
 
 namespace Bibliotech.View.Lectors
 {
@@ -38,7 +39,7 @@ namespace Bibliotech.View.Lectors
         private TypeSearch typeSearch;
 
         //mudar depois, este dado deverá vir a partir do usário atual
-        int idBranch = 22;
+        int idBranch = Session.Instance.User.Branch.IdBranch;
 
         public LectorsWindow()
         {
@@ -58,6 +59,22 @@ namespace Bibliotech.View.Lectors
 
         }
 
+        private void DisableButtons()
+        {
+            btnEdit.IsEnabled = false;
+            btnAdd.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+            searchField.IsEnabled = false;
+        }
+
+        private void EnableButtons()
+        {
+            btnEdit.IsEnabled = true;
+            btnAdd.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+            searchField.IsEnabled = true;
+        }
+
         private async void UpdateGrid()
         {
             
@@ -73,11 +90,13 @@ namespace Bibliotech.View.Lectors
                 dataGrid.Columns[4].Visibility = Visibility.Collapsed;
             }
 
+            DisableButtons();
             DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch , typeSearch);
             if (dataTable != null)
             {
                 dataGrid.ItemsSource = dataTable.DefaultView;
             }
+            EnableButtons();
         }
 
         private void SplitAddress(string temp)
@@ -194,6 +213,7 @@ namespace Bibliotech.View.Lectors
                 FillFieldsToUpdate();
                 UpdateGrid();
             }
+            
         }
 
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
