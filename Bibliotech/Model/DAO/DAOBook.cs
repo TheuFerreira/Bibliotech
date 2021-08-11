@@ -9,7 +9,6 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOBook : Connection
     {
-        private readonly Author author;
         public async Task InsertBook(Book book)
         {
             await Connect();
@@ -59,9 +58,9 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
 
                 string updateBook = "update book set title = ?, subtitle = ?, publishing_company = ?, gender = ?, " +
-                    "edition = ?, pages = ?, year_publication = ?, language = ?, volume = ?, collection = ?, status = ?" +
+                    "edition = ?, pages = ?, year_publication = ?, language = ?, volume = ?, collection = ? " +
                     "where id_book = ? ;";
-                // falta update author
+                
                
                 cmd.CommandText = updateBook;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Title;
@@ -74,6 +73,7 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.String).Value = book.Language;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Volume;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Collection;
+                cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
 
                 await cmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
@@ -98,7 +98,7 @@ namespace Bibliotech.Model.DAO
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
 
-                string insertBookHasAuthor = "insert into bookHasAuthor (id_book, id_author) " +
+                string insertBookHasAuthor = "insert into book_has_author (id_book, id_author) " +
                     " select b.id_book, a.id_author from book as b, author as a " +
                     "order by id_book desc, id_author desc limit 1;"; 
 
@@ -119,36 +119,7 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        public async Task<DataTable> SearchBooks()
-        {
-            try
-            {
-                await Connect();
-                string selectBook = "select b.id_book, b.title, b.subtitle, a.name as author, b.publishing_company as publishingCompany " +
-                    "from bookhasauthor as bookauthor " +
-                    "inner join author as a on a.id_author = bookauthor.id_author " +
-                    "inner join book as b on b.id_book = bookauthor.id_book " +
-                    "where b.status = 1 ";
-
-                MySqlCommand cmd = new MySqlCommand(selectBook, SqlConnection);
-
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-
-                adapter.Fill(dt);
-
-                return dt;
-
-            }
-            catch (MySqlException ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                await Disconnect();
-            }
-        }
+        
 
         public async Task<List<Book>> GetBook()
         {
@@ -157,12 +128,12 @@ namespace Bibliotech.Model.DAO
             {
                 Book book = new Book();
 
-                string selectBook = "select b.id_book, a.id_author, b.title as title, b.subtitle as subtitle, a.name as author, b.publishing_company as publishingCompany, b.gender, " +
+                string selectBook = "select b.id_book, a.id_author, b.title, b.subtitle, a.name, b.publishing_company, b.gender, " +
                     "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection " +
-                    "from bookhasauthor as bookauthor " +
+                    "from book_has_author as bookauthor " +
                     "inner join author as a on a.id_author = bookauthor.id_author " +
                     "inner join book as b on b.id_book = bookauthor.id_book " +
-                    "where b.status = 1 ";
+                    "where b.status = 1 and a.status = 1";
 
                 MySqlCommand cmd = new MySqlCommand(selectBook, SqlConnection);
                 List<Book> books = new List<Book>();
@@ -170,23 +141,45 @@ namespace Bibliotech.Model.DAO
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while(await reader.ReadAsync())
                 {
-                    book.IdBook  = await reader.GetFieldValueAsync<int>(0);
-                   // book.Author.IdAuthor = await reader.GetFieldValueAsync<int>(1);
-                    book.Title = await reader.GetFieldValueAsync<string>(2);
-                    book.Subtitle = await reader.GetFieldValueAsync<string>(3);
-                   // book.Author.Name = await reader.GetFieldValueAsync<string>(4);
-                    book.PublishingCompany = await reader.GetFieldValueAsync<string>(5);
-                    book.Gender = await reader.GetFieldValueAsync<string>(6);
-                    book.Edition = await reader.GetFieldValueAsync<string>(7);
-                    book.Pages = await reader.GetFieldValueAsync<int>(8);
-                    book.YearPublication = await reader.GetFieldValueAsync<int>(9);
-                    book.Language = await reader.GetFieldValueAsync<string>(10);
-                    book.Volume = await reader.GetFieldValueAsync<string>(11);
-                    book.Collection = await reader.GetFieldValueAsync<string>(12);
+                    int idBook  = await reader.GetFieldValueAsync<int>(0);
+                    int idAuthor = await reader.GetFieldValueAsync<int>(1);
+                    string title = await reader.GetFieldValueAsync<string>(2);
+                    string subtitle = await reader.GetFieldValueAsync<string>(3);
+                    string nameAuthor = await reader.GetFieldValueAsync<string>(4);
+                    string publishingCompany = await reader.GetFieldValueAsync<string>(5);
+                    string gender = await reader.GetFieldValueAsync<string>(6);
+                    string edition = await reader.GetFieldValueAsync<string>(7);
+                    int pages = await reader.GetFieldValueAsync<int>(8);
+                    int yearPublication = await reader.GetFieldValueAsync<int>(9);
+                    string language = await reader.GetFieldValueAsync<string>(10);
+                    string volume = await reader.GetFieldValueAsync<string>(11);
+                    string collection = await reader.GetFieldValueAsync<string>(12);
+
+                    Author author = new Author()
+                    {
+                        IdAuthor = idAuthor,
+                        Name = nameAuthor,
+                    };
+
+                    book = new Book()
+                    {
+                        IdBook = idBook,
+                        Title = title,
+                        Subtitle = subtitle,
+                        PublishingCompany = publishingCompany,
+                        Gender = gender,
+                        Edition = edition,
+                        Pages = pages,
+                        YearPublication = yearPublication,
+                        Language = language,
+                        Volume = volume,
+                        Collection = collection,
+                        Author = author,
+                    };
 
                     books.Add(book);
                 }
-
+                
                 return books;
             }
             catch(MySqlException ex)

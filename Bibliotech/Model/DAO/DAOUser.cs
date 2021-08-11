@@ -15,7 +15,7 @@ namespace Bibliotech.Model.DAO
             try
             {
                 await Connect();
-                string select = " select u.id_user, u.id_type_user, u.name, b.id_branch, b.name, b.id_address, b.telephone " +
+                string select = " select u.id_user, u.id_type_user, u.name, b.id_branch, b.id_address " +
                     " from users as u " +
                     " inner join branch as b on b.id_branch = u.id_branch " +
                     " where binary user_name = @user and aes_decrypt(password, 'bibliotech2021') = @password;";
@@ -33,10 +33,7 @@ namespace Bibliotech.Model.DAO
                     string nameUser = reader.GetString(2);
 
                     int idBranch = reader.GetInt32(3);
-                    string nameBranch = reader.GetString(4);
-                    long telephone = reader.GetInt64(6);
-
-                    int idAddressBranch = reader.GetInt32(5);
+                    int idAddressBranch = reader.GetInt32(4);
 
                     Address address = new Address
                     {
@@ -46,9 +43,7 @@ namespace Bibliotech.Model.DAO
                     Branch branch = new Branch
                     {
                         IdBranch = idBranch,
-                        Name = nameBranch,
                         Address = address,
-                        Telephone = telephone,
                     };
 
                     User = new User(idUser, typeUser, nameUser)

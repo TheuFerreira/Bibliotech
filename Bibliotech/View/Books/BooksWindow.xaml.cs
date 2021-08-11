@@ -30,25 +30,23 @@ namespace Bibliotech.View.Books
             InitializeComponent();
             DAOBook = new DAOBook();
             books = new List<Book>();
+
         }
-        private async void SearchBooks()
+        private async Task SearchBooks()
         {
             books = await DAOBook.GetBook();
             dataGrid.ItemsSource = books;
         }
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            SearchBooks();
+            await SearchBooks();
         }
-        private Book GetIdBook()
-        {
-            int row = dataGrid.SelectedIndex;
-            return books[row];
-        }
-        private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnAdd_OnClick(object sender, RoutedEventArgs e)
         {
             AddEditBookWindow addEditBookWindow = new AddEditBookWindow(book);
             addEditBookWindow.ShowDialog();
+
+            await SearchBooks();
 
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
@@ -56,23 +54,25 @@ namespace Bibliotech.View.Books
             InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
             dialog.ShowDialog();
         }
-        private async void BtnEdit_OnClick(object sender, RoutedEventArgs e)
+        private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
         {
-            //precisa consertar
+            
             if (dataGrid.SelectedItem == null)
             {
-                ShowMessage(" ", "Selecione um livro", TypeDialog.Error);
                 return;
             }
 
-            Book selectBook = GetIdBook();
-            int idBook = selectBook.IdBook;
-            
-           
-            AddEditBookWindow addEditBookWindow = new AddEditBookWindow(selectBook);
-            addEditBookWindow.Show();
-            
-            
+            int index = dataGrid.SelectedIndex;
+            Book book = books[index];
+
+            new AddEditBookWindow(book).ShowDialog();
+            SearchBooks();
+        }
+
+        private void BtnExemplary_OnClick(object sender, RoutedEventArgs e)
+        {
+            ExemplaryWindow exemplaryWindow = new ExemplaryWindow();
+            exemplaryWindow.ShowDialog();
         }
     }
 }

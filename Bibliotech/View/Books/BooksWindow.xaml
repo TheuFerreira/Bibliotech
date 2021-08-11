@@ -25,10 +25,10 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=author}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=publishingCompany}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=Title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=Subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=Author.Name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=PublishingCompany}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -53,7 +53,7 @@
                 Source="/Bibliotech;component/Resources/img_exemplary.png"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Text="EXEMPLARES"/>
+                Text="EXEMPLARES" OnClick="BtnExemplary_OnClick"/>
         </Grid>
     </Grid>
 </Window>
