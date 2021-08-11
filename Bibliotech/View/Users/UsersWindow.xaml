@@ -34,11 +34,11 @@
             ItemsSource="{Binding}">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Header="TIPO DE USUÁRIO" Width="150" Binding="{Binding Path=TypeUser, Converter={StaticResource TypeUserConverter}}"/>
-                <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=Name}"/>
-                <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=Telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}"/>
-                <DataGridTextColumn Header="ENDEREÇO" Width="*" Binding="{Binding Path=Address}"/>
-                <DataGridTextColumn Header="ESCOLA" Width="175" Binding="{Binding Path=Branch.Name}"/>
+                <DataGridTextColumn Header="TIPO DE USUÁRIO" Width="150" Binding="{Binding Path=TypeUser, Converter={StaticResource TypeUserConverter}}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=Name}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TELEFONE" Width="150" Binding="{Binding Path=Telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="ENDEREÇO" Width="*" Binding="{Binding Path=Address}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 

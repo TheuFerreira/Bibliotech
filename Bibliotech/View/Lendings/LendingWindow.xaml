@@ -4,9 +4,115 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lendings"
+        xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
-        Title="LendingWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
+        Title="Empréstimos" Height="720" Width="1280">
     <Grid>
+
+        <TextBlock 
+            Margin="0,10"
+            FontSize="25"
+            Text="EMPRÉSTIMO"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"/>
+
+        <Grid
+            Margin="100,60,100,0"
+            VerticalAlignment="Top">
+
+            <Grid
+                Margin="10"
+                VerticalAlignment="Top">
+
+                <uc:TextField
+                    x:Name="tfLectorRegister"
+                    Title="REGISTRO DE LEITOR:"
+                    Placeholder="000000"
+                    IsEnabled="False"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" 
+                    Width="200"/>
+
+                <uc:TextField
+                    x:Name="tfNameLector"
+                    Title="LEITOR:"
+                    Placeholder="Exemplo"
+                    IsEnabled="False"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top" 
+                    Width="350"/>
+
+                <uc:Button
+                    x:Name="btnSearchLector"
+                    Source="/Bibliotech;component/Resources/img_zoom.png"
+                    Text="PROCURAR LEITOR"
+                    Height="30"
+                    Width="250"
+                    MarginImage="8,5,5,5"
+                    CornerRadius="15"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid
+                Margin="10,70,10,10"
+                VerticalAlignment="Top">
+
+                <uc:TextField
+                    Title="DATA DE EMPRÉSTIMO:"
+                    Placeholder="000000"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top" 
+                    Width="250"/>
+
+                <uc:TextField
+                    Title="DATA PREVISTA:"
+                    Placeholder="Exemplo"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top" 
+                    Width="250"/>
+
+                <uc:Button
+                    x:Name="btnSearchBook"
+                    Source="/Bibliotech;component/Resources/img_zoom.png"
+                    Text="PROCURAR LIVRO"
+                    Height="30"
+                    Width="250"
+                    MarginImage="8,5,5,5"
+                    CornerRadius="15"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"/>
+            </Grid>
+
+        </Grid>
         
+        <DataGrid
+            x:Name="dataGrid"
+            Margin="0,200,0,143"
+            ItemsSource="{Binding}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=exemplary}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Width="150" Binding="{Binding Path=subtitle}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=publishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid
+            Margin="30,0,30,10"
+            Height="110"
+            VerticalAlignment="Bottom">
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_save.png"
+                Text="EMPRESTAR"/>
+        </Grid>
     </Grid>
 </Window>

@@ -49,10 +49,10 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="400" CanUserResize="False"/>
-                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*"/>
-                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="130"/>
-                <DataGridTextColumn Header="ESCOLA" Binding="{Binding Path=s_name}" Width="*" Visibility="Collapsed"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=name}" Width="400" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="ENDEREÇO" Binding="{Binding Path=endereco}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TELEFONE" Binding="{Binding Path=telephone, TargetNullValue='Sem Telefone', StringFormat={}{0:(00) 00000-0000}}" Width="130" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="ESCOLA" Binding="{Binding Path=s_name}" Width="*" Visibility="Collapsed" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 
