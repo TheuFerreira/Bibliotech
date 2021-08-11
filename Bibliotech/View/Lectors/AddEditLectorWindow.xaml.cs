@@ -151,12 +151,14 @@ namespace Bibliotech.View.Lectors
                 {
                     return;
                 }
+                btnSave.IsEnabled = false;
                 if (!await daoLector.Insert(idBranch, lector, address))
                 {
                     dialogService.ShowError("Algo deu errado!\nTente novamente.");
                     return;
                 }
                 dialogService.ShowSuccess("Leitor adicionado com sucesso!");
+                btnSave.IsEnabled = true;   
                 return;
             }
 

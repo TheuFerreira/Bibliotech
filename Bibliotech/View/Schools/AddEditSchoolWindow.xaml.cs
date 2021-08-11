@@ -125,6 +125,7 @@ namespace Bibliotech.View.Schools
                 Address = address,
             };
 
+            btnSave.IsEnabled = false;
             if (id == -1)
             {
                 if (await daoSchool.Insert(branch))
@@ -152,6 +153,7 @@ namespace Bibliotech.View.Schools
             }
 
             dialogService.ShowError("Algo deu errado\nTente novamente");
+            btnSave.IsEnabled = true;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)

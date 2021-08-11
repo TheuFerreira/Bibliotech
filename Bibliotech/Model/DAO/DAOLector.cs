@@ -160,8 +160,9 @@ namespace Bibliotech.Model.DAO
                      "LEFT JOIN ( " +
                         "SELECT len.*, exe.status " +
                         "FROM lending AS len " +
-                        "INNER JOIN exemplary AS exe ON len.id_exemplary = exe.id_exemplary " +
-                        "WHERE len.return_date IS NULL " +
+                        "INNER JOIN lending_has_exemplary as lhe on lhe.id_lending = len.id_lending " +
+                        "INNER JOIN exemplary as exe on exe.id_exemplary = lhe.id_exemplary " +
+                        "WHERE len.return_date IS NULL" +
                         ") AS len ON len.id_lector = l.id_lector " +
                      "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 1, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
                      " GROUP BY l.id_lector " +
@@ -207,7 +208,8 @@ namespace Bibliotech.Model.DAO
                     ") AS status, bk.title, exe.id_exemplary, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
                      "from lending as len " +
                      "inner join lector as lec on lec.id_lector = len.id_lector " +
-                     "inner join exemplary as exe on exe.id_exemplary = len.id_exemplary " +
+                     "INNER JOIN lending_has_exemplary as lhe on lhe.id_lending = len.id_lending " +
+                     "INNER JOIN exemplary as exe on exe.id_exemplary = lhe.id_exemplary " +
                      "inner join book as bk on bk.id_book = exe.id_book " +
                      "where lec.id_lector = " + idlector + " and bk.title like '%" + query + "%';";
 

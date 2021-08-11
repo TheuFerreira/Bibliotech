@@ -24,16 +24,34 @@ namespace Bibliotech.View.Schools
             daoSchool = new DAOBranch();
         }
 
+        private void DisableButtons()
+        {
+            btnEdit.IsEnabled = false;
+            btnAdd.IsEnabled = false;
+            btnDelete.IsEnabled = false;
+            searchField.IsEnabled = false;
+        }
+
+        private void EnableButtons()
+        {
+            btnEdit.IsEnabled = true;
+            btnAdd.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+            searchField.IsEnabled = true;
+        }
+
         private async void UpdateGrid()
         {
             string text = searchField.Text;
-
+            DisableButtons();
             branches = await daoSchool.FillDataGrid(text);
             dataGrid.ItemsSource = branches;
+            EnableButtons();
         }
 
         private async void ButtonOnOff_OnClick(object sender, RoutedEventArgs e)
         {
+            
             if (dataGrid.SelectedItem == null)
             {
                 return;
@@ -41,7 +59,7 @@ namespace Bibliotech.View.Schools
 
             int selectedIndex = dataGrid.SelectedIndex;
             Branch branch = branches[selectedIndex];
-
+            DisableButtons();
             if (branch.IsActive())
             {
                 if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
@@ -58,6 +76,7 @@ namespace Bibliotech.View.Schools
                     dialogService.ShowSuccess("Ativado com sucesso!");
                 }
             }
+            EnableButtons();
 
             UpdateGrid();
         }

@@ -37,7 +37,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <uc:Button
+        <uc:Button x:Name="btnSelect"
             Margin="10"
             Width="170"
             Height="30"

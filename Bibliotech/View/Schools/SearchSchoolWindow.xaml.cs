@@ -23,12 +23,24 @@ namespace Bibliotech.View.Schools
             daoSchool = new DAOBranch();
         }
 
+        private void DisableButtons()
+        {
+            searchField.IsEnabled = false;
+            btnSelect.IsEnabled = false;
+        }
+
+        private void EnableButtons()
+        {
+            searchField.IsEnabled = true;
+            btnSelect.IsEnabled = true;
+        }
         private async void LoadSchools()
         {
             string text = searchField.Text;
-
+            DisableButtons();
             branches = await daoSchool.FillDataGrid(text);
             dataGrid.ItemsSource = branches;
+            EnableButtons();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
