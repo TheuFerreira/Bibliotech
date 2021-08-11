@@ -205,6 +205,12 @@
     <Compile Include="View\Devolutions\DevolutionWindow.xaml.cs">
       <DependentUpon>DevolutionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Devolutions\SearchBookWindow.xaml.cs">
+      <DependentUpon>SearchBookWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Devolutions\SearchLectorWindow.xaml.cs">
+      <DependentUpon>SearchLectorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Lectors\AddEditLectorWindow.xaml.cs">
       <DependentUpon>AddEditLectorWindow.xaml</DependentUpon>
     </Compile>
@@ -305,6 +311,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Devolutions\DevolutionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Devolutions\SearchBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Devolutions\SearchLectorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

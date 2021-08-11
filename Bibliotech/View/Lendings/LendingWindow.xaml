@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lendings"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
-        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
@@ -95,7 +94,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=exemplary}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Width="150" Binding="{Binding Path=subtitle}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=subtitle}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=publishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
