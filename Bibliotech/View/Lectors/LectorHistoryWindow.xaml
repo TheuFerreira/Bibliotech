@@ -65,5 +65,9 @@
             </DataGrid.Columns>
         </DataGrid>
 
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,87,0,0"/>
     </Grid>
 </Window>

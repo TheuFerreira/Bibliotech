@@ -8,30 +8,31 @@
         mc:Ignorable="d"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Relatórios" Height="720" Width="1280">
-    <TabControl>
-        <TabItem Header="EMPRÉSTIMOS">
-            <Grid>
-                <Grid 
+    <Grid>
+        <TabControl>
+            <TabItem Header="EMPRÉSTIMOS">
+                <Grid>
+                    <Grid 
                     Margin="10"
                     VerticalAlignment="Top">
 
-                    <Grid 
+                        <Grid 
                         Margin="10"
                         VerticalAlignment="Top">
 
-                        <uc:CustomComboBox 
+                            <uc:CustomComboBox 
                             Title="PERÍODO:"
                             Width="150"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"/>
 
-                        <uc:CustomDatePicker
+                            <uc:CustomDatePicker
                             Title="DATA:"
                             Margin="200,0,0,0"
                             HorizontalAlignment="Left"
                             Width="250"/>
 
-                        <uc:Button
+                            <uc:Button
                             Text="EXPORTAR"
                             MarginImage="8,5,5,5"
                             Source="/Bibliotech;component/Resources/img_export.png"
@@ -41,19 +42,19 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"/>
 
-                    </Grid>
+                        </Grid>
 
-                    <Grid 
+                        <Grid 
                         Margin="10,80,10,10"
                         VerticalAlignment="Top">
 
-                        <uc:CustomComboBox 
+                            <uc:CustomComboBox 
                             Title="TIPO:"
                             Width="150"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"/>
 
-                        <uc:Button
+                            <uc:Button
                             Text="PESQUISAR"
                             Width="250"
                             Margin="200,0,0,0"
@@ -63,49 +64,49 @@
                             MarginImage="8,5,5,5"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"/>
-                        
+
+                        </Grid>
+
                     </Grid>
 
-                </Grid>
-
-                <DataGrid
+                    <DataGrid
                     Margin="0,170,0,0">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="EXEMPLAR" Width="100"/>
-                        <DataGridTextColumn Header="TÍTULO" Width="*"/>
-                        <DataGridTextColumn Header="SUBTÍTULO" Width="*"/>
-                        <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
-                        <DataGridTextColumn Header="LEITOR" Width="*"/>
-                        <DataGridTextColumn Width="50"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-                
-            </Grid>
-        </TabItem>
-        <TabItem Header="LEITORES">
-            <Grid>
-                <Grid 
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="EXEMPLAR" Width="100"/>
+                            <DataGridTextColumn Header="TÍTULO" Width="*"/>
+                            <DataGridTextColumn Header="SUBTÍTULO" Width="*"/>
+                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
+                            <DataGridTextColumn Header="LEITOR" Width="*"/>
+                            <DataGridTextColumn Width="50"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="LEITORES">
+                <Grid>
+                    <Grid 
                     Margin="10"
                     VerticalAlignment="Top">
 
-                    <Grid 
+                        <Grid 
                         Margin="10"
                         VerticalAlignment="Top">
 
-                        <uc:CustomComboBox 
+                            <uc:CustomComboBox 
                             Title="PERÍODO:"
                             Width="150"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"/>
 
-                        <uc:CustomDatePicker
+                            <uc:CustomDatePicker
                             Title="DATA:"
                             Margin="200,0,0,0"
                             HorizontalAlignment="Left"
                             Width="250"/>
 
-                        <uc:Button
+                            <uc:Button
                             Text="EXPORTAR"
                             MarginImage="8,5,5,5"
                             Source="/Bibliotech;component/Resources/img_export.png"
@@ -115,14 +116,14 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"/>
 
-                    </Grid>
+                        </Grid>
 
-                    <Grid 
+                        <Grid 
                         Margin="10,80,10,10"
                         VerticalAlignment="Top"
                         Height="42">
 
-                        <uc:Button
+                            <uc:Button
                             Text="PESQUISAR"
                             Width="250"
                             Margin="200,0,0,0"
@@ -133,35 +134,35 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"/>
 
+                        </Grid>
+
                     </Grid>
 
-                </Grid>
-
-                <DataGrid
+                    <DataGrid
                     Margin="0,170,0,0">
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
-                        <DataGridTextColumn Header="LEITOR" Width="*"/>
-                        <DataGridTextColumn Header="LIVROS PEGOS" Width="250"/>
-                        <DataGridTextColumn Header="LIVROS ENTREGUES" Width="250"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
+                            <DataGridTextColumn Header="LEITOR" Width="*"/>
+                            <DataGridTextColumn Header="LIVROS PEGOS" Width="250"/>
+                            <DataGridTextColumn Header="LIVROS ENTREGUES" Width="250"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-            </Grid>
-        </TabItem>
-        <TabItem Header="LIVROS">
-            <Grid>
-                <Grid 
+                </Grid>
+            </TabItem>
+            <TabItem Header="LIVROS">
+                <Grid>
+                    <Grid 
                     Margin="10"
                     VerticalAlignment="Top">
 
-                    <Grid 
+                        <Grid 
                         Margin="10"
                         VerticalAlignment="Top"
                         Height="45">
 
-                        <uc:Button
+                            <uc:Button
                             Text="EXPORTAR"
                             MarginImage="8,5,5,5"
                             Source="/Bibliotech;component/Resources/img_export.png"
@@ -171,20 +172,20 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"/>
 
-                    </Grid>
+                        </Grid>
 
-                    <Grid 
+                        <Grid 
                         Margin="10,80,10,10"
                         VerticalAlignment="Top"
                         Height="42">
 
-                        <uc:CustomComboBox 
+                            <uc:CustomComboBox 
                             Title="TIPO:"
                             Width="150"
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"/>
-                        
-                        <uc:Button
+
+                            <uc:Button
                             Text="PESQUISAR"
                             Width="250"
                             Margin="200,0,0,0"
@@ -195,18 +196,24 @@
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"/>
 
+                        </Grid>
+
                     </Grid>
 
-                </Grid>
-
-                <DataGrid
+                    <DataGrid
                     Margin="0,170,0,0">
 
-                    <DataGrid.Columns>
-                    </DataGrid.Columns>
-                </DataGrid>
+                        <DataGrid.Columns>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-            </Grid>
-        </TabItem>
-    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,170,0,0"/>
+    </Grid>
 </Window>

@@ -64,5 +64,10 @@
                 VerticalAlignment="Bottom"
                 Text="ATIVAR/DESATIVAR" OnClick="ButtonOnOff_OnClick"/>
         </Grid>
+
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,87,0,143"/>
     </Grid>
 </Window>

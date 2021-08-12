@@ -49,5 +49,10 @@
             HorizontalAlignment="Right"
             Text="SELECIONAR"
             Click="ButtonSelect_Click"/>
+
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,87,0,50"/>
     </Grid>
 </Window>

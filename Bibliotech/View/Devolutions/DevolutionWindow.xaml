@@ -101,5 +101,10 @@
                 Source="/Bibliotech;component/Resources/img_ok.png"
                 Text="EMPRESTAR"/>
         </Grid>
+
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,200,0,143"/>
     </Grid>
 </Window>

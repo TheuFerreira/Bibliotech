@@ -52,5 +52,10 @@
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             Text="SELECIONAR"/>
+
+        <uc:Loading 
+            x:Name="loading"
+            Visibility="Collapsed"
+            Margin="0,100,0,50"/>
     </Grid>
 </Window>

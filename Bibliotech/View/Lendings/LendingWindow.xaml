@@ -112,6 +112,9 @@
                 Text="EMPRESTAR"/>
         </Grid>
 
-        <uc:Loading x:Name="loading" Awaiting="False" Margin="0,200,0,125" Visibility="Hidden"/>
+        <uc:Loading 
+            x:Name="loading" 
+            Margin="0,200,0,125" 
+            Visibility="Hidden"/>
     </Grid>
 </Window>
