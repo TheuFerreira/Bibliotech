@@ -57,7 +57,6 @@ namespace Bibliotech.Model.DAO
             catch (Exception)
             {
                 await transaction.RollbackAsync();
-                return false;
                 throw;
             }
             finally
@@ -139,7 +138,6 @@ namespace Bibliotech.Model.DAO
             catch (Exception)
             {
                 await transaction.RollbackAsync();
-                return false;
                 throw;
             }
             finally
