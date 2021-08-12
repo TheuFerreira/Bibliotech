@@ -18,6 +18,7 @@ using EnumsNET;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
 using Bibliotech.Singletons;
+using Bibliotech.UserControls;
 
 namespace Bibliotech.View.Lectors
 {
@@ -65,6 +66,8 @@ namespace Bibliotech.View.Lectors
             btnAdd.IsEnabled = false;
             btnDelete.IsEnabled = false;
             searchField.IsEnabled = false;
+            loading.Awaiting = true;
+            
         }
 
         private void EnableButtons()
@@ -73,6 +76,7 @@ namespace Bibliotech.View.Lectors
             btnAdd.IsEnabled = true;
             btnDelete.IsEnabled = true;
             searchField.IsEnabled = true;
+            loading.Awaiting = false;
         }
 
         private async void UpdateGrid()
@@ -226,23 +230,6 @@ namespace Bibliotech.View.Lectors
 
         private async void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            /* if (dataGrid.SelectedItem != null)
-             {
-                 if((dialogServices.ShowQuestion("Tem certeza que deseja excluir este leitor?", "Não é possível desfazer esta ação.")))
-                 {
-                     if(await daoLector.Delete(lector.IdLector))
-                     {
-                         dialogServices.ShowSuccess("Leitor excluído com sucesso!");
-                         UpdateGrid();
-                         return;
-                     }
-                     dialogServices.ShowError("Algo deu errado!\nTente novamente.");
-                     return;
-                 }
-             }
-             dialogServices.ShowError("Escolha algo primeiro.");*/
-
-
             if (dataGrid.SelectedItem == null)
             {
                 dialogServices.ShowError("Escolha algo primeiro.");
@@ -254,11 +241,14 @@ namespace Bibliotech.View.Lectors
             {
                 return;
             }
-
+            loading.Awaiting = true;
+            DisableButtons();
             result = await daoLector.Delete(lector.IdLector);
             if (result == false)
             {
                 dialogServices.ShowError("Algo deu errado!\nTente novamente.");
+                loading.Awaiting = false;
+                EnableButtons();
                 return;
             }
 

@@ -30,6 +30,7 @@ namespace Bibliotech.View.Schools
             btnAdd.IsEnabled = false;
             btnDelete.IsEnabled = false;
             searchField.IsEnabled = false;
+            loading.Awaiting = true;
         }
 
         private void EnableButtons()
@@ -38,6 +39,7 @@ namespace Bibliotech.View.Schools
             btnAdd.IsEnabled = true;
             btnDelete.IsEnabled = true;
             searchField.IsEnabled = true;
+            loading.Awaiting = false;
         }
 
         private async void UpdateGrid()
@@ -60,6 +62,7 @@ namespace Bibliotech.View.Schools
             int selectedIndex = dataGrid.SelectedIndex;
             Branch branch = branches[selectedIndex];
             DisableButtons();
+            loading.Awaiting = true;
             if (branch.IsActive())
             {
                 if (dialogService.ShowQuestion("Tem certeza que deseja\ndesativar esta escola?", ""))
@@ -76,6 +79,7 @@ namespace Bibliotech.View.Schools
                     dialogService.ShowSuccess("Ativado com sucesso!");
                 }
             }
+            loading.Awaiting = false;
             EnableButtons();
 
             UpdateGrid();

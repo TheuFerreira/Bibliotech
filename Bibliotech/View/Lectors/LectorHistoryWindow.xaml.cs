@@ -33,11 +33,13 @@ namespace Bibliotech.View.Lectors
         private async void UpdateGrid()
         {
             searchField.IsEnabled = false;
+            loading.Awaiting = true;
             DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idLector);
             if (dataTable != null)
             {
                 dataGrid.ItemsSource = dataTable.DefaultView;
             }
+            loading.Awaiting = false;
             searchField.IsEnabled = true;
         }
 

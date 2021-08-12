@@ -27,12 +27,14 @@ namespace Bibliotech.View.Schools
         {
             searchField.IsEnabled = false;
             btnSelect.IsEnabled = false;
+            loading.Awaiting = true;
         }
 
         private void EnableButtons()
         {
             searchField.IsEnabled = true;
             btnSelect.IsEnabled = true;
+            loading.Awaiting = false;
         }
         private async void LoadSchools()
         {

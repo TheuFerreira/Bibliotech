@@ -1,6 +1,7 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
+using Bibliotech.UserControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace Bibliotech.View.Lectors
         private Address address = new Address();
 
         public bool IsUpdate { get; set; }
+
+        Loading loading = new Loading();
 
         public AddEditLectorWindow(int id_branch, bool is_update, int idAddress)
         {
@@ -152,12 +155,14 @@ namespace Bibliotech.View.Lectors
                     return;
                 }
                 btnSave.IsEnabled = false;
+                loading.Awaiting = true;
                 if (!await daoLector.Insert(idBranch, lector, address))
                 {
                     dialogService.ShowError("Algo deu errado!\nTente novamente.");
                     return;
                 }
                 dialogService.ShowSuccess("Leitor adicionado com sucesso!");
+                loading.Awaiting = false;
                 btnSave.IsEnabled = true;   
                 return;
             }
