@@ -223,6 +223,16 @@ namespace Bibliotech.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap img_loading {
+            get {
+                object obj = ResourceManager.GetObject("img_loading", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap img_logo_vgp {
             get {
                 object obj = ResourceManager.GetObject("img_logo_vgp", resourceCulture);

@@ -111,5 +111,7 @@
                 Source="/Bibliotech;component/Resources/img_save.png"
                 Text="EMPRESTAR"/>
         </Grid>
+
+        <uc:Loading x:Name="loading" Awaiting="False" Margin="0,200,0,125" Visibility="Hidden"/>
     </Grid>
 </Window>
