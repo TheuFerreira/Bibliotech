@@ -15,7 +15,7 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="White" Margin="0,35,0,0">
         <Image Margin="75" x:Name="image" Source="/Bibliotech;component/Resources/img_loading.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>

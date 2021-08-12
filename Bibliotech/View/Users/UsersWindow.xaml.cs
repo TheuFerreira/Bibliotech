@@ -51,6 +51,8 @@ namespace Bibliotech.View.Users
             btnEdit.IsEnabled = isEnabled;
             btnNew.IsEnabled = isEnabled;
             btnDel.IsEnabled = isEnabled;
+
+            loading.Awaiting = !isEnabled;
         }
 
         private async void SearchUsers()
