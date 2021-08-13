@@ -26,10 +26,9 @@ namespace Bibliotech.View.Books
     public partial class AddEditBookWindow : Window
     {
         private Book Book = new Book();
-        private Author author = new Author();
+        private Author Author = new Author();
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
-        private List<Book> returnBooksOnDataBase;
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -67,17 +66,11 @@ namespace Bibliotech.View.Books
             tfColletion.Text = Book.Collection;
 
         }
-        private async Task<bool> CompareBook()
+        private async Task<bool> CompareBook(List<Book> actually, List<Book> insert)
         {
-            // consertar
-            List<Book> returnDataBase = new List<Book>();
-
-           // returnDataBase = await DAOBook.ListBooks();
-
-            var emComum = returnDataBase.Intersect(returnBooksOnDataBase);
-            if (emComum.Count() > 1) return true;
-            else return false;
-           
+            var emComum = actually.Intersect(insert);
+            if (emComum.Count() > 0) return false;
+            else return true;
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -100,7 +93,7 @@ namespace Bibliotech.View.Books
                 ShowMessage("Atenção", "Preencha os espaços com * !!!", TypeDialog.Error);
                 return false;
             }
-
+            
             Book.Pages = (string.IsNullOrWhiteSpace(tfNumberPages.Text) ? 0 : Convert.ToInt32(tfNumberPages.Text));
             Book.YearPublication = (string.IsNullOrWhiteSpace(tfYear.Text) ? 0 : Convert.ToInt32(tfYear.Text));
             return true;
@@ -108,27 +101,30 @@ namespace Bibliotech.View.Books
 
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {
-            returnBooksOnDataBase = new List<Book>();
+            List<Book> actually = new List<Book>();
+
             if (!VerifyFields()) return;
             Book.Title = tfTitle.Text;
             Book.Subtitle = tfSubtitle.Text;
             Book.PublishingCompany = tfPublishingCompany.Text;
-            author.Name = tfAuthor.Text;
+            Author.Name = tfAuthor.Text;
             Book.Gender = tfGender.Text;
             Book.Edition = tfEdition.Text;
             Book.Language = tfLanguage.Text;
             Book.Volume = tfVolume.Text;
             Book.Collection = tfColletion.Text;
 
-            returnBooksOnDataBase.Add(Book);
-            /*if (await CompareBook())
+            actually.Add(Book);
+            bool test = await CompareBook(actually, await DAOBook.GetBook());
+            MessageBox.Show(test.ToString());
+            if (!await CompareBook(actually, await DAOBook.GetBook()))
             {
                 ShowMessage(" ", "Livro já inserido", TypeDialog.Error);
-            }*/
+            }
             
             if(Book.IdBook == -1)
             {
-                await DAOAuthor.InsertAuthor(author);
+                await DAOAuthor.InsertAuthor(Author);
                 await DAOBook.InsertBook(Book);
                 await DAOBook.BookHasAuthor();
 
@@ -144,10 +140,11 @@ namespace Bibliotech.View.Books
             else
             {
                 await DAOBook.UpdateBook(Book);
+                await DAOAuthor.UpdateAuthor(Author);
                 ShowMessage(" ", "Livro alterado com sucesso", TypeDialog.Success);
-
+                this.Close();
             }
-
+            
 
         }
     }

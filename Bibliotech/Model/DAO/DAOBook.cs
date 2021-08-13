@@ -28,8 +28,24 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.String).Value = book.PublishingCompany;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Gender;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Edition;
-                cmd.Parameters.Add("?", DbType.Int32).Value = book.Pages;
-                cmd.Parameters.Add("?", DbType.Int32).Value = book.YearPublication;
+                if(book.Pages == 0)
+                {
+                    cmd.Parameters.Add("?", MySqlDbType.Null);
+                }
+                else
+                {
+                    cmd.Parameters.Add("?", DbType.Int32).Value = book.Pages;
+                }
+
+                if (book.YearPublication == 0)
+                {
+                    cmd.Parameters.Add("?", MySqlDbType.Null);
+                }
+                else
+                {
+                    cmd.Parameters.Add("?", DbType.Int32).Value = book.YearPublication;
+                }
+
                 cmd.Parameters.Add("?", DbType.String).Value = book.Language;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Volume;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Collection;
@@ -149,8 +165,16 @@ namespace Bibliotech.Model.DAO
                     string publishingCompany = await reader.GetFieldValueAsync<string>(5);
                     string gender = await reader.GetFieldValueAsync<string>(6);
                     string edition = await reader.GetFieldValueAsync<string>(7);
-                    int pages = await reader.GetFieldValueAsync<int>(8);
-                    int yearPublication = await reader.GetFieldValueAsync<int>(9);
+                    int? pages = null;
+                    if (await reader.IsDBNullAsync(8) == false)
+                    {
+                        pages = await reader.GetFieldValueAsync<int>(8);
+                    }
+                    int? yearPublication = null;
+                    if (await reader.IsDBNullAsync(9) == false)
+                    {
+                        yearPublication = await reader.GetFieldValueAsync<int>(9);
+                    }
                     string language = await reader.GetFieldValueAsync<string>(10);
                     string volume = await reader.GetFieldValueAsync<string>(11);
                     string collection = await reader.GetFieldValueAsync<string>(12);

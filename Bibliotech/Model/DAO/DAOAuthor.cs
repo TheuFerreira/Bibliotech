@@ -38,5 +38,34 @@ namespace Bibliotech.Model.DAO
             }
 
         }
+        public async Task UpdateAuthor(Author author)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
+
+                string updateBook = "update author set name = ? where id_author = ? ;";
+
+                cmd.CommandText = updateBook;
+                cmd.Parameters.Add("?", DbType.String).Value = author.Name;
+                cmd.Parameters.Add("?", DbType.Int32).Value = author.IdAuthor;
+
+                await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+            }
+            catch (MySqlException ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
     }
 }

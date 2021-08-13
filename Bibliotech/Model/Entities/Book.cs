@@ -30,7 +30,7 @@ namespace Bibliotech.Model.Entities
         }
 
         public Book(string title, string subtitle, Author author, string publishingCompany, string gender, 
-            string edition, int pages, int year, string language, string volume, string collection)
+            string edition, int? pages, int? year, string language, string volume, string collection)
         {
             Title = title;
             Subtitle = subtitle;

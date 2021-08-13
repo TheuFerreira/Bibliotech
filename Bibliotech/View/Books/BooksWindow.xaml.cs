@@ -54,7 +54,7 @@ namespace Bibliotech.View.Books
             InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
             dialog.ShowDialog();
         }
-        private void BtnEdit_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnEdit_OnClick(object sender, RoutedEventArgs e)
         {
             
             if (dataGrid.SelectedItem == null)
@@ -66,13 +66,14 @@ namespace Bibliotech.View.Books
             Book book = books[index];
 
             new AddEditBookWindow(book).ShowDialog();
-            SearchBooks();
+            await SearchBooks();
         }
 
         private void BtnExemplary_OnClick(object sender, RoutedEventArgs e)
         {
             ExemplaryWindow exemplaryWindow = new ExemplaryWindow();
             exemplaryWindow.ShowDialog();
+            
         }
     }
 }
