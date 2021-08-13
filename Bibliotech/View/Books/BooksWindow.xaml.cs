@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.UserControls;
 using Bibliotech.UserControls.CustomDialog;
 using System;
 using System.Collections.Generic;
@@ -23,22 +24,24 @@ namespace Bibliotech.View.Books
     public partial class BooksWindow : Window
     {
         public readonly DAOBook DAOBook;
-        Book book = new Book();
+        readonly Book book = new Book();
         List<Book> books;
         public BooksWindow()
         {
             InitializeComponent();
             DAOBook = new DAOBook();
             books = new List<Book>();
-
         }
         private async Task SearchBooks()
         {
+            loading.Awaiting = true;
             books = await DAOBook.GetBook();
             dataGrid.ItemsSource = books;
+            loading.Awaiting = false;
         }
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            
             await SearchBooks();
         }
         private async void BtnAdd_OnClick(object sender, RoutedEventArgs e)
@@ -48,11 +51,6 @@ namespace Bibliotech.View.Books
 
             await SearchBooks();
 
-        }
-        private void ShowMessage(string title, string contents, TypeDialog typeDialog)
-        {
-            InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
-            dialog.ShowDialog();
         }
         private async void BtnEdit_OnClick(object sender, RoutedEventArgs e)
         {

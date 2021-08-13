@@ -25,10 +25,11 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class AddEditBookWindow : Window
     {
-        private Book Book = new Book();
-        private Author Author = new Author();
+        private readonly Book Book = new Book();
+        private readonly Author Author = new Author();
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
+        private readonly Loading loading = new Loading();
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -52,7 +53,7 @@ namespace Bibliotech.View.Books
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
 
-            tfBarCode.Text = Book.IdBook.ToString();
+            tfBarCode.Text = ($" SME-VGP-{Book.IdBook}");
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
@@ -121,7 +122,8 @@ namespace Bibliotech.View.Books
             {
                 ShowMessage(" ", "Livro já inserido", TypeDialog.Error);
             }
-            
+
+            loading.Awaiting = true;
             if(Book.IdBook == -1)
             {
                 await DAOAuthor.InsertAuthor(Author);
@@ -144,7 +146,8 @@ namespace Bibliotech.View.Books
                 ShowMessage(" ", "Livro alterado com sucesso", TypeDialog.Success);
                 this.Close();
             }
-            
+
+
 
         }
     }
