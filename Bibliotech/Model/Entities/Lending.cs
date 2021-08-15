@@ -12,5 +12,10 @@ namespace Bibliotech.Model.Entities
         public DateTime ExpectedDate { get; set; }
         public DateTime? ReturnDate { get; set; }
         public List<Exemplary> Exemplaries { get; set; }
+
+        public Lending()
+        {
+            IdLending = -1;
+        }
     }
 }
