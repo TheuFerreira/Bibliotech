@@ -75,7 +75,7 @@
                     Placeholder="GÊNERO"
                     HorizontalAlignment="Center"
                     Width="153" 
-                    Margin="320,0,351,0"/>
+                    Margin="310,0,351,0"/>
 
                 <uc:TextField 
                     x:Name="tfEdition"
@@ -85,7 +85,7 @@
                     Placeholder="EDIÇÃO"
                     HorizontalAlignment="Center"
                     Width="167" 
-                    Margin="488,0,169,0"/>
+                    Margin="478,0,169,0"/>
 
                 <uc:TextField 
                     x:Name="tfNumberPages"
@@ -118,7 +118,7 @@
                     Title="IDIOMA:"
                     Placeholder="PORTUGUÊS"
                     HorizontalAlignment="Center" 
-                    Margin="195,0,437,0" 
+                    Margin="185,0,437,0" 
                     Width="192"/>
 
                 <uc:TextField 
@@ -128,7 +128,7 @@
                     Title="VOLUME:"
                     Placeholder="VOLUME"
                     HorizontalAlignment="Center" 
-                    Width="200" Margin="405,0,219,0"/>
+                    Width="200" Margin="395,0,219,0"/>
 
                 <uc:TextField 
                     x:Name="tfColletion"

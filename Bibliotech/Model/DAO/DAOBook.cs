@@ -225,34 +225,41 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT " +
                         "b.title, " +
-                        "at.id_author, at.name " +
+                        "a.id_author, a.name " +
                     "FROM book AS b " +
-                    "INNER JOIN author AS at ON at.id_author = b.id_author " +
-                    "WHERE id_book = ?;";
+                    "INNER JOIN book_has_author AS ba ON ba.id_book = b.id_book " +
+                    "INNER JOIN author AS a ON a.id_author = ba.id_author " +
+                    "WHERE b.id_book = ?;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = idBook;
 
+                Book book = new Book();
+                List<Author> authors = new List<Author>();
+
                 MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                _ = await reader.ReadAsync();
-
-                string title = await reader.GetFieldValueAsync<string>(0);
-
-                int idAuthor = await reader.GetFieldValueAsync<int>(1);
-                string nameAuthor = await reader.GetFieldValueAsync<string>(2);
-
-                Author author = new Author
+                while (await reader.ReadAsync())
                 {
-                    IdAuthor = idAuthor,
-                    Name = nameAuthor,
-                };
+                    string title = await reader.GetFieldValueAsync<string>(0);
 
-                Book book = new Book
-                {
-                    IdBook = idBook,
-                    Title = title,
-                    Author = author,
-                };
+                    int idAuthor = await reader.GetFieldValueAsync<int>(1);
+                    string nameAuthor = await reader.GetFieldValueAsync<string>(2);
+
+                    Author author = new Author
+                    {
+                        IdAuthor = idAuthor,
+                        Name = nameAuthor,
+                    };
+
+                    authors.Add(author);
+
+                    book = new Book
+                    {
+                        IdBook = idBook,
+                        Title = title,
+                        Authors = authors,
+                    };
+                }
 
                 return book;
             }
