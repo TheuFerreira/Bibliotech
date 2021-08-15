@@ -35,13 +35,13 @@ namespace Bibliotech.View.Books
         private async Task SearchBooks()
         {
             loading.Awaiting = true;
-            books = await DAOBook.GetBook();
+            string text = searchField.Text;
+            books = await DAOBook.GetBook(text);
             dataGrid.ItemsSource = books;
             loading.Awaiting = false;
         }
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
             await SearchBooks();
         }
         private async void BtnAdd_OnClick(object sender, RoutedEventArgs e)
@@ -65,6 +65,7 @@ namespace Bibliotech.View.Books
 
             new AddEditBookWindow(book).ShowDialog();
             await SearchBooks();
+
         }
 
         private void BtnExemplary_OnClick(object sender, RoutedEventArgs e)
@@ -72,6 +73,11 @@ namespace Bibliotech.View.Books
             ExemplaryWindow exemplaryWindow = new ExemplaryWindow();
             exemplaryWindow.ShowDialog();
             
+        }
+
+        private async void SearchField_Click(object sender, RoutedEventArgs e)
+        {
+            await SearchBooks();
         }
     }
 }

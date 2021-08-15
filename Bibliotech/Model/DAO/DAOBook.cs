@@ -137,7 +137,7 @@ namespace Bibliotech.Model.DAO
         }
         
 
-        public async Task<List<Book>> GetBook()
+        public async Task<List<Book>> GetBook(string text)
         {
             await Connect();
             try
@@ -149,7 +149,7 @@ namespace Bibliotech.Model.DAO
                     "from book_has_author as bookauthor " +
                     "inner join author as a on a.id_author = bookauthor.id_author " +
                     "inner join book as b on b.id_book = bookauthor.id_book " +
-                    "where b.status = 1 and a.status = 1";
+                    "where b.title like '%" + text + "%' and b.status = 1 and a.status = 1; " ;
 
                 MySqlCommand cmd = new MySqlCommand(selectBook, SqlConnection);
                 List<Book> books = new List<Book>();

@@ -53,7 +53,7 @@ namespace Bibliotech.View.Books
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
 
-            tfBarCode.Text = ($" SME-VGP-{Book.IdBook}");
+            tfBarCode.Text = ($" SME-VGP- {Book.IdBook}");
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
@@ -69,9 +69,9 @@ namespace Bibliotech.View.Books
         }
         private async Task<bool> CompareBook(List<Book> actually, List<Book> insert)
         {
-            var emComum = actually.Intersect(insert);
-            if (emComum.Count() > 0) return false;
-            else return true;
+            var emComum = actually.Intersect(insert).ToList();
+            if (emComum.Count() > 0) return true;
+            else return false;
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -114,15 +114,15 @@ namespace Bibliotech.View.Books
             Book.Language = tfLanguage.Text;
             Book.Volume = tfVolume.Text;
             Book.Collection = tfColletion.Text;
-
+            /*
             actually.Add(Book);
             bool test = await CompareBook(actually, await DAOBook.GetBook());
-            MessageBox.Show(test.ToString());
-            if (!await CompareBook(actually, await DAOBook.GetBook()))
+            if (await CompareBook(actually, await DAOBook.GetBook()))
             {
                 ShowMessage(" ", "Livro já inserido", TypeDialog.Error);
+                return;
             }
-
+            */
             loading.Awaiting = true;
             if(Book.IdBook == -1)
             {
