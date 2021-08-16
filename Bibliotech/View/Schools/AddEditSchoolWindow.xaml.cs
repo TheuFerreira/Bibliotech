@@ -16,7 +16,6 @@ namespace Bibliotech.View.Schools
         private readonly bool isFirstBranch;
         private readonly int id;
         private readonly int idAddress;
-        Loading loading = new Loading();
 
         public AddEditSchoolWindow(Branch branch, bool isFirstBranch = false)
         {
@@ -26,12 +25,12 @@ namespace Bibliotech.View.Schools
             tbInfo.Text = "Adicionar Escola";
             Title = tbInfo.Text;
 
+            id = branch.IdBranch;
             if (branch.IdBranch == -1)
             {
                 return;
             }
 
-            id = branch.IdBranch;
             idAddress = branch.Address.IdAddress;
             tfName.Text = branch.Name;
             tfCity.Text = branch.Address.City;
@@ -128,7 +127,6 @@ namespace Bibliotech.View.Schools
             };
 
             btnSave.IsEnabled = false;
-            loading.Awaiting = true;
             if (id == -1)
             {
                 if (await daoSchool.Insert(branch))
@@ -156,9 +154,7 @@ namespace Bibliotech.View.Schools
             }
 
             dialogService.ShowError("Algo deu errado\nTente novamente");
-            loading.Awaiting = false;
             btnSave.IsEnabled = true;
-
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)

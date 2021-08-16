@@ -86,6 +86,11 @@ namespace Bibliotech.View.Users
             Title = "Adicionar Usuário";
             tbInfo.Text = "Adicionar Usuário";
 
+            if (loggedUser == null)
+            {
+                return;
+            }
+
             btnSearchSchools.IsEnabled = loggedUser.IsController();
 
             if (user.IdUser == -1)
