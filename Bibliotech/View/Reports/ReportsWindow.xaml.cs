@@ -122,8 +122,32 @@ namespace Bibliotech.View.Reports
 
         private async void BtnLendingSearch_Click(object sender, RoutedEventArgs e)
         {
-            List<Lending> lendings = await daoLending.SearchLendings();
-            lendingDataGrid.ItemsSource = lendings;
+            List<Lending> lendings = new List<Lending>();
+
+            switch (period)
+            {
+                case Period.Day:
+                    DateTime? selectedDate = lendingDate.SelectedDate;
+                    lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending);
+                    lendingDataGrid.ItemsSource = lendings;
+                    break;
+                case Period.Mount:
+                    lendings = await daoLending.SearchLendingsByMonth(month, typeLending);
+                    lendingDataGrid.ItemsSource = lendings;
+                    break;
+                case Period.Year:
+                    lendings = await daoLending.SearchLendingsByYear(year, typeLending);
+                    lendingDataGrid.ItemsSource = lendings;
+                    break;
+                case Period.Custom:
+                    DateTime? start = lendingStartDate.SelectedDate;
+                    DateTime? end = lendingEndDate.SelectedDate;
+                    lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending);
+                    lendingDataGrid.ItemsSource = lendings;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
