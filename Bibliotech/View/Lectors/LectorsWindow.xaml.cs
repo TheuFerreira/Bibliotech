@@ -79,7 +79,7 @@ namespace Bibliotech.View.Lectors
             loading.Awaiting = false;
         }
 
-        private async void UpdateGrid()
+        private  async void UpdateGrid()
         {
             
             if (searchField.SelectedIndex == ((int)TypeSearch.All))
@@ -93,7 +93,7 @@ namespace Bibliotech.View.Lectors
                 typeSearch = TypeSearch.Current;
                 dataGrid.Columns[4].Visibility = Visibility.Collapsed;
             }
-
+            MessageBox.Show(typeSearch.ToString());
             DisableButtons();
             DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch , typeSearch);
             if (dataTable != null)
@@ -167,15 +167,8 @@ namespace Bibliotech.View.Lectors
 
         private void searchField_Click(object sender, RoutedEventArgs e)
         {
-            UpdateGrid();
-        }
 
-        private void searchField_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(searchField.Text))
-            {
-                UpdateGrid();
-            }
+            UpdateGrid();
         }
 
         private void FillFieldsToUpdate()
