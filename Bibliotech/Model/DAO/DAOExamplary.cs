@@ -128,7 +128,11 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
 
                 object result = await command.ExecuteScalarAsync();
-                int lastindex = Convert.ToInt32(result);
+                int lastindex = 0;
+                if (int.TryParse(result.ToString(), out int res))
+                {
+                    lastindex = res;
+                }
                 int nextIndex = lastindex + 1;
 
                 for (int i = 0; i < numberExemplaries; i++)
