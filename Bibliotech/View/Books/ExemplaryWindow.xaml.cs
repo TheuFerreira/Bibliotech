@@ -19,23 +19,22 @@ namespace Bibliotech.View.Books
     {
         private List<Exemplary> exemplaries;
 
-        private readonly DAOBook daoBook;
         private readonly DAOExamplary daoExemplary;
         private TypeSearch typeSearch;
         private Status filterStatus;
         private readonly DialogService dialogService;
-        private Book book;
+        private readonly Book Book;
 
         // SUBSTITUIR DEPOIS PELO SINGLETON
         private readonly Branch currentBranch = new Branch(1, "Senador");
 
-        public ExemplaryWindow()
+        public ExemplaryWindow(Book book)
         {
             InitializeComponent();
 
-            daoBook = new DAOBook();
             daoExemplary = new DAOExamplary();
             dialogService = new DialogService();
+            Book = book;
 
             searchField.ItemsSource = Enum.GetValues(typeof(TypeSearch))
                 .Cast<TypeSearch>()
@@ -57,8 +56,6 @@ namespace Bibliotech.View.Books
 
         private async void SearchEemplaries()
         {
-            book = await daoBook.GetById(1);
-
             string text = searchField.Text;
 
             typeSearch = Enums.Parse<TypeSearch>(searchField.SelectedItem.ToString(), false, EnumFormat.Description);
@@ -66,7 +63,7 @@ namespace Bibliotech.View.Books
 
             columnSchool.Visibility = typeSearch == TypeSearch.Current ? Visibility.Hidden : Visibility.Visible;
 
-            exemplaries = await daoExemplary.GetExemplarysByBook(book, typeSearch, currentBranch, text, filterStatus);
+            exemplaries = await daoExemplary.GetExemplarysByBook(Book, typeSearch, currentBranch, text, filterStatus);
             dataGrid.ItemsSource = exemplaries;
         }
 
@@ -165,7 +162,7 @@ namespace Bibliotech.View.Books
                 dialogService.ShowError("A quantidade precisa ser maior que 0!");
             }
 
-            bool result = await daoExemplary.AddExemplaries(currentBranch, book, numberExemplaries);
+            bool result = await daoExemplary.AddExemplaries(currentBranch, Book, numberExemplaries);
             if (result == false)
             {
                 return;
