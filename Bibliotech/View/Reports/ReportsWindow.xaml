@@ -217,6 +217,7 @@
         </Grid>
 
         <uc:Button
+            x:Name="btnSearch"
             Text="PESQUISAR"
             Width="250"
             Margin="223,127,0,0"
