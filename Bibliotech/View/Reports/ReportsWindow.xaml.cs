@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,46 +18,60 @@ namespace Bibliotech.View.Reports
     public partial class ReportsWindow : Window
     {
         private Tabs tabs;
-
         private Period period;
-        private int month;
-        private int year;
-
         private TypeLending typeLending;
 
         private readonly DAOLending daoLending;
+        private readonly DAOLector daoLector;
 
         public ReportsWindow()
         {
             InitializeComponent();
 
             daoLending = new DAOLending();
+            daoLector = new DAOLector();
 
             tabs = Tabs.Lendings;
 
+            dpDate.SelectedDate = DateTime.Now;
+
+            dpStartDate.SelectedDate = DateTime.Now;
+            dpEndDate.SelectedDate = DateTime.Now;
+        }
+
+        private void SetPeriodsToComboBoxPeriod()
+        {
             List<string> periodNames = Enum.GetValues(typeof(Period)).Cast<Period>().Select(x => x.AsString(EnumFormat.Description)).ToList();
-            lendingPeriod.ItemsSource = periodNames;
+            cbPeriod.ItemsSource = periodNames;
 
             period = Period.Day;
-            lendingPeriod.SelectedItem = period.AsString(EnumFormat.Description);
+            cbPeriod.SelectedItem = period.AsString(EnumFormat.Description);
+        }
 
-            lendingDate.SelectedDate = DateTime.Now;
-
+        private void SetMonthsToComboBoxMonth()
+        {
             List<string> monthName = Enumerable.Range(1, 12).Select(x => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x).ToUpper()).ToList();
-            lendingMonth.ItemsSource = monthName;
+            cbMonth.ItemsSource = monthName;
 
-            month = DateTime.Now.Month;
-            lendingMonth.SelectedItem = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month).ToUpper();
+            int month = DateTime.Now.Month;
+            cbMonth.SelectedItem = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month).ToUpper();
+        }
 
-            List<int> years = new List<int>() { 2020, 2021 };
-            lendingYear.ItemsSource = years;
+        private async Task SetYearsToComboBoxYear()
+        {
+            btnSearch.IsEnabled = false;
 
-            year = DateTime.Now.Year;
-            lendingYear.SelectedItem = year;
+            List<int> years = await daoLending.GetYears();
+            cbYear.ItemsSource = years;
 
-            lendingStartDate.SelectedDate = DateTime.Now;
-            lendingEndDate.SelectedDate = DateTime.Now;
+            int year = DateTime.Now.Year;
+            cbYear.SelectedItem = year;
 
+            btnSearch.IsEnabled = true;
+        }
+
+        private void SetTypeLendingsToComboBoxTypeLending()
+        {
             List<string> typeLendingNames = Enum.GetValues(typeof(TypeLending)).Cast<TypeLending>().Select(x => x.AsString(EnumFormat.Description)).ToList();
             lendingType.ItemsSource = typeLendingNames;
 
@@ -64,55 +79,68 @@ namespace Bibliotech.View.Reports
             lendingType.SelectedItem = typeLending.AsString(EnumFormat.Description);
         }
 
-        private void LendingPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            string selectedItem = lendingPeriod.SelectedItem.ToString();
-            period = Enums.Parse<Period>(selectedItem, true, EnumFormat.Description);
+            SetPeriodsToComboBoxPeriod();
+            SetMonthsToComboBoxMonth();
+            await SetYearsToComboBoxYear();
+            SetTypeLendingsToComboBoxTypeLending();
 
-            lendingDate.Visibility = Visibility.Collapsed;
-            lendingMonth.Visibility = Visibility.Collapsed;
-            lendingYear.Visibility = Visibility.Collapsed;
+            tabControl.SelectionChanged += TabControl_SelectionChanged;
+        }
 
-            lendingStartDate.Visibility = Visibility.Collapsed;
-            lendingEndDate.Visibility = Visibility.Collapsed;
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            tabs = (Tabs)tabControl.SelectedIndex;
 
-            switch (period)
+            switch (tabs)
             {
-                case Period.Day:
-                    lendingDate.Visibility = Visibility.Visible;
+                case Tabs.Lendings:
+                    gridPeriod.Visibility = Visibility.Visible;
                     break;
-                case Period.Mount:
-                    lendingMonth.Visibility = Visibility.Visible;
+                case Tabs.Lectors:
+                    gridPeriod.Visibility = Visibility.Visible;
                     break;
-                case Period.Year:
-                    lendingYear.Visibility = Visibility.Visible;
-                    break;
-                case Period.Custom:
-                    lendingStartDate.Visibility = Visibility.Visible;
-                    lendingEndDate.Visibility = Visibility.Visible;
+                case Tabs.Books:
+                    gridPeriod.Visibility = Visibility.Collapsed;
                     break;
                 default:
                     break;
             }
+
         }
 
-        private void LendingMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selectedItem = lendingMonth.SelectedItem.ToString();
-            DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
-            month = dateMonth.Month;
-        }
+            string selectedItem = cbPeriod.SelectedItem.ToString();
+            period = Enums.Parse<Period>(selectedItem, true, EnumFormat.Description);
 
-        private void LendingYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string selectedItem = lendingYear.SelectedItem.ToString();
-            year = int.Parse(selectedItem);
-        }
+            dpDate.Visibility = Visibility.Collapsed;
+            cbMonth.Visibility = Visibility.Collapsed;
+            cbYear.Visibility = Visibility.Collapsed;
 
-        private void LendingType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string selectedItem = lendingType.SelectedItem.ToString();
-            typeLending = Enums.Parse<TypeLending>(selectedItem, true, EnumFormat.Description);
+            dpStartDate.Visibility = Visibility.Collapsed;
+            dpEndDate.Visibility = Visibility.Collapsed;
+
+            switch (period)
+            {
+                case Period.Day:
+                    dpDate.Visibility = Visibility.Visible;
+                    break;
+                case Period.Mount:
+                    cbYear.Visibility = Visibility.Visible;
+                    cbMonth.Visibility = Visibility.Visible;
+                    break;
+                case Period.Year:
+                    cbYear.Visibility = Visibility.Visible;
+                    break;
+                case Period.Custom:
+                    dpStartDate.Visibility = Visibility.Visible;
+                    dpEndDate.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
@@ -120,34 +148,98 @@ namespace Bibliotech.View.Reports
             throw new Exception("Falta Implementar a Exportação nos Empréstimos");
         }
 
-        private async void BtnLendingSearch_Click(object sender, RoutedEventArgs e)
+        private async void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
-            List<Lending> lendings = new List<Lending>();
+            btnSearch.IsEnabled = false;
+            loading.Awaiting = true;
 
-            switch (period)
+            List<Lending> lendings;
+            string selectedItem;
+            int month;
+            int year;
+
+            switch (tabs)
             {
-                case Period.Day:
-                    DateTime? selectedDate = lendingDate.SelectedDate;
-                    lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending);
-                    lendingDataGrid.ItemsSource = lendings;
+                case Tabs.Lendings:
+                    selectedItem = lendingType.SelectedItem.ToString();
+                    typeLending = Enums.Parse<TypeLending>(selectedItem, true, EnumFormat.Description);
+
+                    switch (period)
+                    {
+                        case Period.Day:
+                            DateTime? selectedDate = dpDate.SelectedDate;
+                            lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending);
+                            lendingDataGrid.ItemsSource = lendings;
+                            break;
+                        case Period.Mount:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
+                            selectedItem = cbMonth.SelectedItem.ToString();
+                            DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
+                            month = dateMonth.Month;
+
+                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending);
+                            lendingDataGrid.ItemsSource = lendings;
+                            break;
+                        case Period.Year:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
+                            lendings = await daoLending.SearchLendingsByYear(year, typeLending);
+                            lendingDataGrid.ItemsSource = lendings;
+                            break;
+                        case Period.Custom:
+                            DateTime? start = dpStartDate.SelectedDate;
+                            DateTime? end = dpEndDate.SelectedDate;
+                            lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending);
+                            lendingDataGrid.ItemsSource = lendings;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
-                case Period.Mount:
-                    lendings = await daoLending.SearchLendingsByMonth(month, typeLending);
-                    lendingDataGrid.ItemsSource = lendings;
+                case Tabs.Lectors:
+                    switch (period)
+                    {
+                        case Period.Day:
+                            DateTime? selectedDate = dpDate.SelectedDate;
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByDay(selectedDate.Value);
+                            break;
+                        case Period.Mount:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
+                            selectedItem = cbMonth.SelectedItem.ToString();
+                            DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
+                            month = dateMonth.Month;
+
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByMonth(year, month);
+                            break;
+                        case Period.Year:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByYear(year); ;
+                            break;
+                        case Period.Custom:
+                            DateTime? start = dpStartDate.SelectedDate;
+                            DateTime? end = dpEndDate.SelectedDate;
+
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByCustomTime(start.Value, end.Value); ;
+                            break;
+                        default:
+                            break;
+                    }
                     break;
-                case Period.Year:
-                    lendings = await daoLending.SearchLendingsByYear(year, typeLending);
-                    lendingDataGrid.ItemsSource = lendings;
-                    break;
-                case Period.Custom:
-                    DateTime? start = lendingStartDate.SelectedDate;
-                    DateTime? end = lendingEndDate.SelectedDate;
-                    lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending);
-                    lendingDataGrid.ItemsSource = lendings;
+                case Tabs.Books:
                     break;
                 default:
                     break;
             }
+
+            loading.Awaiting = false;
+            btnSearch.IsEnabled = true;
         }
     }
 }

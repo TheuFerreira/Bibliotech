@@ -4,6 +4,7 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
@@ -37,6 +38,46 @@ namespace Bibliotech.Model.DAO
             command.Parameters.Add("?", DbType.Boolean).Value = typeLending == TypeLending.Both;
             command.Parameters.Add("?", DbType.Int32).Value = typeLending;
             command.Parameters.Add("?", DbType.Int32).Value = typeLending;
+        }
+
+        public async Task<List<int>> GetYears()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT DISTINCT YEAR(loan_date) " +
+                    "FROM lending;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                List<int> years = new List<int>();
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int year = await reader.GetFieldValueAsync<int>(0);
+
+                    years.Add(year);
+                }
+
+                int currentYear = DateTime.Now.Year;
+                if (years.Contains(currentYear) == false)
+                {
+                    years.Add(currentYear);
+                }
+
+                return years.OrderBy(x => x).ToList();
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
         }
 
         private async Task<List<Lending>> ReportReader(MySqlCommand command)
@@ -109,7 +150,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByMonth(int month, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending)
         {
             try
             {
@@ -117,11 +158,12 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_SQL_LENDING +
-                    "Where MONTH(l.loan_date) = ? " +
+                    "WHERE YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     ";";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
 
                 AddTypeLending(command, typeLending);

@@ -9,7 +9,6 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
-        Loaded="Window_Loaded"
         Title="Usuários" Height="720" Width="1280">
 
     <Window.Resources>

@@ -1,7 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
-using Bibliotech.UserControls;
 using System.Windows;
 
 namespace Bibliotech.View.Schools
@@ -14,8 +13,25 @@ namespace Bibliotech.View.Schools
         private readonly DialogService dialogService = new DialogService();
         private readonly DAOBranch daoSchool = new DAOBranch();
         private readonly bool isFirstBranch;
-        private readonly int id;
-        private readonly int idAddress;
+        private readonly Branch branch;
+
+        private void FillFieldWithBranchInfo()
+        {
+            if (branch.IdBranch == -1)
+            {
+                return;
+            }
+
+            tfName.Text = branch.Name;
+            tfCity.Text = branch.Address.City;
+            tfDistrict.Text = branch.Address.Neighborhood;
+            tfPhone.Text = branch.Telephone.ToString();
+            tfStreet.Text = branch.Address.Street;
+            tfNumber.Text = branch.Address.Number;
+
+            tbInfo.Text = "Editar Escola";
+            Title = tbInfo.Text;
+        }
 
         public AddEditSchoolWindow(Branch branch, bool isFirstBranch = false)
         {
@@ -25,21 +41,9 @@ namespace Bibliotech.View.Schools
             tbInfo.Text = "Adicionar Escola";
             Title = tbInfo.Text;
 
-            id = branch.IdBranch;
-            if (branch.IdBranch == -1)
-            {
-                return;
-            }
+            this.branch = branch;
 
-            idAddress = branch.Address.IdAddress;
-            tfName.Text = branch.Name;
-            tfCity.Text = branch.Address.City;
-            tfDistrict.Text = branch.Address.Neighborhood;
-            tfPhone.Text = branch.Telephone.ToString();
-            tfStreet.Text = branch.Address.Street;
-            tfNumber.Text = branch.Address.Number;
-            tbInfo.Text = "Editar Escola";
-            Title = tbInfo.Text;
+            FillFieldWithBranchInfo();
         }
 
         public bool ValidateFields()
@@ -86,6 +90,17 @@ namespace Bibliotech.View.Schools
             return true;
         }
 
+        private long? ValidatePhone()
+        {
+            long? phone = null;
+            if (long.TryParse(tfPhone.Text, out long temp))
+            {
+                phone = temp;
+            }
+
+            return phone;
+        }
+
         private void ClearFields()
         {
             tfName.Text = "";
@@ -103,54 +118,37 @@ namespace Bibliotech.View.Schools
                 return;
             }
 
-            long? phone = null;
-            if (long.TryParse(tfPhone.Text, out long temp))
-            {
-                phone = temp;
-            }
+            long? phone = ValidatePhone();
 
-            Address address = new Address()
-            {
-                IdAddress = idAddress,
-                City = tfCity.Text,
-                Neighborhood = tfDistrict.Text,
-                Street = tfStreet.Text,
-                Number = tfNumber.Text,
-            };
+            Address address = branch.Address;
+            address.City = tfCity.Text;
+            address.Neighborhood = tfDistrict.Text;
+            address.Neighborhood = tfDistrict.Text;
+            address.Number = tfNumber.Text;
 
-            Branch branch = new Branch()
-            {
-                IdBranch = id,
-                Name = tfName.Text,
-                Telephone = phone,
-                Address = address,
-            };
+            branch.Address = address;
+            branch.Name = tfName.Text;
+            branch.Telephone = phone;
+            branch.Address = address;
 
             btnSave.IsEnabled = false;
-            if (id == -1)
+            if (await daoSchool.Save(branch))
             {
-                if (await daoSchool.Insert(branch))
-                {
-                    dialogService.ShowSuccess("Escola salva com sucesso");
-                    ClearFields();
+                dialogService.ShowSuccess("Escola salva com sucesso");
+                ClearFields();
 
-                    if (isFirstBranch)
-                    {
-                        dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
-                        DialogResult = true;
-                        Close();
-                    }
-                    return;
-                }
-            }
-            else
-            {
-                if (await daoSchool.Update(branch))
+                if (isFirstBranch)
                 {
-                    dialogService.ShowSuccess("Escola salva com sucesso");
+                    dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
+                    DialogResult = true;
                     Close();
-                    return;
                 }
+                else if (branch.IdBranch != -1)
+                {
+                    Close();
+                }
+
+                return;
             }
 
             dialogService.ShowError("Algo deu errado\nTente novamente");
@@ -159,7 +157,7 @@ namespace Bibliotech.View.Schools
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            int aux = await daoSchool.UsersCount();
+            int aux = await daoSchool.UsersCount(branch);
             tfUsers.Text = aux.ToString();
         }
     }

@@ -5,11 +5,61 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-
 namespace Bibliotech.Model.DAO
 {
     public class DAOLector : Connection
     {
+        private const string BASE_REPORT_SQL_SELECT_LECTOR = "" +
+            "SELECT l.id_lector, l.name, IF(pick.pickup IS NULL, 0, pick.pickup), IF(returned.returned IS NULL, 0, returned.returned) AS returned " +
+            "FROM lector AS l " +
+            "";
+
+        private const string BASE_REPORT_SQL_LEFT_JOIN_PICKUP = "" +
+            "LEFT JOIN( " +
+                "SELECT lc.id_lector, COUNT(le.id_exemplary) AS pickup " +
+                "FROM lending_has_exemplary AS le " +
+                "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
+                "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
+            "";
+
+        private const string BASE_REPORT_SQL_LEFT_JOIN_RETURNED = "" +
+            "LEFT JOIN( " +
+                "SELECT lc.id_lector, COUNT(le.id_exemplary) AS returned " +
+                "FROM lending_has_exemplary AS le " +
+                "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
+                "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
+            "";
+
+        private async Task<DataView> ReportReader(MySqlCommand command)
+        {
+            DataTable dt = new DataTable();
+            _ = dt.Columns.Add("IdLector", typeof(int));
+            _ = dt.Columns.Add("Name", typeof(string));
+            _ = dt.Columns.Add("Pickup", typeof(int));
+            _ = dt.Columns.Add("Returned", typeof(int));
+
+            MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+            while (await reader.ReadAsync())
+            {
+                int idLector = await reader.GetFieldValueAsync<int>(0);
+                string name = await reader.GetFieldValueAsync<string>(1);
+                int pickup = await reader.GetFieldValueAsync<int>(2);
+                int returned = await reader.GetFieldValueAsync<int>(3);
+
+                object[] values = new object[4]
+                {
+                        idLector,
+                        name,
+                        pickup,
+                        returned
+                };
+
+                _ = dt.Rows.Add(values);
+            }
+
+            return dt.DefaultView;
+        }
+
         public async Task<bool> Insert(int idBranch, Lector lector, Address address)
         {
             await Connect();
@@ -234,6 +284,138 @@ namespace Bibliotech.Model.DAO
             }
 
 
+        }
+
+        public async Task<DataView> ReportSearchByDay(DateTime day)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    BASE_REPORT_SQL_SELECT_LECTOR +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
+                        "WHERE l.return_date IS NULL AND DATE(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
+                        "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                    "";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Date).Value = day.Date;
+                command.Parameters.Add("?", DbType.Date).Value = day.Date;
+
+                return await ReportReader(command);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByMonth(int year, int month)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    BASE_REPORT_SQL_SELECT_LECTOR +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
+                        "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
+                        "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                    "";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = month;
+
+                return await ReportReader(command);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByYear(int year)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    BASE_REPORT_SQL_SELECT_LECTOR +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
+                        "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
+                        "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                    "";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = year;
+
+                return await ReportReader(command);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByCustomTime(DateTime start, DateTime end)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    BASE_REPORT_SQL_SELECT_LECTOR +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
+                        "WHERE l.return_date IS NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
+                        "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
+                        "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                    "";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.DateTime).Value = start;
+                command.Parameters.Add("?", DbType.DateTime).Value = end;
+                command.Parameters.Add("?", DbType.DateTime).Value = start;
+                command.Parameters.Add("?", DbType.DateTime).Value = end;
+
+                return await ReportReader(command);
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
         }
     }
 }

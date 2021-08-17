@@ -7,6 +7,7 @@
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Relatórios" Height="720" Width="1280">
     <Grid>
@@ -23,51 +24,6 @@
                             Margin="10"
                             VerticalAlignment="Top"
                             Height="45">
-
-                            <uc:CustomComboBox 
-                                x:Name="lendingPeriod"
-                                Title="PERÍODO:"
-                                Width="150"
-                                HorizontalAlignment="Left" 
-                                VerticalAlignment="Top"
-                                SelectionChanged="LendingPeriod_SelectionChanged"/>
-
-                            <uc:CustomDatePicker
-                                x:Name="lendingDate"
-                                Title="DATA:"
-                                Margin="200,0,0,0"
-                                HorizontalAlignment="Left"
-                                Width="250"/>
-
-                            <uc:CustomComboBox
-                                x:Name="lendingMonth"
-                                Title="MÊS:"
-                                Margin="200,0,0,0"
-                                HorizontalAlignment="Left"
-                                Width="250"
-                                SelectionChanged="LendingMonth_SelectionChanged"/>
-
-                            <uc:CustomComboBox
-                                x:Name="lendingYear"
-                                Title="ANO:"
-                                Margin="200,0,0,0"
-                                HorizontalAlignment="Left"
-                                Width="250"
-                                SelectionChanged="LendingYear_SelectionChanged"/>
-
-                            <uc:CustomDatePicker
-                                x:Name="lendingStartDate"
-                                Title="DATA INICIAL:"
-                                Margin="200,0,0,0"
-                                HorizontalAlignment="Left"
-                                Width="250"/>
-
-                            <uc:CustomDatePicker
-                                x:Name="lendingEndDate"
-                                Title="DATA FINAL:"
-                                Margin="500,0,0,0"
-                                HorizontalAlignment="Left"
-                                Width="250"/>
 
                             <uc:Button
                                 Text="EXPORTAR"
@@ -91,20 +47,7 @@
                                 Title="TIPO:"
                                 Width="150"
                                 HorizontalAlignment="Left" 
-                                VerticalAlignment="Top"
-                                SelectionChanged="LendingType_SelectionChanged"/>
-
-                            <uc:Button
-                                Text="PESQUISAR"
-                                Width="250"
-                                Margin="200,0,0,0"
-                                Height="30"
-                                Source="/Bibliotech;component/Resources/img_zoom.png"
-                                CornerRadius="15"
-                                MarginImage="8,5,5,5"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom"
-                                Click="BtnLendingSearch_Click"/>
+                                VerticalAlignment="Top"/>
 
                         </Grid>
 
@@ -137,18 +80,6 @@
                         Margin="10"
                         VerticalAlignment="Top">
 
-                            <uc:CustomComboBox 
-                            Title="PERÍODO:"
-                            Width="150"
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top"/>
-
-                            <uc:CustomDatePicker
-                            Title="DATA:"
-                            Margin="200,0,0,0"
-                            HorizontalAlignment="Left"
-                            Width="250"/>
-
                             <uc:Button
                             Text="EXPORTAR"
                             MarginImage="8,5,5,5"
@@ -166,29 +97,19 @@
                         VerticalAlignment="Top"
                         Height="42">
 
-                            <uc:Button
-                            Text="PESQUISAR"
-                            Width="250"
-                            Margin="200,0,0,0"
-                            Height="30"
-                            Source="/Bibliotech;component/Resources/img_zoom.png"
-                            CornerRadius="15"
-                            MarginImage="8,5,5,5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"/>
-
                         </Grid>
 
                     </Grid>
 
                     <DataGrid
+                        x:Name="lectorDataGrid"
                         Margin="0,170,0,0">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175"/>
-                            <DataGridTextColumn Header="LEITOR" Width="*"/>
-                            <DataGridTextColumn Header="LIVROS PEGOS" Width="250"/>
-                            <DataGridTextColumn Header="LIVROS ENTREGUES" Width="250"/>
+                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175" Binding="{Binding Path=IdLector, StringFormat=D6}"/>
+                            <DataGridTextColumn Header="LEITOR" Width="*" Binding="{Binding Path=Name}"/>
+                            <DataGridTextColumn Header="LIVROS PEGOS" Width="250" Binding="{Binding Path=Pickup, StringFormat=D3}"/>
+                            <DataGridTextColumn Header="LIVROS ENTREGUES" Width="250" Binding="{Binding Path=Returned, StringFormat=D3}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -228,17 +149,6 @@
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Top"/>
 
-                            <uc:Button
-                            Text="PESQUISAR"
-                            Width="250"
-                            Margin="200,0,0,0"
-                            Height="30"
-                            Source="/Bibliotech;component/Resources/img_zoom.png"
-                            CornerRadius="15"
-                            MarginImage="8,5,5,5"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"/>
-
                         </Grid>
 
                     </Grid>
@@ -254,9 +164,74 @@
             </TabItem>
         </TabControl>
 
+        <Grid 
+            x:Name="gridPeriod"
+            Margin="23,45"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Height="45">
+
+            <uc:CustomComboBox 
+                x:Name="cbPeriod"
+                Title="PERÍODO:"
+                Width="150"
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top"
+                SelectionChanged="CbPeriod_SelectionChanged"/>
+
+            <uc:CustomDatePicker
+                x:Name="dpDate"
+                Title="DATA:"
+                Margin="200,0,0,0"
+                HorizontalAlignment="Left"
+                Width="250"/>
+
+            <uc:CustomComboBox
+                x:Name="cbMonth"
+                Title="MÊS:"
+                Margin="500,0,0,0"
+                HorizontalAlignment="Left"
+                Width="250"/>
+
+            <uc:CustomComboBox
+                x:Name="cbYear"
+                Title="ANO:"
+                Margin="200,0,0,0"
+                HorizontalAlignment="Left"
+                Width="250"/>
+
+            <uc:CustomDatePicker
+                x:Name="dpStartDate"
+                Title="DATA INICIAL:"
+                Margin="200,0,0,0"
+                HorizontalAlignment="Left"
+                Width="250"/>
+
+            <uc:CustomDatePicker
+                x:Name="dpEndDate"
+                Title="DATA FINAL:"
+                Margin="500,0,0,0"
+                HorizontalAlignment="Left"
+                Width="250"/>
+
+        </Grid>
+
+        <uc:Button
+            x:Name="btnSearch"
+            Text="PESQUISAR"
+            Width="250"
+            Margin="223,127,0,0"
+            Height="30"
+            Source="/Bibliotech;component/Resources/img_zoom.png"
+            CornerRadius="15"
+            MarginImage="8,5,5,5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Click="BtnSearch_Click"/>
+        
         <uc:Loading 
             x:Name="loading"
             Visibility="Collapsed"
-            Margin="0,170,0,0"/>
+            Margin="0,200,0,0"/>
     </Grid>
 </Window>
