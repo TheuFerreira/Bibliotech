@@ -68,11 +68,6 @@ namespace Bibliotech.View.Users
             SetControls(true);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            SearchUsers();
-        }
-
         private void SearchField_Click(object sender, RoutedEventArgs e)
         {
             SearchUsers();
