@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bibliotech.View.Books;
+using Bibliotech.View.Lectors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +24,18 @@ namespace Bibliotech.View.Lendings
         public LendingWindow()
         {
             InitializeComponent();
+        }
+
+        private void btnSearchLector_Click(object sender, RoutedEventArgs e)
+        {
+            SearchLectorWindow searchLector = new SearchLectorWindow();
+            searchLector.ShowDialog();
+        }
+
+        private void btnSearchBook_Click(object sender, RoutedEventArgs e)
+        {
+            SearchBookWindow searchBook = new SearchBookWindow();
+            searchBook.ShowDialog();
         }
     }
 }

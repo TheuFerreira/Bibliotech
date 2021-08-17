@@ -71,5 +71,27 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
+
+        public async Task<DataTable> FillDataGrid()
+        {
+            await Connect();
+
+            try
+            {
+                string strSql = "";
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+
+
+
+
+
+            return null;
+        }
     }
 }

@@ -53,7 +53,7 @@
                     MarginImage="8,5,5,5"
                     CornerRadius="15"
                     VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right"/>
+                    HorizontalAlignment="Right" Click="btnSearchLector_Click"/>
             </Grid>
 
             <Grid
@@ -81,7 +81,7 @@
                     MarginImage="8,5,5,5"
                     CornerRadius="15"
                     VerticalAlignment="Bottom"
-                    HorizontalAlignment="Right"/>
+                    HorizontalAlignment="Right" Click="btnSearchBook_Click"/>
             </Grid>
 
         </Grid>
