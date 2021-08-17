@@ -9,7 +9,7 @@ namespace Bibliotech.Model.Entities
         public int IdBook { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public Author Author { get; set; }
+        public Author Author { get; set; } = new Author();
         public List<Author> Authors { get; set; }
 
         public string PublishingCompany { get; set; }
@@ -21,6 +21,7 @@ namespace Bibliotech.Model.Entities
         public string Volume { get; set; }
         public string Collection { get; set; }
         public Status Status { get; set; }
+        public int idExemplary { get; set; }
 
         public Book()
         {

@@ -272,5 +272,54 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
+
+
+        public async Task<DataTable> FillSearchDataGrid(string query, int idBranch)
+        {
+            // MySqlTransaction transaction = await  SqlConnection.BeginTransactionAsync();
+            await Connect();
+
+            string strSql = "select exe.id_index, bk.title, bk.subtitle, group_concat(distinct name separator ', ') as autores, bk.publishing_company, bk.id_book, exe.id_exemplary " +
+                            "from book as bk " +
+                            "inner join book_has_author as bha on bha.id_book = bk.id_book " +
+                            "inner join author as aut on aut.id_author = bha.id_author " +
+                            "inner join exemplary as exe on exe.id_book = bk.id_book " +
+                            "where bk.title like '%" +query+ "%' and exe.status = 3 and exe.id_branch = " + idBranch +
+                            " group by bk.id_book, exe.id_index;";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+
+                _ = await cmd.ExecuteNonQueryAsync();
+
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable("book");
+
+                _ = adapter.Fill(dt);
+                return dt;
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+
+
+
+
+
+
+            return null;
+        }
+            
+
+        
     }
 }

@@ -29,18 +29,20 @@
         <DataGrid 
             x:Name="dataGrid"
             Margin="0,100,0,50" 
-            ItemsSource="{Binding}">
+            ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="EXEMPLAR" Binding="{Binding Path=icon}" Width="100"/>
-                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=lectorRegister}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Binding="{Binding Path=id_index}" Width="100"/>
+                <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=autores}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=publishing_company}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="IDBOOK" Binding="{Binding Path=id_book}" Width="*" Visibility="Collapsed" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="IDEXE" Binding="{Binding Path=id_exemplary}" Width="*" Visibility="Collapsed" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <uc:Button
+        <uc:Button x:Name="selectButton"
             Margin="10"
             Width="170"
             Height="30"
@@ -50,7 +52,7 @@
             CornerRadius="15"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
-            Text="SELECIONAR"/>
+            Text="SELECIONAR" Click="selectButton_Click"/>
 
         <uc:Loading 
             x:Name="loading"
