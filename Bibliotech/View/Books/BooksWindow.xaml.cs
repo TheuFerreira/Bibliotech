@@ -1,8 +1,10 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.UserControls;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Bibliotech.View.Books
 {
@@ -14,19 +16,45 @@ namespace Bibliotech.View.Books
         private readonly DAOBook DAOBook;
         private Book book = new Book();
         private List<Book> books;
+        
         public BooksWindow()
         {
             InitializeComponent();
             DAOBook = new DAOBook();
             books = new List<Book>();
         }
+        private void DisableControls(UIElementCollection childs)
+        {
+            foreach (UserControl element in childs)
+            {
+                if (element is ButtonImage)
+                {
+                    (element).IsEnabled = false;
+                }
+                
+            }
+        }
+        private void EnableControls(UIElementCollection childs)
+        {
+            foreach (UserControl element in childs)
+            {
+                if (element is ButtonImage)
+                {
+                    (element).IsEnabled = true;
+                }
+            }
+        }
         private async Task SearchBooks()
         {
-            loading.Awaiting = true;
+            DisableControls(gridPanel.Children);
             string text = searchField.Text;
+            loading.Awaiting = true;
+            searchField.IsEnabled = false;
             books = await DAOBook.GetBook(text);
             dataGrid.ItemsSource = books;
+            searchField.IsEnabled = true;
             loading.Awaiting = false;
+            EnableControls(gridPanel.Children);
         }
         private Book GetIdBook()
         {
@@ -40,6 +68,7 @@ namespace Bibliotech.View.Books
             ExemplaryWindow exemplary = new ExemplaryWindow(book);
             exemplary.Show();
         }
+        
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await SearchBooks();

@@ -39,8 +39,7 @@ namespace Bibliotech.View.Books
         {
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
-
-            tfBarCode.Text = ($" SME-VGP- {Book.IdBook}");
+            tfBarCode.Text = string.Format(String.Format($"{"SME-VGP-"}{0:D8}{Book.IdBook}"));
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
