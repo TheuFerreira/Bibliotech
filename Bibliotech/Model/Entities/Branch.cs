@@ -35,6 +35,11 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
+        public bool IsNew()
+        {
+            return IdBranch == -1;
+        }
+
         public bool IsActive()
         {
             return Status == Status.Active;

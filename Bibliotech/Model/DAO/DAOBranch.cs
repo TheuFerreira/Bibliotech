@@ -12,14 +12,7 @@ namespace Bibliotech.Model.DAO
     {
         public async Task<bool> Save(Branch branch)
         {
-            if (branch.IdBranch == -1)
-            {
-                return await Insert(branch);
-            }
-            else
-            {
-                return await Update(branch);
-            }
+            return branch.IsNew() ? await Insert(branch) : await Update(branch);
         }
 
         private async Task<bool> Insert(Branch branch)
