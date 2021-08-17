@@ -1,20 +1,10 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.UserControls;
-using Bibliotech.UserControls.CustomDialog;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bibliotech.View.Books
 {
@@ -23,23 +13,62 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class BooksWindow : Window
     {
-        public readonly DAOBook DAOBook;
-        readonly Book book = new Book();
-        List<Book> books;
+        private readonly DAOBook DAOBook;
+        private Book book = new Book();
+        private List<Book> books;
+        
         public BooksWindow()
         {
             InitializeComponent();
             DAOBook = new DAOBook();
             books = new List<Book>();
         }
+        private void DisableControls(UIElementCollection childs)
+        {
+            foreach (UserControl element in childs)
+            {
+                if (element is ButtonImage)
+                {
+                    (element).IsEnabled = false;
+                }
+                
+            }
+        }
+        private void EnableControls(UIElementCollection childs)
+        {
+            foreach (UserControl element in childs)
+            {
+                if (element is ButtonImage)
+                {
+                    (element).IsEnabled = true;
+                }
+            }
+        }
         private async Task SearchBooks()
         {
-            loading.Awaiting = true;
+            DisableControls(gridPanel.Children);
             string text = searchField.Text;
+            loading.Awaiting = true;
+            searchField.IsEnabled = false;
             books = await DAOBook.GetBook(text);
             dataGrid.ItemsSource = books;
+            searchField.IsEnabled = true;
             loading.Awaiting = false;
+            EnableControls(gridPanel.Children);
         }
+        private Book GetIdBook()
+        {
+            int index = dataGrid.SelectedIndex;
+            Book book = books[index];
+            return book;
+        }
+        private void ShowExemplaries()
+        {
+            book = GetIdBook();
+            ExemplaryWindow exemplary = new ExemplaryWindow(book);
+            exemplary.Show();
+        }
+        
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await SearchBooks();
@@ -48,33 +77,23 @@ namespace Bibliotech.View.Books
         {
             AddEditBookWindow addEditBookWindow = new AddEditBookWindow(book);
             addEditBookWindow.ShowDialog();
-
             await SearchBooks();
-
         }
         private async void BtnEdit_OnClick(object sender, RoutedEventArgs e)
         {
-            
             if (dataGrid.SelectedItem == null)
             {
                 return;
             }
 
-            int index = dataGrid.SelectedIndex;
-            Book book = books[index];
-
+            book = GetIdBook();
             new AddEditBookWindow(book).ShowDialog();
             await SearchBooks();
-
         }
-
         private void BtnExemplary_OnClick(object sender, RoutedEventArgs e)
         {
-            ExemplaryWindow exemplaryWindow = new ExemplaryWindow();
-            exemplaryWindow.ShowDialog();
-            
+            ShowExemplaries();
         }
-
         private async void SearchField_Click(object sender, RoutedEventArgs e)
         {
             await SearchBooks();

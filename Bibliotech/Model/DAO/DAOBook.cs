@@ -198,7 +198,7 @@ namespace Bibliotech.Model.DAO
                         Language = language,
                         Volume = volume,
                         Collection = collection,
-                        Author = author,
+                        
                     };
 
                     books.Add(book);

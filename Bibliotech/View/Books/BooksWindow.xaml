@@ -33,6 +33,7 @@
         </DataGrid>
 
         <Grid
+            x:Name="gridPanel"
             Margin="30,0,30,10"
             Height="110"
             VerticalAlignment="Bottom">

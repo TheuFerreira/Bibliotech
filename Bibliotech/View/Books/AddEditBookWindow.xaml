@@ -173,7 +173,7 @@
                 Width="200"
                 CornerRadius="15"
                 FontSize="16"
-                Text="EXEMPLARES"/>
+                Text="EXEMPLARES" Click="BtnExemplaryBook_Click"/>
         </Grid>
 
         <uc:ButtonImage 

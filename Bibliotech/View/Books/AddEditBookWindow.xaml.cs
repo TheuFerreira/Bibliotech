@@ -1,22 +1,11 @@
 ﻿using Bibliotech.Model.Entities;
 using Bibliotech.UserControls.CustomDialog;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Bibliotech.Model.DAO;
 using Bibliotech.UserControls;
 using Bibliotech.Services;
-using Bibliotech.View.Books;
+using System.Threading.Tasks;
 
 namespace Bibliotech.View.Books
 {
@@ -45,19 +34,16 @@ namespace Bibliotech.View.Books
             }
             
            EditBook();
-
         } 
-        
         private void EditBook()
         {
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
-
-            tfBarCode.Text = ($" SME-VGP- {Book.IdBook}");
+            tfBarCode.Text = string.Format(String.Format($"{"SME-VGP-"}{0:D8}{Book.IdBook}"));
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
-            tfAuthor.Text = Book.Author.Name;
+           // tfAuthor.Text = Book.Author.Name;
             tfGender.Text = Book.Gender;
             tfEdition.Text = Book.Edition;
             tfNumberPages.Text = Book.Pages.ToString();
@@ -65,13 +51,6 @@ namespace Bibliotech.View.Books
             tfLanguage.Text = Book.Language;
             tfVolume.Text = Book.Volume;
             tfColletion.Text = Book.Collection;
-
-        }
-        private async Task<bool> CompareBook(List<Book> actually, List<Book> insert)
-        {
-            var emComum = actually.Intersect(insert).ToList();
-            if (emComum.Count() > 0) return true;
-            else return false;
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -99,10 +78,10 @@ namespace Bibliotech.View.Books
             Book.YearPublication = (string.IsNullOrWhiteSpace(tfYear.Text) ? 0 : Convert.ToInt32(tfYear.Text));
             return true;
         }
-
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {
-            List<Book> actually = new List<Book>();
+            loading.Awaiting = true;
+            btnSave.IsEnabled = false;
 
             if (!VerifyFields()) return;
             Book.Title = tfTitle.Text;
@@ -114,16 +93,7 @@ namespace Bibliotech.View.Books
             Book.Language = tfLanguage.Text;
             Book.Volume = tfVolume.Text;
             Book.Collection = tfColletion.Text;
-            /*
-            actually.Add(Book);
-            bool test = await CompareBook(actually, await DAOBook.GetBook());
-            if (await CompareBook(actually, await DAOBook.GetBook()))
-            {
-                ShowMessage(" ", "Livro já inserido", TypeDialog.Error);
-                return;
-            }
-            */
-            loading.Awaiting = true;
+            
             if(Book.IdBook == -1)
             {
                 await DAOAuthor.InsertAuthor(Author);
@@ -132,12 +102,10 @@ namespace Bibliotech.View.Books
 
                 if (ShowQuestion(" ", "Livro inserido com sucesso! Deseja adicionar um exemplar?"))
                 {
-                    ExemplaryWindow exemplaryWindow = new ExemplaryWindow();
+                    ExemplaryWindow exemplaryWindow = new ExemplaryWindow(Book);
                     exemplaryWindow.ShowDialog();
                 }
                 else return;
-                
-
             }
             else
             {
@@ -146,9 +114,18 @@ namespace Bibliotech.View.Books
                 ShowMessage(" ", "Livro alterado com sucesso", TypeDialog.Success);
                 this.Close();
             }
+            loading.Awaiting = false;
+            btnSave.IsEnabled = true;
 
-
-
+        }
+        private void ShowExemplaries()
+        {
+            ExemplaryWindow exemplary = new ExemplaryWindow(Book);
+            exemplary.Show();
+        }
+        private void BtnExemplaryBook_Click(object sender, RoutedEventArgs e)
+        {
+            ShowExemplaries();
         }
     }
 }

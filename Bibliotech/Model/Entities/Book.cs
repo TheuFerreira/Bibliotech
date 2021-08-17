@@ -43,7 +43,7 @@ namespace Bibliotech.Model.Entities
             Collection = collection;
             Status = Status.Active;
         }
-
+        /*
         public override string ToString()
         {
             string authors = string.Empty;
@@ -59,6 +59,6 @@ namespace Bibliotech.Model.Entities
 
             return authors;
         }
-
+        */
     }
 }
