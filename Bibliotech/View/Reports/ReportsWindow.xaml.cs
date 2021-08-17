@@ -27,6 +27,15 @@ namespace Bibliotech.View.Reports
         private readonly DAOLending daoLending;
         private readonly DAOLector daoLector;
 
+        private async void SetYearsToComboBoxYear()
+        {
+            List<int> years = await daoLending.GetYears();
+            cbYear.ItemsSource = years;
+
+            year = DateTime.Now.Year;
+            cbYear.SelectedItem = year;
+        }
+
         public ReportsWindow()
         {
             InitializeComponent();
@@ -50,11 +59,7 @@ namespace Bibliotech.View.Reports
             month = DateTime.Now.Month;
             cbMonth.SelectedItem = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month).ToUpper();
 
-            List<int> years = new List<int>() { 2020, 2021 };
-            cbYear.ItemsSource = years;
-
-            year = DateTime.Now.Year;
-            cbYear.SelectedItem = year;
+            SetYearsToComboBoxYear();
 
             dpStartDate.SelectedDate = DateTime.Now;
             dpEndDate.SelectedDate = DateTime.Now;
@@ -110,6 +115,7 @@ namespace Bibliotech.View.Reports
                     dpDate.Visibility = Visibility.Visible;
                     break;
                 case Period.Mount:
+                    cbYear.Visibility = Visibility.Visible;
                     cbMonth.Visibility = Visibility.Visible;
                     break;
                 case Period.Year:
@@ -150,11 +156,14 @@ namespace Bibliotech.View.Reports
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         case Period.Mount:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
                             selectedItem = cbMonth.SelectedItem.ToString();
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lendings = await daoLending.SearchLendingsByMonth(month, typeLending);
+                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending);
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         case Period.Year:
@@ -182,11 +191,14 @@ namespace Bibliotech.View.Reports
                             lectorDataGrid.ItemsSource = await daoLector.ReportSearchByDay(selectedDate.Value);
                             break;
                         case Period.Mount:
+                            selectedItem = cbYear.SelectedItem.ToString();
+                            year = int.Parse(selectedItem);
+
                             selectedItem = cbMonth.SelectedItem.ToString();
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByMonth(month);
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByMonth(year, month);
                             break;
                         case Period.Year:
                             selectedItem = cbYear.SelectedItem.ToString();

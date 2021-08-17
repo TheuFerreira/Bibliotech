@@ -150,7 +150,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByMonth(int month, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending)
         {
             try
             {
@@ -158,11 +158,12 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_SQL_LENDING +
-                    "Where MONTH(l.loan_date) = ? " +
+                    "WHERE YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     ";";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
 
                 AddTypeLending(command, typeLending);

@@ -189,7 +189,7 @@
             <uc:CustomComboBox
                 x:Name="cbMonth"
                 Title="MÊS:"
-                Margin="200,0,0,0"
+                Margin="500,0,0,0"
                 HorizontalAlignment="Left"
                 Width="250"/>
 

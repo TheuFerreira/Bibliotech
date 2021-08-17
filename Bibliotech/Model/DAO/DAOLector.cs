@@ -14,9 +14,17 @@ namespace Bibliotech.Model.DAO
             "FROM lector AS l " +
             "";
 
-        private const string BASE_REPORT_SQL_LEFT_JOIN = "" +
+        private const string BASE_REPORT_SQL_LEFT_JOIN_PICKUP = "" +
             "LEFT JOIN( " +
                 "SELECT lc.id_lector, COUNT(le.id_exemplary) AS pickup " +
+                "FROM lending_has_exemplary AS le " +
+                "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
+                "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
+            "";
+
+        private const string BASE_REPORT_SQL_LEFT_JOIN_RETURNED = "" +
+            "LEFT JOIN( " +
+                "SELECT lc.id_lector, COUNT(le.id_exemplary) AS returned " +
                 "FROM lending_has_exemplary AS le " +
                 "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
                 "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
@@ -286,10 +294,10 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
                         "WHERE l.return_date IS NULL AND DATE(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
@@ -310,7 +318,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByMonth(int month)
+        public async Task<DataView> ReportSearchByMonth(int year, int month)
         {
             try
             {
@@ -318,16 +326,18 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
-                    BASE_REPORT_SQL_LEFT_JOIN +
-                        "WHERE l.return_date IS NULL AND MONTH(l.loan_date) = ? " +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
+                        "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
-                    BASE_REPORT_SQL_LEFT_JOIN +
-                        "WHERE l.return_date IS NOT NULL AND MONTH(l.loan_date) = ? " +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
+                        "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
 
                 return await ReportReader(command);
@@ -350,10 +360,10 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
                         "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
@@ -382,10 +392,10 @@ namespace Bibliotech.Model.DAO
 
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
                         "WHERE l.return_date IS NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
-                    BASE_REPORT_SQL_LEFT_JOIN +
+                    BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
