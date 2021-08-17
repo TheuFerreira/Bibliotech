@@ -93,7 +93,6 @@
                 HorizontalAlignment="Left"
                 Width="80"
                 Title="USUÁRIOS:"
-                Text="80"
                 Placeholder=""
                 IsEnabled="False"/>
         </Grid>

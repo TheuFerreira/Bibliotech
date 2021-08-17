@@ -10,7 +10,19 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOBranch : Connection
     {
-        public async Task<bool> Insert(Branch branch)
+        public async Task<bool> Save(Branch branch)
+        {
+            if (branch.IdBranch == -1)
+            {
+                return await Insert(branch);
+            }
+            else
+            {
+                return await Update(branch);
+            }
+        }
+
+        private async Task<bool> Insert(Branch branch)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -58,7 +70,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<bool> Update(Branch branch)
+        private async Task<bool> Update(Branch branch)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -131,14 +143,21 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<int> UsersCount()
+        public async Task<int> UsersCount(Branch branch)
         {
             try
             {
                 await Connect();
-                string sql = "select count(id_user) from users where status = 1;";
+                string sql = "" +
+                    "select count(id_user) " +
+                    "from users AS u " +
+                    "inner join branch as b on b.id_branch = u.id_branch " +
+                    "where u.status = 1 " +
+                        "AND b.id_branch = ?;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, SqlConnection);
+                cmd.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
+
                 object result = await cmd.ExecuteScalarAsync();
 
                 return Convert.ToInt32(result.ToString());
