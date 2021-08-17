@@ -22,28 +22,47 @@ namespace Bibliotech.View.Lendings
     /// </summary>
     public partial class LendingWindow : Window
     {
-        public Lector Lector { get; set; } = new Lector();
-        public Book book { get; set; } = new Book();
-        public Exemplary exemplary { get; set; } = new Exemplary();
-        public static bool isLector { get; set; }
+        private Lector lector { get; set; } = new Lector();
+
+        private Book book { get; set; } = new Book();
+
+        private Exemplary exemplary { get; set; } = new Exemplary();
 
         List<Book> books = new List<Book>();
         
-
         public LendingWindow()
         {
             InitializeComponent();
-            isLector = false;
+            book = null;
+        }
+
+        private void UpdateGrid()
+        {
+            if (book == null)
+            {
+                return;
+            }
+            if (exemplary.IdIndex <= 0)
+            {
+                return;
+            }
+            book.idExemplary = exemplary.IdIndex;
+            books.Add(book);
+            dataGrid.ItemsSource = null;
+            dataGrid.ItemsSource = books;
         }
 
         private void btnSearchLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow searchLector = new SearchLectorWindow();
             searchLector.ShowDialog();
-            Lector = searchLector.lector;
-
-            tfLectorRegister.Text = Lector.IdLector.ToString();
-            tfNameLector.Text = Lector.Name.ToString();
+            lector = searchLector.lector;
+            if(lector.Name == null)
+            {
+                return;
+            }
+            tfLectorRegister.Text = lector.IdLector.ToString();
+            tfNameLector.Text = lector.Name.ToString();
         }
 
         private void btnSearchBook_Click(object sender, RoutedEventArgs e)
@@ -55,14 +74,6 @@ namespace Bibliotech.View.Lendings
             UpdateGrid();
         }
 
-        private void UpdateGrid()
-        {
-            if (book != null)
-            {
-               //book.idExemplary = exemplary.IdIndex;
-                books.Add(book);
-                dataGrid.ItemsSource = books;
-            }
-        }
+
     }
 }

@@ -273,10 +273,8 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-
         public async Task<DataTable> FillSearchDataGrid(string query, int idBranch)
         {
-            // MySqlTransaction transaction = await  SqlConnection.BeginTransactionAsync();
             await Connect();
 
             string strSql = "select exe.id_index, bk.title, bk.subtitle, group_concat(distinct name separator ', ') as autores, bk.publishing_company, bk.id_book, exe.id_exemplary " +
@@ -310,13 +308,6 @@ namespace Bibliotech.Model.DAO
             {
                 await Disconnect();
             }
-
-
-
-
-
-
-            return null;
         }
             
 

@@ -24,7 +24,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Placeholder="PROCURAR LIVRO"
-            Width="350"/>
+            Width="350" Click="searchField_Click"/>
 
         <DataGrid 
             x:Name="dataGrid"

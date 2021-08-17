@@ -79,11 +79,15 @@ namespace Bibliotech.View.Books
                 book.Author.Name = row_selected["autores"].ToString();
                 book.PublishingCompany = row_selected["publishing_company"].ToString();
 
-                exemplary.IdIndex = Convert.ToInt32(row_selected["id_exemplary"].ToString());
-                exemplary.IdExemplary = Convert.ToInt32(row_selected["id_index"].ToString());
+                exemplary.IdIndex = Convert.ToInt32(row_selected["id_index"].ToString());
+                exemplary.IdExemplary = Convert.ToInt32(row_selected["id_exemplary"].ToString());
             }
         
         }
 
+        private void searchField_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateGrid();
+        }
     }
 }

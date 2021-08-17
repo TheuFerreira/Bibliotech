@@ -31,7 +31,7 @@ namespace Bibliotech.View.Lectors
 
         Address address = new Address();
 
-        Branch branch = new Branch();
+       // Branch branch = new Branch();
         //trocar para o krai la de session
         private int idBranch = Session.Instance.User.Branch.IdBranch;
 
@@ -81,33 +81,6 @@ namespace Bibliotech.View.Lectors
             Close();
         }
 
-        private void SplitAddress(string temp)
-        {
-            string[] result = temp.Split(',');
-
-            address.City = result[0];
-            address.City = address.City.Trim();
-
-            address.Neighborhood = result[1];
-            address.Neighborhood = address.Neighborhood.Trim();
-
-            address.Street = result[2];
-            address.Street = address.Street.Trim();
-
-            address.Number = result[3];
-            address.Number = address.Number.Trim();
-
-            try
-            {
-                address.Complement = result[4];
-                address.Complement = address.Complement.Trim();
-            }
-            catch (System.IndexOutOfRangeException)
-            {
-            }
-
-        }
-
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataGrid gd = (DataGrid)sender;
@@ -115,7 +88,7 @@ namespace Bibliotech.View.Lectors
 
             if (row_selected != null)
             {
-                branch.IdBranch = Convert.ToInt32(row_selected["id_branch"].ToString());
+               // branch.IdBranch = Convert.ToInt32(row_selected["id_branch"].ToString());
 
                 lector.IdLector = Convert.ToInt32(row_selected["id_lector"].ToString());
 
@@ -139,10 +112,8 @@ namespace Bibliotech.View.Lectors
 
                 address.IdAddress = Convert.ToInt32(row_selected["id_address"].ToString());
                 string temp = row_selected["endereco"].ToString();
-                SplitAddress(temp);
+
             }
         }
-
-        
     }
 }

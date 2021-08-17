@@ -25,7 +25,9 @@ namespace Bibliotech.Model.Entities
 
         public override string ToString()
         {
-            return Name.ToString();
+            if (Name!=null) 
+                return Name.ToString();
+            return "";
         }
     }
 }
