@@ -42,6 +42,7 @@ namespace Bibliotech.View.Schools
             Title = tbInfo.Text;
 
             this.branch = branch;
+
             FillFieldWithBranchInfo();
         }
 
