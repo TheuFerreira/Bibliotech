@@ -65,7 +65,19 @@
                     Title="AUTOR(ES):*"
                     Placeholder="AUTOR"
                     HorizontalAlignment="Left" 
-                    Width="298"/>
+                    IsEnabled="False"
+                    Width="320"/>
+
+                <uc:Button
+                    Margin="0,0,20,0"
+                    Height="30"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="center"
+                    Text="PESQUISAR"
+                    Width="150"
+                    CornerRadius="15"
+                    Source="/Bibliotech;component/Resources/img_zoom.png"
+                    MarginImage="7,5"/>
 
                 <uc:TextField 
                     x:Name="tfGender"
@@ -75,7 +87,7 @@
                     Placeholder="GÊNERO"
                     HorizontalAlignment="Center"
                     Width="153" 
-                    Margin="310,0,351,0"/>
+                    Margin="310,0,0,0"/>
 
                 <uc:TextField 
                     x:Name="tfEdition"
@@ -83,18 +95,10 @@
                     VerticalAlignment="Top"
                     Title="EDIÇÃO:"
                     Placeholder="EDIÇÃO"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Right"
                     Width="167" 
-                    Margin="478,0,169,0"/>
-
-                <uc:TextField 
-                    x:Name="tfNumberPages"
-                    VerticalAlignment="Top"
-                    MaxLength="5"
-                    FieldType="Number"
-                    Title="Nº DE PÁGINAS:"
-                    Placeholder="555" 
-                    HorizontalAlignment="Right" Width="150" />
+                    Margin="0,0,0,0"/>
+                
             </Grid>
 
             <Grid
@@ -147,6 +151,16 @@
                 Margin="10,190,10,10">
 
                 <uc:TextField 
+                    x:Name="tfNumberPages"
+                    VerticalAlignment="Top"
+                    MaxLength="5"
+                    FieldType="Number"
+                    Title="Nº DE PÁGINAS:"
+                    Placeholder="555" 
+                    HorizontalAlignment="Left" 
+                    Width="150" />
+                
+                <uc:TextField 
                     x:Name="tfBarCode"
                     MaxLength="50"
                     IsEnabled="False"
@@ -154,7 +168,8 @@
                     Title="CÓDIGO DE BARRAS:*"
                     Text="005050"
                     HorizontalAlignment="Left" 
-                    Width="285"/>
+                    Width="285"
+                    Margin="170,0,0,0"/>
 
             </Grid>
 
