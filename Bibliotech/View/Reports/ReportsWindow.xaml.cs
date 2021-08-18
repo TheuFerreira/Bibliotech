@@ -81,12 +81,12 @@ namespace Bibliotech.View.Reports
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            tabControl.SelectionChanged += TabControl_SelectionChanged;
+
             SetPeriodsToComboBoxPeriod();
             SetMonthsToComboBoxMonth();
             await SetYearsToComboBoxYear();
             SetTypeLendingsToComboBoxTypeLending();
-
-            tabControl.SelectionChanged += TabControl_SelectionChanged;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -101,13 +101,9 @@ namespace Bibliotech.View.Reports
                 case Tabs.Lectors:
                     gridPeriod.Visibility = Visibility.Visible;
                     break;
-                case Tabs.Books:
-                    gridPeriod.Visibility = Visibility.Collapsed;
-                    break;
                 default:
                     break;
             }
-
         }
 
         private void CbPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -231,8 +227,6 @@ namespace Bibliotech.View.Reports
                         default:
                             break;
                     }
-                    break;
-                case Tabs.Books:
                     break;
                 default:
                     break;
