@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -11,15 +12,28 @@ namespace Bibliotech.Model.DAO
     {
         public async Task InsertBook(Book book)
         {
+            List<int> idAuthors = new List<int>();
+            
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
+                string insertAuthor = "insert into author(name, status) values (?, 1); select last_insert_id(); ";
+                
+                for(int i = 0; i < book.Authors.Count; i++)
+                {
+                    cmd.CommandText = insertAuthor;
+                    cmd.Parameters.Clear();
+                    string name = book.Authors[i].Name;
+                    cmd.Parameters.Add("?", DbType.String).Value = name;
+                    var idAuthor = await cmd.ExecuteScalarAsync();
+                    idAuthors.Add(Convert.ToInt32(idAuthor));
+                }
 
                 string insertBook = "insert into book(title, subtitle, publishing_company, gender, " +
-                    "edition, pages, year_publication, language, volume, collection, status ) values  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  1); ";
+                    "edition, pages, year_publication, language, volume, collection, status ) values  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  1); select last_insert_id();";
 
                 cmd.Parameters.Clear();
                 cmd.CommandText = insertBook;
@@ -28,7 +42,7 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.String).Value = book.PublishingCompany;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Gender;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Edition;
-                if(book.Pages == 0)
+                if (book.Pages == 0)
                 {
                     cmd.Parameters.Add("?", MySqlDbType.Null);
                 }
@@ -36,7 +50,6 @@ namespace Bibliotech.Model.DAO
                 {
                     cmd.Parameters.Add("?", DbType.Int32).Value = book.Pages;
                 }
-
                 if (book.YearPublication == 0)
                 {
                     cmd.Parameters.Add("?", MySqlDbType.Null);
@@ -45,12 +58,24 @@ namespace Bibliotech.Model.DAO
                 {
                     cmd.Parameters.Add("?", DbType.Int32).Value = book.YearPublication;
                 }
-
                 cmd.Parameters.Add("?", DbType.String).Value = book.Language;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Volume;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Collection;
 
-                await cmd.ExecuteNonQueryAsync();
+                var result = await cmd.ExecuteScalarAsync();
+                int idBook = Convert.ToInt32(result);
+                
+                for (int i = 0; i < idAuthors.Count; i++)
+                {
+                    cmd.Parameters.Clear();
+                    string insertBookHasAuthor = "insert book_has_author (id_book, id_author) values (?, ?) ; ";
+                    cmd.CommandText = insertBookHasAuthor;
+                    int idAuthor = idAuthors[i];
+                    cmd.Parameters.Add("?", DbType.Int32).Value = idBook;
+                    cmd.Parameters.Add("?", DbType.Int32).Value = idAuthor;
+                    await cmd.ExecuteNonQueryAsync();
+                }
+                
                 await transaction.CommitAsync();
 
             }
@@ -92,6 +117,7 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
 
                 await cmd.ExecuteNonQueryAsync();
+                
                 await transaction.CommitAsync();
 
             }
@@ -105,51 +131,21 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        public async Task BookHasAuthor()
-        {
-            await Connect();
-            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
-
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
-
-                string insertBookHasAuthor = "insert into book_has_author (id_book, id_author) " +
-                    " select b.id_book, a.id_author from book as b, author as a " +
-                    "order by id_book desc, id_author desc limit 1;"; 
-
-                cmd.Parameters.Clear();
-                cmd.CommandText = insertBookHasAuthor;
-
-                await cmd.ExecuteNonQueryAsync();
-                await transaction.CommitAsync();
-
-            }
-            catch (MySqlException ex)
-            {
-                await transaction.RollbackAsync();
-                throw ex;
-            }
-            finally
-            {
-                await Disconnect();
-            }
-        }
-        
-
+       
         public async Task<List<Book>> GetBook(string text)
         {
             await Connect();
             try
             {
                 Book book = new Book();
+                book.Authors = new List<Author>();
 
-                string selectBook = "select b.id_book, a.id_author, b.title, b.subtitle, a.name, b.publishing_company, b.gender, " +
-                    "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection " +
-                    "from book_has_author as bookauthor " +
+                string selectBook = "select b.id_book, b.title, b.subtitle, b.publishing_company, b.gender, " +
+                    "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection from book_has_author as bookauthor " +
                     "inner join author as a on a.id_author = bookauthor.id_author " +
                     "inner join book as b on b.id_book = bookauthor.id_book " +
-                    "where b.title like '%" + text + "%' and b.status = 1 and a.status = 1; " ;
+                    "where b.title like '%" + text + "%' and b.status = 1 and a.status = 1 " +
+                    "group by bookauthor.id_book; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectBook, SqlConnection);
                 List<Book> books = new List<Book>();
@@ -157,34 +153,26 @@ namespace Bibliotech.Model.DAO
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while(await reader.ReadAsync())
                 {
-                    int idBook  = await reader.GetFieldValueAsync<int>(0);
-                    int idAuthor = await reader.GetFieldValueAsync<int>(1);
-                    string title = await reader.GetFieldValueAsync<string>(2);
-                    string subtitle = await reader.GetFieldValueAsync<string>(3);
-                    string nameAuthor = await reader.GetFieldValueAsync<string>(4);
-                    string publishingCompany = await reader.GetFieldValueAsync<string>(5);
-                    string gender = await reader.GetFieldValueAsync<string>(6);
-                    string edition = await reader.GetFieldValueAsync<string>(7);
+                    int idBook = await reader.GetFieldValueAsync<int>(0);
+                    string title = await reader.GetFieldValueAsync<string>(1);
+                    string subtitle = await reader.GetFieldValueAsync<string>(2);
+                    string publishingCompany = await reader.GetFieldValueAsync<string>(3);
+                    string gender = await reader.GetFieldValueAsync<string>(4);
+                    string edition = await reader.GetFieldValueAsync<string>(5);
                     int? pages = null;
-                    if (await reader.IsDBNullAsync(8) == false)
+                    if (await reader.IsDBNullAsync(6) == false)
                     {
-                        pages = await reader.GetFieldValueAsync<int>(8);
+                        pages = await reader.GetFieldValueAsync<int>(6);
                     }
                     int? yearPublication = null;
-                    if (await reader.IsDBNullAsync(9) == false)
+                    if (await reader.IsDBNullAsync(7) == false)
                     {
-                        yearPublication = await reader.GetFieldValueAsync<int>(9);
+                        yearPublication = await reader.GetFieldValueAsync<int>(7);
                     }
-                    string language = await reader.GetFieldValueAsync<string>(10);
-                    string volume = await reader.GetFieldValueAsync<string>(11);
-                    string collection = await reader.GetFieldValueAsync<string>(12);
-
-                    Author author = new Author()
-                    {
-                        IdAuthor = idAuthor,
-                        Name = nameAuthor,
-                    };
-
+                    string language = await reader.GetFieldValueAsync<string>(8);
+                    string volume = await reader.GetFieldValueAsync<string>(9);
+                    string collection = await reader.GetFieldValueAsync<string>(10);
+                    
                     book = new Book()
                     {
                         IdBook = idBook,
@@ -198,7 +186,6 @@ namespace Bibliotech.Model.DAO
                         Language = language,
                         Volume = volume,
                         Collection = collection,
-                        
                     };
 
                     books.Add(book);

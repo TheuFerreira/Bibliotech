@@ -11,30 +11,47 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOAuthor : Connection
     {
-        public async Task InsertAuthor(Author author)
+        public async Task<List<Author>> GetAuthor(int idBook)
         {
-            await Connect();
-            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
             try
             {
-                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
-                string insertAuthor = "insert into author(name, status) values (?, 1); ";
+                await Connect();
+                string selectAuthor = "select a.id_author, a.name " +
+                    "from book_has_author as bookauthor " +
+                    "inner join author as a on a.id_author = bookauthor.id_author " +
+                    "inner join book as b on b.id_book = bookauthor.id_bookstatus = 1 " +
+                    "and bookauthor.id_book = ? ; ";
+
+                MySqlCommand cmd = new MySqlCommand(selectAuthor, SqlConnection);
+                cmd.CommandText = selectAuthor;
                 cmd.Parameters.Clear();
-                cmd.CommandText = insertAuthor;
-                cmd.Parameters.Add("?", DbType.String).Value = author.Name;
+                cmd.Parameters.Add("?", DbType.Int32).Value = idBook;
 
-                await cmd.ExecuteNonQueryAsync();
-                await transaction.CommitAsync();
+                List<Author> authors = new List<Author>();
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int idAuthor = await reader.GetFieldValueAsync<int>(0);
+                    string nameAuthor = await reader.GetFieldValueAsync<string>(1);
 
+                    Author author = new Author()
+                    {
+                        IdAuthor = idAuthor,
+                        Name = nameAuthor,
+                    };
+
+                    authors.Add(author);
+                }
+
+                return authors;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
-                await transaction.RollbackAsync();
                 throw ex;
             }
             finally
             {
-                await Disconnect ();
+                await Disconnect();
             }
 
         }
