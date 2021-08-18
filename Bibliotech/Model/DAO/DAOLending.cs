@@ -1,4 +1,5 @@
 ﻿using Bibliotech.Model.Entities;
+using Bibliotech.Singletons;
 using Bibliotech.View.Reports.CustomEnums;
 using MySqlConnector;
 using System;
@@ -238,19 +239,37 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataTable> FillDataGrid()
+        public async Task<DataTable> Insert(Book book, Exemplary exemplary, Lector lector, DateTime begin, DateTime end)
         {
             await Connect();
 
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            int idUser = Session.Instance.User.IdUser;
+
+            string strSql = "insert into lending (id_exemplary, id_lector, id_user, loan_date, expected_date) " +
+                                "values(@id_exemplary, @id_lector, @id_user, @loan_date, @expected_date);";
+
             try
             {
-                string strSql = "";
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+                cmd.Parameters.AddWithValue("@id_exemplary", exemplary.IdExemplary);
+                cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
+                cmd.Parameters.AddWithValue("@id_user", idUser);
+                cmd.Parameters.AddWithValue("@loan_date", begin);
+                cmd.Parameters.AddWithValue("@expected_date", end);
 
+                _ = await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
             }
             catch (System.Exception)
             {
-
+                await transaction.RollbackAsync();
                 throw;
+            }
+            finally
+            {
+                await Disconnect();
             }
 
 

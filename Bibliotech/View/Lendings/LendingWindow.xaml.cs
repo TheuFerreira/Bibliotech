@@ -1,4 +1,5 @@
-﻿using Bibliotech.Model.Entities;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using Bibliotech.View.Books;
 using Bibliotech.View.Lectors;
 using System;
@@ -28,7 +29,11 @@ namespace Bibliotech.View.Lendings
 
         private Exemplary exemplary { get; set; } = new Exemplary();
 
+        DAOLending daoLending = new DAOLending();
+
         List<Book> books = new List<Book>();
+
+        List<Exemplary> exemplaries = new List<Exemplary>();
         
         public LendingWindow()
         {
@@ -48,8 +53,38 @@ namespace Bibliotech.View.Lendings
             }
             book.idExemplary = exemplary.IdIndex;
             books.Add(book);
+            exemplaries.Add(exemplary);
             dataGrid.ItemsSource = null;
             dataGrid.ItemsSource = books;
+        }
+
+        private bool ValidateFields()
+        {
+            if(string.IsNullOrEmpty(tfLectorRegister.Text))
+            {
+                return false;
+            }
+
+            if(string.IsNullOrEmpty(tfNameLector.Text))
+            {
+                return false;
+            }
+
+            if(dataGrid.Items == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void OnOffControls(bool validate)
+        {
+            loading.Awaiting = !validate;
+            addButton.IsEnabled = validate;
+            dataGrid.IsEnabled = validate;
+            btnSearchBook.IsEnabled = validate;
+            btnSearchLector.IsEnabled = validate;
         }
 
         private void btnSearchLector_Click(object sender, RoutedEventArgs e)
@@ -74,6 +109,23 @@ namespace Bibliotech.View.Lendings
             UpdateGrid();
         }
 
+        private async void addButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(!ValidateFields())
+            {
+                return;
+            }
 
+            DateTime begin = DateTime.Parse(dtpBegin.date.Text);
+            DateTime end = DateTime.Parse(dtpEnd.date.Text);
+
+            OnOffControls(false);
+            for (int i = 0; i < books.Count; i++)
+            {
+                 await daoLending.Insert(books[i], exemplaries[i], lector, begin, end);    
+            }
+            dataGrid.ItemsSource = null;
+            OnOffControls(true);
+        }
     }
 }

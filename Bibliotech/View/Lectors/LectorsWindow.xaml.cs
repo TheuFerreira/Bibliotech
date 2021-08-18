@@ -56,8 +56,6 @@ namespace Bibliotech.View.Lectors
             typeSearch = TypeSearch.Current;
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
 
-            UpdateGrid();
-
         }
 
         private void DisableButtons()
