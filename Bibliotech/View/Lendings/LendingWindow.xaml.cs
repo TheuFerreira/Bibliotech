@@ -127,5 +127,10 @@ namespace Bibliotech.View.Lendings
             dataGrid.ItemsSource = null;
             OnOffControls(true);
         }
+
+        private void GridCellDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

@@ -97,6 +97,31 @@
                 <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Author}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=PublishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="" Width="50">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Grid
+                                            MouseLeftButtonDown="GridCellDelete_MouseLeftButtonDown">
+                                            <Image 
+                                                Width="20"
+                                                Height="20"
+                                                Source="/Bibliotech;component/Resources/img_delete.png"/>
+                                        </Grid>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
 
