@@ -22,5 +22,12 @@ namespace Bibliotech.Model.Entities
             Name = name;
             Status = Status.Active;
         }
+
+        public override string ToString()
+        {
+            if (Name!=null) 
+                return Name.ToString();
+            return "";
+        }
     }
 }

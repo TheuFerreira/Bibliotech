@@ -17,6 +17,7 @@
                     <Setter.Value>
                         <ControlTemplate>
                             <Border
+                                x:Name="bdBack"
                                 CornerRadius="10"
                                 Background="{StaticResource BackgroundSolidColor}">
 
@@ -50,6 +51,10 @@
                                     <Setter Property="Cursor" Value="Hand"/>
                                 </Trigger>
 
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                                
                                 <DataTrigger Binding="{Binding ElementName=uc, Path=HasBorder}" Value="False">
                                     <Setter TargetName="bd" Property="Background" Value="Transparent"/>
                                     <Setter TargetName="tb" Property="Foreground" Value="{StaticResource ButtonTextSolidColor}"/>

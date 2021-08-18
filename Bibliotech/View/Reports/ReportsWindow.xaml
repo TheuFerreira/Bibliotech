@@ -10,6 +10,7 @@
         Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Relatórios" Height="720" Width="1280">
+
     <Grid>
         <TabControl 
             x:Name="tabControl">
@@ -73,29 +74,29 @@
             <TabItem Header="LEITORES">
                 <Grid>
                     <Grid 
-                    Margin="10"
-                    VerticalAlignment="Top">
-
-                        <Grid 
                         Margin="10"
                         VerticalAlignment="Top">
 
+                        <Grid 
+                            Margin="10"
+                            VerticalAlignment="Top">
+
                             <uc:Button
-                            Text="EXPORTAR"
-                            MarginImage="8,5,5,5"
-                            Source="/Bibliotech;component/Resources/img_export.png"
-                            Width="200"
-                            Height="30"
-                            CornerRadius="8"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"/>
+                                Text="EXPORTAR"
+                                MarginImage="8,5,5,5"
+                                Source="/Bibliotech;component/Resources/img_export.png"
+                                Width="200"
+                                Height="30"
+                                CornerRadius="8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"/>
 
                         </Grid>
 
                         <Grid 
-                        Margin="10,80,10,10"
-                        VerticalAlignment="Top"
-                        Height="42">
+                            Margin="10,80,10,10"
+                            VerticalAlignment="Top"
+                            Height="42">
 
                         </Grid>
 
@@ -118,45 +119,47 @@
             <TabItem Header="LIVROS">
                 <Grid>
                     <Grid 
-                    Margin="10"
-                    VerticalAlignment="Top">
+                        Margin="10"
+                        VerticalAlignment="Top">
 
                         <Grid 
-                        Margin="10"
-                        VerticalAlignment="Top"
-                        Height="45">
+                            Margin="10"
+                            VerticalAlignment="Top">
 
                             <uc:Button
-                            Text="EXPORTAR"
-                            MarginImage="8,5,5,5"
-                            Source="/Bibliotech;component/Resources/img_export.png"
-                            Width="200"
-                            Height="30"
-                            CornerRadius="8"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"/>
+                                Text="EXPORTAR"
+                                MarginImage="8,5,5,5"
+                                Source="/Bibliotech;component/Resources/img_export.png"
+                                Width="200"
+                                Height="30"
+                                CornerRadius="8"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"/>
 
                         </Grid>
 
                         <Grid 
-                        Margin="10,80,10,10"
-                        VerticalAlignment="Top"
-                        Height="42">
+                            Margin="10,80,10,10"
+                            VerticalAlignment="Top">
 
                             <uc:CustomComboBox 
-                            Title="TIPO:"
-                            Width="150"
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top"/>
+                                x:Name="cbBookType"
+                                Title="TIPO:"
+                                Width="150"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top"/>
 
                         </Grid>
 
                     </Grid>
 
                     <DataGrid
-                    Margin="0,170,0,0">
+                        x:Name="bookDataGrid"
+                        Margin="0,170,0,0">
 
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=title, StringFormat=D6}"/>
+                            <DataGridTextColumn Header="EMPRÉSTIMOS TOTAIS" Width="250" Binding="{Binding Path=total, StringFormat=D3}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -217,6 +220,7 @@
         </Grid>
 
         <uc:Button
+            x:Name="btnSearch"
             Text="PESQUISAR"
             Width="250"
             Margin="223,127,0,0"

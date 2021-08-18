@@ -93,7 +93,6 @@ namespace Bibliotech.View.Lectors
                 typeSearch = TypeSearch.Current;
                 dataGrid.Columns[4].Visibility = Visibility.Collapsed;
             }
-            MessageBox.Show(typeSearch.ToString());
             DisableButtons();
             DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch , typeSearch);
             if (dataTable != null)

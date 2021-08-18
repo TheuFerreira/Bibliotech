@@ -169,7 +169,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            MySqlTransaction transaction = SqlConnection.BeginTransaction();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             string strSql = "update lector set status = " + ((int)Status.Inactive) + " where id_lector = @idLector;";
 

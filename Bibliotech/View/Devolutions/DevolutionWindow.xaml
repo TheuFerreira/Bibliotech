@@ -94,7 +94,13 @@
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_lost.png"
                 Text="EXTRAVIOUR"/>
-            
+
+            <uc:ButtonImage
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Source="/Bibliotech;component/Resources/img_ok.png"
+                Text="ESTENDER PRAZO"/>
+
             <uc:ButtonImage
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,24 +18,13 @@ namespace Bibliotech.View.Reports
     public partial class ReportsWindow : Window
     {
         private Tabs tabs;
-
         private Period period;
-        private int month;
-        private int year;
-
         private TypeLending typeLending;
+        private TypeBook typeBook;
 
         private readonly DAOLending daoLending;
         private readonly DAOLector daoLector;
-
-        private async void SetYearsToComboBoxYear()
-        {
-            List<int> years = await daoLending.GetYears();
-            cbYear.ItemsSource = years;
-
-            year = DateTime.Now.Year;
-            cbYear.SelectedItem = year;
-        }
+        private readonly DAOBook daoBook;
 
         public ReportsWindow()
         {
@@ -42,28 +32,55 @@ namespace Bibliotech.View.Reports
 
             daoLending = new DAOLending();
             daoLector = new DAOLector();
+            daoBook = new DAOBook();
 
             tabs = Tabs.Lendings;
 
+            dpDate.SelectedDate = DateTime.Now;
+
+            dpStartDate.SelectedDate = DateTime.Now;
+            dpEndDate.SelectedDate = DateTime.Now;
+
+            List<string> bookTypes = Enum.GetValues(typeof(TypeBook)).Cast<TypeBook>().Select(x => x.AsString(EnumFormat.Description)).ToList();
+            cbBookType.ItemsSource = bookTypes;
+
+            typeBook = TypeBook.Title;
+            cbBookType.SelectedItem = typeBook.AsString(EnumFormat.Description);
+        }
+
+        private void SetPeriodsToComboBoxPeriod()
+        {
             List<string> periodNames = Enum.GetValues(typeof(Period)).Cast<Period>().Select(x => x.AsString(EnumFormat.Description)).ToList();
             cbPeriod.ItemsSource = periodNames;
 
             period = Period.Day;
             cbPeriod.SelectedItem = period.AsString(EnumFormat.Description);
+        }
 
-            dpDate.SelectedDate = DateTime.Now;
-
+        private void SetMonthsToComboBoxMonth()
+        {
             List<string> monthName = Enumerable.Range(1, 12).Select(x => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(x).ToUpper()).ToList();
             cbMonth.ItemsSource = monthName;
 
-            month = DateTime.Now.Month;
+            int month = DateTime.Now.Month;
             cbMonth.SelectedItem = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month).ToUpper();
+        }
 
-            SetYearsToComboBoxYear();
+        private async Task SetYearsToComboBoxYear()
+        {
+            btnSearch.IsEnabled = false;
 
-            dpStartDate.SelectedDate = DateTime.Now;
-            dpEndDate.SelectedDate = DateTime.Now;
+            List<int> years = await daoLending.GetYears();
+            cbYear.ItemsSource = years;
 
+            int year = DateTime.Now.Year;
+            cbYear.SelectedItem = year;
+
+            btnSearch.IsEnabled = true;
+        }
+
+        private void SetTypeLendingsToComboBoxTypeLending()
+        {
             List<string> typeLendingNames = Enum.GetValues(typeof(TypeLending)).Cast<TypeLending>().Select(x => x.AsString(EnumFormat.Description)).ToList();
             lendingType.ItemsSource = typeLendingNames;
 
@@ -71,9 +88,14 @@ namespace Bibliotech.View.Reports
             lendingType.SelectedItem = typeLending.AsString(EnumFormat.Description);
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tabControl.SelectionChanged += TabControl_SelectionChanged;
+
+            SetPeriodsToComboBoxPeriod();
+            SetMonthsToComboBoxMonth();
+            await SetYearsToComboBoxYear();
+            SetTypeLendingsToComboBoxTypeLending();
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -94,7 +116,6 @@ namespace Bibliotech.View.Reports
                 default:
                     break;
             }
-
         }
 
         private void CbPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -137,10 +158,13 @@ namespace Bibliotech.View.Reports
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
+            btnSearch.IsEnabled = false;
             loading.Awaiting = true;
 
-            List<Lending> lendings = new List<Lending>();
-            string selectedItem = string.Empty;
+            List<Lending> lendings;
+            string selectedItem;
+            int month;
+            int year;
 
             switch (tabs)
             {
@@ -217,13 +241,29 @@ namespace Bibliotech.View.Reports
                     }
                     break;
                 case Tabs.Books:
+                    selectedItem = cbBookType.SelectedItem.ToString();
+                    typeBook = Enums.Parse<TypeBook>(selectedItem, true, EnumFormat.Description);
+
+                    switch (typeBook)
+                    {
+                        case TypeBook.Title:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByTitle();
+                            break;
+                        case TypeBook.PublishingCompany:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByPublishingCompany();
+                            break;
+                        case TypeBook.Authors:
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 default:
                     break;
             }
 
             loading.Awaiting = false;
+            btnSearch.IsEnabled = true;
         }
-
     }
 }

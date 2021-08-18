@@ -259,5 +259,137 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
+
+        public async Task<DataTable> FillSearchDataGrid(string query, int idBranch)
+        {
+            await Connect();
+
+            string strSql = "select exe.id_index, bk.title, bk.subtitle, group_concat(distinct name separator ', ') as autores, bk.publishing_company, bk.id_book, exe.id_exemplary " +
+                            "from book as bk " +
+                            "inner join book_has_author as bha on bha.id_book = bk.id_book " +
+                            "inner join author as aut on aut.id_author = bha.id_author " +
+                            "inner join exemplary as exe on exe.id_book = bk.id_book " +
+                            "where bk.title like '%" +query+ "%' and exe.status = 3 and exe.id_branch = " + idBranch +
+                            " group by bk.id_book, exe.id_index;";
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection);
+
+                _ = await cmd.ExecuteNonQueryAsync();
+
+                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable("book");
+
+                _ = adapter.Fill(dt);
+                return dt;
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+            
+
+        public async Task<DataView> ReportSearchByTitle()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT b.title, COUNT(l.id_lending) " +
+                    "FROM book AS b " +
+                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
+                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "GROUP BY b.id_book;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                DataTable dt = new DataTable();
+                _ = dt.Columns.Add("title", typeof(string));
+                _ = dt.Columns.Add("total", typeof(int));
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string title = await reader.GetFieldValueAsync<string>(0);
+                    int total = await reader.GetFieldValueAsync<int>(1);
+
+                    object[] values = new object[]
+                    {
+                        title,
+                        total,
+                    };
+
+                    _ = dt.Rows.Add(values);
+                }
+
+                return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByPublishingCompany()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT b.publishing_company, COUNT(l.id_lending) " +
+                    "FROM book AS b " +
+                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
+                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "GROUP BY b.publishing_company;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                DataTable dt = new DataTable();
+                _ = dt.Columns.Add("title", typeof(string));
+                _ = dt.Columns.Add("total", typeof(int));
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string title = await reader.GetFieldValueAsync<string>(0);
+                    int total = await reader.GetFieldValueAsync<int>(1);
+
+                    object[] values = new object[]
+                    {
+                        title,
+                        total,
+                    };
+
+                    _ = dt.Rows.Add(values);
+                }
+
+                return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
     }
 }
