@@ -14,8 +14,7 @@ namespace Bibliotech.Model.DAO
         private const string BASE_SQL_LENDING = "" +
             "SELECT e.id_index, b.title, b.subtitle, lc.id_lector, lc.name, l.id_lending " +
             "FROM lending AS l " +
-            "INNER JOIN lending_has_exemplary AS le ON l.id_lending = le.id_lending " +
-            "INNER JOIN exemplary AS e ON le.id_exemplary = e.id_exemplary " +
+            "INNER JOIN exemplary AS e ON l.id_exemplary = e.id_exemplary " +
             "INNER JOIN book AS b ON e.id_book = b.id_book " +
             "INNER JOIN lector AS lc ON l.id_lector = lc.id_lector " +
             "";

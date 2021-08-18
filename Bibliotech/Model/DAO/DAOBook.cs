@@ -321,8 +321,7 @@ namespace Bibliotech.Model.DAO
                     "SELECT b.title, COUNT(l.id_lending) " +
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
-                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
-                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
                     "GROUP BY b.id_book;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -368,9 +367,55 @@ namespace Bibliotech.Model.DAO
                     "SELECT b.publishing_company, COUNT(l.id_lending) " +
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
-                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
-                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
                     "GROUP BY b.publishing_company;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                DataTable dt = new DataTable();
+                _ = dt.Columns.Add("title", typeof(string));
+                _ = dt.Columns.Add("total", typeof(int));
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string title = await reader.GetFieldValueAsync<string>(0);
+                    int total = await reader.GetFieldValueAsync<int>(1);
+
+                    object[] values = new object[]
+                    {
+                        title,
+                        total,
+                    };
+
+                    _ = dt.Rows.Add(values);
+                }
+
+                return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByAuthors()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT a.name, COUNT(l.id_lending) " +
+                    "FROM lending AS l " +
+                    "INNER JOIN exemplary AS e ON e.id_exemplary = l.id_exemplary " +
+                    "INNER JOIN book_has_author AS ba ON ba.id_book = e.id_book " +
+                    "INNER JOIN author AS a ON a.id_author = ba.id_author " +
+                    "GROUP BY a.id_author;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
 

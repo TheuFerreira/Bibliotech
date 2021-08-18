@@ -253,6 +253,7 @@ namespace Bibliotech.View.Reports
                             bookDataGrid.ItemsSource = await daoBook.ReportSearchByPublishingCompany();
                             break;
                         case TypeBook.Authors:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByAuthors();
                             break;
                         default:
                             break;
