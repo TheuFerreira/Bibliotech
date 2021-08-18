@@ -311,6 +311,98 @@ namespace Bibliotech.Model.DAO
         }
             
 
-        
+        public async Task<DataView> ReportSearchByTitle()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT b.title, COUNT(l.id_lending) " +
+                    "FROM book AS b " +
+                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
+                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "GROUP BY b.id_book;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                DataTable dt = new DataTable();
+                _ = dt.Columns.Add("title", typeof(string));
+                _ = dt.Columns.Add("total", typeof(int));
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string title = await reader.GetFieldValueAsync<string>(0);
+                    int total = await reader.GetFieldValueAsync<int>(1);
+
+                    object[] values = new object[]
+                    {
+                        title,
+                        total,
+                    };
+
+                    _ = dt.Rows.Add(values);
+                }
+
+                return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<DataView> ReportSearchByPublishingCompany()
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT b.publishing_company, COUNT(l.id_lending) " +
+                    "FROM book AS b " +
+                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "INNER JOIN lending_has_exemplary AS le ON le.id_exemplary = e.id_exemplary " +
+                    "INNER JOIN lending AS l ON l.id_lending = le.id_lending " +
+                    "GROUP BY b.publishing_company;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+
+                DataTable dt = new DataTable();
+                _ = dt.Columns.Add("title", typeof(string));
+                _ = dt.Columns.Add("total", typeof(int));
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    string title = await reader.GetFieldValueAsync<string>(0);
+                    int total = await reader.GetFieldValueAsync<int>(1);
+
+                    object[] values = new object[]
+                    {
+                        title,
+                        total,
+                    };
+
+                    _ = dt.Rows.Add(values);
+                }
+
+                return dt.DefaultView;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
     }
 }

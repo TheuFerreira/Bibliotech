@@ -140,8 +140,14 @@
 
                         <Grid 
                             Margin="10,80,10,10"
-                            VerticalAlignment="Top"
-                            Height="42">
+                            VerticalAlignment="Top">
+
+                            <uc:CustomComboBox 
+                                x:Name="cbBookType"
+                                Title="TIPO:"
+                                Width="150"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top"/>
 
                         </Grid>
 
@@ -152,8 +158,8 @@
                         Margin="0,170,0,0">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=IdLector, StringFormat=D6}"/>
-                            <DataGridTextColumn Header="EMPRÉSTIMOS TOTAIS" Width="250" Binding="{Binding Path=Pickup, StringFormat=D3}"/>
+                            <DataGridTextColumn Header="NOME" Width="*" Binding="{Binding Path=title, StringFormat=D6}"/>
+                            <DataGridTextColumn Header="EMPRÉSTIMOS TOTAIS" Width="250" Binding="{Binding Path=total, StringFormat=D3}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

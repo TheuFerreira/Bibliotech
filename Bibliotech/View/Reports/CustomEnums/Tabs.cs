@@ -8,5 +8,7 @@ namespace Bibliotech.View.Reports.CustomEnums
         Lendings = 0,
         [Description("LEITORES")]
         Lectors = 1,
+        [Description("LIVROS")]
+        Books = 2,
     }
 }
