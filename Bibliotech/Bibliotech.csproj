@@ -193,6 +193,9 @@
     <Compile Include="UserControls\TextField.xaml.cs">
       <DependentUpon>TextField.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Authors\SearchAuthorWindow.xaml.cs">
+      <DependentUpon>SearchAuthorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Books\AddEditBookWindow.xaml.cs">
       <DependentUpon>AddEditBookWindow.xaml</DependentUpon>
     </Compile>
@@ -231,6 +234,7 @@
     </Compile>
     <Compile Include="View\Reports\CustomEnums\Period.cs" />
     <Compile Include="View\Reports\CustomEnums\Tabs.cs" />
+    <Compile Include="View\Reports\CustomEnums\TypeBook.cs" />
     <Compile Include="View\Reports\CustomEnums\TypeLending.cs" />
     <Compile Include="View\Reports\ReportsWindow.xaml.cs">
       <DependentUpon>ReportsWindow.xaml</DependentUpon>
@@ -301,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\TextField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Authors\SearchAuthorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

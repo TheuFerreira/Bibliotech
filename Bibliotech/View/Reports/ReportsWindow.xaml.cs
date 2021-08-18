@@ -20,9 +20,11 @@ namespace Bibliotech.View.Reports
         private Tabs tabs;
         private Period period;
         private TypeLending typeLending;
+        private TypeBook typeBook;
 
         private readonly DAOLending daoLending;
         private readonly DAOLector daoLector;
+        private readonly DAOBook daoBook;
 
         public ReportsWindow()
         {
@@ -30,6 +32,7 @@ namespace Bibliotech.View.Reports
 
             daoLending = new DAOLending();
             daoLector = new DAOLector();
+            daoBook = new DAOBook();
 
             tabs = Tabs.Lendings;
 
@@ -37,6 +40,12 @@ namespace Bibliotech.View.Reports
 
             dpStartDate.SelectedDate = DateTime.Now;
             dpEndDate.SelectedDate = DateTime.Now;
+
+            List<string> bookTypes = Enum.GetValues(typeof(TypeBook)).Cast<TypeBook>().Select(x => x.AsString(EnumFormat.Description)).ToList();
+            cbBookType.ItemsSource = bookTypes;
+
+            typeBook = TypeBook.Title;
+            cbBookType.SelectedItem = typeBook.AsString(EnumFormat.Description);
         }
 
         private void SetPeriodsToComboBoxPeriod()
@@ -81,12 +90,12 @@ namespace Bibliotech.View.Reports
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            tabControl.SelectionChanged += TabControl_SelectionChanged;
+
             SetPeriodsToComboBoxPeriod();
             SetMonthsToComboBoxMonth();
             await SetYearsToComboBoxYear();
             SetTypeLendingsToComboBoxTypeLending();
-
-            tabControl.SelectionChanged += TabControl_SelectionChanged;
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -107,7 +116,6 @@ namespace Bibliotech.View.Reports
                 default:
                     break;
             }
-
         }
 
         private void CbPeriod_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -233,6 +241,23 @@ namespace Bibliotech.View.Reports
                     }
                     break;
                 case Tabs.Books:
+                    selectedItem = cbBookType.SelectedItem.ToString();
+                    typeBook = Enums.Parse<TypeBook>(selectedItem, true, EnumFormat.Description);
+
+                    switch (typeBook)
+                    {
+                        case TypeBook.Title:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByTitle();
+                            break;
+                        case TypeBook.PublishingCompany:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByPublishingCompany();
+                            break;
+                        case TypeBook.Authors:
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByAuthors();
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 default:
                     break;

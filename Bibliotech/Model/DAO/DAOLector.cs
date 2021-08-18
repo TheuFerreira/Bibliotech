@@ -17,17 +17,15 @@ namespace Bibliotech.Model.DAO
         private const string BASE_REPORT_SQL_LEFT_JOIN_PICKUP = "" +
             "LEFT JOIN( " +
                 "SELECT lc.id_lector, COUNT(le.id_exemplary) AS pickup " +
-                "FROM lending_has_exemplary AS le " +
-                "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
-                "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
+                "FROM lending AS le " +
+                "INNER JOIN lector AS lc ON lc.id_lector = le.id_lector " +
             "";
 
         private const string BASE_REPORT_SQL_LEFT_JOIN_RETURNED = "" +
             "LEFT JOIN( " +
                 "SELECT lc.id_lector, COUNT(le.id_exemplary) AS returned " +
-                "FROM lending_has_exemplary AS le " +
-                "INNER JOIN lending AS l ON le.id_lending = l.id_lending " +
-                "INNER JOIN lector AS lc ON lc.id_lector = l.id_lector " +
+                "FROM lending AS le " +
+                "INNER JOIN lector AS lc ON lc.id_lector = le.id_lector " +
             "";
 
         private async Task<DataView> ReportReader(MySqlCommand command)
@@ -295,10 +293,10 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE l.return_date IS NULL AND DATE(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NULL AND DATE(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
-                        "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
 
@@ -327,10 +325,10 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NULL AND YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
-                        "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
 
@@ -361,10 +359,10 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE l.return_date IS NULL AND YEAR(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NULL AND YEAR(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
-                        "WHERE l.return_date IS NOT NULL AND YEAR(l.loan_date) = ? " +
+                        "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
 
@@ -393,10 +391,10 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE l.return_date IS NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
+                        "WHERE le.return_date IS NULL AND DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
-                        "WHERE l.return_date IS NOT NULL AND DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
+                        "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
                         "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
                     "";
 
