@@ -6,12 +6,11 @@ namespace Bibliotech.Model.Entities
 {
     public class Book
     {
+        private DAO.DAOAuthor DAOAuthor;
         public int IdBook { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
-        public Author Author { get; set; }
         public List<Author> Authors { get; set; }
-
         public string PublishingCompany { get; set; }
         public string Gender { get; set; }
         public string Edition { get; set; }
@@ -26,14 +25,13 @@ namespace Bibliotech.Model.Entities
         {
             IdBook = -1;
         }
-
-        public Book(string title, string subtitle, Author author, string publishingCompany, string gender,
+        public Book(string title, string subtitle, List<Author> authors, string publishingCompany, string gender,
             string edition, int? pages, int? year, string language, string volume, string collection)
         {
             Title = title;
             Subtitle = subtitle;
-            Author = author;
             PublishingCompany = publishingCompany;
+            Authors = authors;
             Gender = gender;
             Edition = edition;
             Pages = pages;
@@ -43,6 +41,7 @@ namespace Bibliotech.Model.Entities
             Collection = collection;
             Status = Status.Active;
         }
+       
         /*
         public override string ToString()
         {

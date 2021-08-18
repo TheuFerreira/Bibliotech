@@ -5,7 +5,8 @@ using System.Windows;
 using Bibliotech.Model.DAO;
 using Bibliotech.UserControls;
 using Bibliotech.Services;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using Bibliotech.Model.Entities.Enums;
 
 namespace Bibliotech.View.Books
 {
@@ -14,17 +15,20 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class AddEditBookWindow : Window
     {
-        private readonly Book Book = new Book();
-        private readonly Author Author = new Author();
+        private readonly Book Book ;
+        private Author Author = new Author();
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
         private readonly Loading loading = new Loading();
+
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
             DAOAuthor = new DAOAuthor();
             DAOBook = new DAOBook();
             Book = book;
+            Book.Authors = new List<Author>();
+
             Title = "Adicionar Livro";
             tbInfo.Text = "Adicionar Livro";
 
@@ -43,7 +47,7 @@ namespace Bibliotech.View.Books
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
-           // tfAuthor.Text = Book.Author.Name;
+           tfAuthor.Text = Book.Authors.ToString(); 
             tfGender.Text = Book.Gender;
             tfEdition.Text = Book.Edition;
             tfNumberPages.Text = Book.Pages.ToString();
@@ -51,6 +55,23 @@ namespace Bibliotech.View.Books
             tfLanguage.Text = Book.Language;
             tfVolume.Text = Book.Volume;
             tfColletion.Text = Book.Collection;
+        }
+        
+        private void SeparateAuthor()
+        {
+            string author = tfAuthor.Text;
+            string[] authors = author.Split(',');
+            foreach(var nameAuthor in authors)
+            {
+                Author = new Author
+                {
+                    IdAuthor = -1,
+                    Name = nameAuthor,
+                    Status = Status.Active
+                };
+
+                Book.Authors.Add(Author);
+            }
         }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
@@ -84,22 +105,21 @@ namespace Bibliotech.View.Books
             btnSave.IsEnabled = false;
 
             if (!VerifyFields()) return;
+
+            SeparateAuthor();
+            
             Book.Title = tfTitle.Text;
             Book.Subtitle = tfSubtitle.Text;
             Book.PublishingCompany = tfPublishingCompany.Text;
-            Author.Name = tfAuthor.Text;
             Book.Gender = tfGender.Text;
             Book.Edition = tfEdition.Text;
             Book.Language = tfLanguage.Text;
             Book.Volume = tfVolume.Text;
             Book.Collection = tfColletion.Text;
-            
+           
             if(Book.IdBook == -1)
             {
-                await DAOAuthor.InsertAuthor(Author);
                 await DAOBook.InsertBook(Book);
-                await DAOBook.BookHasAuthor();
-
                 if (ShowQuestion(" ", "Livro inserido com sucesso! Deseja adicionar um exemplar?"))
                 {
                     ExemplaryWindow exemplaryWindow = new ExemplaryWindow(Book);
