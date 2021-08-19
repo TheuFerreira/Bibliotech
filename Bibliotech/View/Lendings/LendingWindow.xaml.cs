@@ -47,15 +47,21 @@ namespace Bibliotech.View.Lendings
             {
                 return;
             }
+
             if (exemplary.IdIndex <= 0)
             {
                 return;
             }
+            
             book.idExemplary = exemplary.IdIndex;
             books.Add(book);
             exemplaries.Add(exemplary);
             dataGrid.ItemsSource = null;
             dataGrid.ItemsSource = books;
+            foreach (var item in books)
+            {
+                MessageBox.Show(item.Author.Name);
+            }
         }
 
         private bool ValidateFields()
@@ -70,7 +76,17 @@ namespace Bibliotech.View.Lendings
                 return false;
             }
 
-            if(dataGrid.Items == null)
+            if(books.Count < 1)
+            {
+                return false;
+            }
+
+            if(string.IsNullOrEmpty(dtpBegin.date.Text))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(dtpEnd.date.Text))
             {
                 return false;
             }
@@ -85,6 +101,15 @@ namespace Bibliotech.View.Lendings
             dataGrid.IsEnabled = validate;
             btnSearchBook.IsEnabled = validate;
             btnSearchLector.IsEnabled = validate;
+        }
+
+        private void ClearFields()
+        {
+            dataGrid.ItemsSource = null;
+            tfLectorRegister.Text = "";
+            tfNameLector.Text = "";
+            dtpBegin.date.Text = "";
+            dtpEnd.date.Text = "";
         }
 
         private void btnSearchLector_Click(object sender, RoutedEventArgs e)
@@ -124,13 +149,36 @@ namespace Bibliotech.View.Lendings
             {
                  await daoLending.Insert(books[i], exemplaries[i], lector, begin, end);    
             }
-            dataGrid.ItemsSource = null;
+            ClearFields();
             OnOffControls(true);
         }
 
-        private void GridCellDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
 
+
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { }
+
+        private void GridCellDelete_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            int temp = dataGrid.SelectedIndex;
+            if(temp < 0)
+            {
+                return;
+            }
+            if(temp > books.Count)
+            {
+                return;
+            }
+            if (books.Count < 1 || exemplaries.Count < 1)
+            {
+                return;
+            }
+
+            MessageBox.Show(temp.ToString());
+            books.RemoveAt(temp);
+            exemplaries.RemoveAt(temp);
+            UpdateGrid();
         }
+
     }
 }
