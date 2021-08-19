@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.View.Books;
 using Bibliotech.View.Reports.CustomEnums;
 using EnumsNET;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Bibliotech.View.Reports
 {
@@ -17,6 +19,8 @@ namespace Bibliotech.View.Reports
     /// </summary>
     public partial class ReportsWindow : Window
     {
+        private List<Lending> lendings;
+
         private Tabs tabs;
         private Period period;
         private TypeLending typeLending;
@@ -69,6 +73,7 @@ namespace Bibliotech.View.Reports
         private async Task SetYearsToComboBoxYear()
         {
             btnSearch.IsEnabled = false;
+            btnExport.IsEnabled = false;
 
             List<int> years = await daoLending.GetYears();
             cbYear.ItemsSource = years;
@@ -77,6 +82,7 @@ namespace Bibliotech.View.Reports
             cbYear.SelectedItem = year;
 
             btnSearch.IsEnabled = true;
+            btnExport.IsEnabled = true;
         }
 
         private void SetTypeLendingsToComboBoxTypeLending()
@@ -159,9 +165,9 @@ namespace Bibliotech.View.Reports
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
             btnSearch.IsEnabled = false;
+            btnExport.IsEnabled = false;
             loading.Awaiting = true;
 
-            List<Lending> lendings;
             string selectedItem;
             int month;
             int year;
@@ -265,6 +271,25 @@ namespace Bibliotech.View.Reports
 
             loading.Awaiting = false;
             btnSearch.IsEnabled = true;
+            btnExport.IsEnabled = true;
+        }
+
+        private async void GridCellBook_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            btnExport.IsEnabled = false;
+            btnSearch.IsEnabled = false;
+            loading.Awaiting = true;
+
+            int selectedIndex = lendingDataGrid.SelectedIndex;
+            Lending lending = lendings[selectedIndex];
+
+            Book book = await new DAOBook().GetById(lending.Exemplaries[0].Book.IdBook);
+
+            loading.Awaiting = false;
+            btnSearch.IsEnabled = true;
+            btnExport.IsEnabled = true;
+
+            _ = new AddEditBookWindow(book).ShowDialog();
         }
     }
 }

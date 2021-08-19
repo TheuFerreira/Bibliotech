@@ -13,7 +13,7 @@ namespace Bibliotech.Model.DAO
     public class DAOLending : Connection
     {
         private const string BASE_SQL_LENDING = "" +
-            "SELECT e.id_index, b.title, b.subtitle, lc.id_lector, lc.name, l.id_lending " +
+            "SELECT e.id_index, b.title, b.subtitle, lc.id_lector, lc.name, l.id_lending, b.id_book " +
             "FROM lending AS l " +
             "INNER JOIN exemplary AS e ON l.id_exemplary = e.id_exemplary " +
             "INNER JOIN book AS b ON e.id_book = b.id_book " +
@@ -91,9 +91,11 @@ namespace Bibliotech.Model.DAO
                 string subtitleBook = await reader.GetFieldValueAsync<string>(2);
                 int idLector = await reader.GetFieldValueAsync<int>(3);
                 string nameLector = await reader.GetFieldValueAsync<string>(4);
+                int idBook = await reader.GetFieldValueAsync<int>(5);
 
                 Book book = new Book
                 {
+                    IdBook = idBook,
                     Title = titleBook,
                     Subtitle = subtitleBook,
                 };

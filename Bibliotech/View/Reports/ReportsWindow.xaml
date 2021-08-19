@@ -26,16 +26,7 @@
                             VerticalAlignment="Top"
                             Height="45">
 
-                            <uc:Button
-                                Text="EXPORTAR"
-                                MarginImage="8,5,5,5"
-                                Source="/Bibliotech;component/Resources/img_export.png"
-                                Width="200"
-                                Height="30"
-                                CornerRadius="15"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"
-                                Click="BtnLendingExport_Click"/>
+                            
 
                         </Grid>
 
@@ -65,7 +56,31 @@
                             <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Exemplaries[0].Book.Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
                             <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175" Binding="{Binding Path=Lector.IdLector, StringFormat=D6}"/>
                             <DataGridTextColumn Header="LEITOR" Width="*" Binding="{Binding Path=Lector.Name}" ElementStyle="{StaticResource ColumnText}"/>
-                            <DataGridTextColumn Width="50"/>
+                            <DataGridTextColumn Width="50">
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="DataGridCell">
+                                                    <Grid
+                                                        MouseLeftButtonUp="GridCellBook_MouseLeftButtonUp">
+                                                        <Image
+                                                            Width="25" 
+                                                            Height="25" 
+                                                            Source="/Bibliotech;component/Resources/img_print.png"/>
+                                                    </Grid>
+
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Cursor" Value="Hand"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
 
@@ -76,22 +91,6 @@
                     <Grid 
                         Margin="10"
                         VerticalAlignment="Top">
-
-                        <Grid 
-                            Margin="10"
-                            VerticalAlignment="Top">
-
-                            <uc:Button
-                                Text="EXPORTAR"
-                                MarginImage="8,5,5,5"
-                                Source="/Bibliotech;component/Resources/img_export.png"
-                                Width="200"
-                                Height="30"
-                                CornerRadius="8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"/>
-
-                        </Grid>
 
                         <Grid 
                             Margin="10,80,10,10"
@@ -121,22 +120,6 @@
                     <Grid 
                         Margin="10"
                         VerticalAlignment="Top">
-
-                        <Grid 
-                            Margin="10"
-                            VerticalAlignment="Top">
-
-                            <uc:Button
-                                Text="EXPORTAR"
-                                MarginImage="8,5,5,5"
-                                Source="/Bibliotech;component/Resources/img_export.png"
-                                Width="200"
-                                Height="30"
-                                CornerRadius="8"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"/>
-
-                        </Grid>
 
                         <Grid 
                             Margin="10,80,10,10"
@@ -219,6 +202,19 @@
 
         </Grid>
 
+        <uc:Button
+            x:Name="btnExport"
+            Text="EXPORTAR"
+            MarginImage="8,5,5,5"
+            Source="/Bibliotech;component/Resources/img_export.png"
+            Width="200"
+            Height="30"
+            Margin="0,60,20,0"
+            CornerRadius="15"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="BtnLendingExport_Click"/>
+        
         <uc:Button
             x:Name="btnSearch"
             Text="PESQUISAR"
