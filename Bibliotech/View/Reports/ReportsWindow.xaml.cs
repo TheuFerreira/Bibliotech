@@ -1,10 +1,12 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.View.Books;
+using Bibliotech.View.Lectors;
 using Bibliotech.View.Reports.CustomEnums;
 using EnumsNET;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -290,6 +292,32 @@ namespace Bibliotech.View.Reports
             btnExport.IsEnabled = true;
 
             _ = new AddEditBookWindow(book).ShowDialog();
+        }
+
+        private async void GridCellLector_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            btnExport.IsEnabled = false;
+            btnSearch.IsEnabled = false;
+            loading.Awaiting = true;
+
+            DataRowView selectedRow = lectorDataGrid.SelectedItem as DataRowView;
+            int idLector = Convert.ToInt32(selectedRow["IdLector"]);
+
+            Lector lector = await new DAOLector().GetById(idLector);
+            Branch branch = new Branch
+            {
+                IdBranch = 1,
+            };
+            Address address = new Address
+            {
+                IdAddress = 1,
+            };
+
+            loading.Awaiting = false;
+            btnSearch.IsEnabled = true;
+            btnExport.IsEnabled = true;
+
+            _ = new AddEditLectorWindow(branch.IdBranch, false, address.IdAddress).ShowDialog();
         }
     }
 }

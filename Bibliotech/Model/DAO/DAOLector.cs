@@ -163,6 +163,79 @@ namespace Bibliotech.Model.DAO
             }
         }
 
+        public async Task<Lector> GetById(int idLector)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT " +
+                    "l.name, l.responsible, l.birth_date, l.telephone, " +
+                    "a.id_address, a.city, a.neighborhood, a.street, a.number, a.complement " +
+                    "FROM lector AS l " +
+                    "INNER JOIN address AS a ON a.id_address = l.id_address " +
+                    "WHERE l.id_lector = ?;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = idLector;
+
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                await reader.ReadAsync();
+
+                string name = await reader.GetFieldValueAsync<string>(0);
+                string responsible = await reader.GetFieldValueAsync<string>(1);
+                DateTime? birthDate = null;
+                long? telephone = null;
+
+                if (await reader.IsDBNullAsync(2) == false)
+                {
+                    birthDate = await reader.GetFieldValueAsync<DateTime>(2);
+                }
+
+                if (await reader.IsDBNullAsync(3) == false)
+                {
+                    telephone = await reader.GetFieldValueAsync<long>(3);
+                }
+
+                int idAddress = await reader.GetFieldValueAsync<int>(4);
+                string city = await reader.GetFieldValueAsync<string>(5);
+                string neighborhood = await reader.GetFieldValueAsync<string>(6);
+                string street = await reader.GetFieldValueAsync<string>(7);
+                string number = await reader.GetFieldValueAsync<string>(8);
+                string complement = await reader.GetFieldValueAsync<string>(9);
+
+                Address address = new Address
+                {
+                    IdAddress = idAddress,
+                    City = city,
+                    Neighborhood = neighborhood,
+                    Street = street,
+                    Number = number,
+                    Complement = complement,
+                };
+
+                Lector lector = new Lector
+                {
+                    IdAddress = address.IdAddress,
+                    Name = name,
+                    Responsible = responsible,
+                    BirthDate = birthDate,
+                    Phone = telephone,
+                };
+
+                return lector;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
         public async Task<bool> Delete(int idLector)
         {
             await Connect();
