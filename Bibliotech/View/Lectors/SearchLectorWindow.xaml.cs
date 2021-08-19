@@ -65,15 +65,19 @@ namespace Bibliotech.View.Lectors
             Close();
         }
 
-        private async void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(dataGrid.Items.Count < 1)
+            {
+                return;
+            }
             DataGrid gd = (DataGrid)sender;
             DataRowView row_selected = gd.SelectedItem as DataRowView;
 
-            int idLector = Convert.ToInt32(row_selected["id_lector"].ToString());
+            Lector.IdLector = Convert.ToInt32(row_selected["id_lector"].ToString());
+            Lector.Name = row_selected["name"].ToString();
 
             OnOffControls(false);
-            Lector = await daoLector.GetById(idLector);
             OnOffControls(true);
         }
     }

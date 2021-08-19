@@ -241,7 +241,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataTable> Insert(Book book, Exemplary exemplary, Lector lector, DateTime begin, DateTime end)
+        public async Task<bool> Insert(List<Exemplary> exemplary, Lector lector, DateTime begin, DateTime end)
         {
             await Connect();
 
@@ -254,15 +254,20 @@ namespace Bibliotech.Model.DAO
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
-                cmd.Parameters.AddWithValue("@id_exemplary", exemplary.IdExemplary);
-                cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
-                cmd.Parameters.AddWithValue("@id_user", idUser);
-                cmd.Parameters.AddWithValue("@loan_date", begin);
-                cmd.Parameters.AddWithValue("@expected_date", end);
+                for (int i = 0; i < exemplary.Count; i++)
+                {
+                    MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+                    cmd.Parameters.AddWithValue("@id_exemplary", exemplary[i].IdExemplary);
+                    cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
+                    cmd.Parameters.AddWithValue("@id_user", idUser);
+                    cmd.Parameters.AddWithValue("@loan_date", begin);
+                    cmd.Parameters.AddWithValue("@expected_date", end);
 
-                _ = await cmd.ExecuteNonQueryAsync();
+                    _ = await cmd.ExecuteNonQueryAsync();
+                }
+
                 await transaction.CommitAsync();
+                return true;
             }
             catch (System.Exception)
             {
@@ -274,11 +279,6 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
 
-
-
-
-
-            return null;
         }
     }
 }

@@ -65,8 +65,8 @@
                                                     <Grid
                                                         MouseLeftButtonUp="GridCellBook_MouseLeftButtonUp">
                                                         <Image
-                                                            Width="25" 
-                                                            Height="25" 
+                                                            Width="30" 
+                                                            Height="30" 
                                                             Source="/Bibliotech;component/Resources/img_book.png"/>
                                                     </Grid>
 
@@ -119,8 +119,8 @@
                                                     <Grid
                                                         MouseLeftButtonUp="GridCellLector_MouseLeftButtonUp">
                                                         <Image
-                                                            Width="25"
-                                                            Height="25"
+                                                            Width="30"
+                                                            Height="30"
                                                             Source="/Bibliotech;component/Resources/img_lectors.png"/>
                                                     </Grid>
                                                     

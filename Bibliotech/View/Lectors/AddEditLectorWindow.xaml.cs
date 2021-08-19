@@ -133,6 +133,29 @@ namespace Bibliotech.View.Lectors
             address.Complement = tfComplement.Text;
         }
 
+        private void ClearFields()
+        {
+            tfName.Text = "";
+
+            tfBirthDate.Text = "";
+
+            tfCity.Text = "";
+
+            tfResponsible.Text = "";
+
+            tfStreet.Text = "";
+
+            tfNumber.Text = "";
+
+            tfUserRegistration.Text = "";
+
+            tfComplement.Text = "";
+
+            tfDistrict.Text = "";
+
+            tfNumber.Text = "";
+        }
+
         private async void save_OnClick(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields())
@@ -158,6 +181,7 @@ namespace Bibliotech.View.Lectors
 
                 dialogService.ShowSuccess("Leitor adicionado com sucesso!");
                 btnSave.IsEnabled = true;
+                ClearFields();
 
                 return;
             }

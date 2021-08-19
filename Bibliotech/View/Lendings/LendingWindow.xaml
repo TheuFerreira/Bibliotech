@@ -89,7 +89,7 @@
         <DataGrid
             x:Name="dataGrid"
             Margin="0,200,0,143"
-            ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
+            ItemsSource="{Binding}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=idExemplary}" ElementStyle="{StaticResource ColumnText}"/>

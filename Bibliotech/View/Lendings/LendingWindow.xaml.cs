@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Services;
 using Bibliotech.View.Books;
 using Bibliotech.View.Lectors;
 using System;
@@ -29,6 +30,8 @@ namespace Bibliotech.View.Lendings
 
         private Exemplary exemplary { get; set; } = new Exemplary();
 
+        DialogService dialogService = new DialogService();
+
         DAOLending daoLending = new DAOLending();
 
         List<Book> books = new List<Book>();
@@ -41,7 +44,7 @@ namespace Bibliotech.View.Lendings
             book = null;
         }
 
-        private void UpdateGrid()
+        private void UpdateGrid(bool isDelete)
         {
             if (book == null)
             {
@@ -52,42 +55,45 @@ namespace Bibliotech.View.Lendings
             {
                 return;
             }
-            
-            book.idExemplary = exemplary.IdIndex;
-            books.Add(book);
-            exemplaries.Add(exemplary);
+            if (!isDelete)
+            {
+                book.idExemplary = exemplary.IdIndex;
+                books.Add(book);
+                exemplaries.Add(exemplary);
+            }
             dataGrid.ItemsSource = null;
             dataGrid.ItemsSource = books;
-            foreach (var item in books)
-            {
-                MessageBox.Show(item.Author.Name);
-            }
         }
 
         private bool ValidateFields()
         {
             if(string.IsNullOrEmpty(tfLectorRegister.Text))
             {
+                dialogService.ShowError("Escolha um Leitor.");
                 return false;
             }
 
             if(string.IsNullOrEmpty(tfNameLector.Text))
             {
+                dialogService.ShowError("Escolha um Leitor.");
                 return false;
             }
 
             if(books.Count < 1)
             {
+                dialogService.ShowError("Escolha um Livro.");
                 return false;
             }
 
             if(string.IsNullOrEmpty(dtpBegin.date.Text))
             {
+                dialogService.ShowError("Escolha uma data de empréstimo.");
                 return false;
             }
 
             if (string.IsNullOrEmpty(dtpEnd.date.Text))
             {
+                dialogService.ShowError("Escolha uma data de devolução.");
                 return false;
             }
 
@@ -112,6 +118,34 @@ namespace Bibliotech.View.Lendings
             dtpEnd.date.Text = "";
         }
 
+        private void DeleteFromList(int index)
+        {
+
+            if (index < 0)
+            {
+                return;
+            }
+            if (index > books.Count)
+            {
+                return;
+            }
+            if (books.Count < 1 || exemplaries.Count < 1)
+            {
+                return;
+            }
+            books.RemoveAt(index);
+            exemplaries.RemoveAt(index);
+
+            UpdateGrid(true);
+        }
+
+        private void GridCellDelete_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            int temp = dataGrid.SelectedIndex;
+            MessageBox.Show(temp.ToString());
+            DeleteFromList(temp);
+        }
+
         private void btnSearchLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow searchLector = new SearchLectorWindow();
@@ -131,7 +165,7 @@ namespace Bibliotech.View.Lendings
             searchBook.ShowDialog();
             book = searchBook.book;
             exemplary = searchBook.exemplary;
-            UpdateGrid();
+            UpdateGrid(false);
         }
 
         private async void addButton_OnClick(object sender, RoutedEventArgs e)
@@ -143,42 +177,15 @@ namespace Bibliotech.View.Lendings
 
             DateTime begin = DateTime.Parse(dtpBegin.date.Text);
             DateTime end = DateTime.Parse(dtpEnd.date.Text);
-
             OnOffControls(false);
-            for (int i = 0; i < books.Count; i++)
+
+            if (await daoLending.Insert(exemplaries, lector, begin, end))
             {
-                 await daoLending.Insert(books[i], exemplaries[i], lector, begin, end);    
+                dialogService.ShowSuccess("Empréstimo realizado com sucesso!");
             }
+
             ClearFields();
             OnOffControls(true);
         }
-
-
-
-        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { }
-
-        private void GridCellDelete_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            int temp = dataGrid.SelectedIndex;
-            if(temp < 0)
-            {
-                return;
-            }
-            if(temp > books.Count)
-            {
-                return;
-            }
-            if (books.Count < 1 || exemplaries.Count < 1)
-            {
-                return;
-            }
-
-            MessageBox.Show(temp.ToString());
-            books.RemoveAt(temp);
-            exemplaries.RemoveAt(temp);
-            UpdateGrid();
-        }
-
     }
 }
