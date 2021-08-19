@@ -67,7 +67,7 @@
                                                         <Image
                                                             Width="25" 
                                                             Height="25" 
-                                                            Source="/Bibliotech;component/Resources/img_print.png"/>
+                                                            Source="/Bibliotech;component/Resources/img_book.png"/>
                                                     </Grid>
 
                                                     <ControlTemplate.Triggers>
@@ -121,7 +121,7 @@
                                                         <Image
                                                             Width="25"
                                                             Height="25"
-                                                            Source="/Bibliotech;component/Resources/img_book.png"/>
+                                                            Source="/Bibliotech;component/Resources/img_lectors.png"/>
                                                     </Grid>
                                                     
                                                     <ControlTemplate.Triggers>
