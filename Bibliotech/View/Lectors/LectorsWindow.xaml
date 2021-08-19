@@ -16,12 +16,13 @@
             Margin="0,20,0,0"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Width="450" Click="searchField_Click"/>
+            Width="450" 
+            Click="SearchField_Click"/>
 
         <DataGrid 
             x:Name="dataGrid"
             Margin="0,87,0,143" 
-            ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
+            ItemsSource="{Binding}" >
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50">

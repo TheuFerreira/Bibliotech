@@ -1,51 +1,30 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Model.Entities.Enums;
+using Bibliotech.Services;
+using Bibliotech.Singletons;
+using EnumsNET;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using EnumsNET;
-using Bibliotech.Model.Entities.Enums;
-using Bibliotech.Services;
-using Bibliotech.Singletons;
-using Bibliotech.UserControls;
 
 namespace Bibliotech.View.Lectors
 {
-    /// <summary>
-    /// Lógica interna para LectorsWindow.xaml
-    /// </summary>
     public partial class LectorsWindow : Window
     {
-        DAOLector daoLector = new DAOLector();
-
-        Lector lector = new Lector();
-
-        Address address = new Address();
-
-        Branch branch = new Branch();
-
-        DialogService dialogServices = new DialogService();
+        private readonly DAOLector daoLector = new DAOLector();
+        private readonly DialogService dialogServices = new DialogService();
 
         private TypeSearch typeSearch;
 
-        //mudar depois, este dado deverá vir a partir do usário atual
-        int idBranch = Session.Instance.User.Branch.IdBranch;
+        private readonly int idBranch = Session.Instance.User.Branch.IdBranch;
 
         public LectorsWindow()
         {
             InitializeComponent();
-            
 
             List<string> typesSearch = Enum.GetValues(typeof(TypeSearch))
               .Cast<TypeSearch>()
@@ -55,34 +34,27 @@ namespace Bibliotech.View.Lectors
 
             typeSearch = TypeSearch.Current;
             searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
-
         }
 
-        private void DisableButtons()
+        private void SetButtons(bool value)
         {
-            btnEdit.IsEnabled = false;
-            btnAdd.IsEnabled = false;
-            btnDelete.IsEnabled = false;
-            searchField.IsEnabled = false;
-            loading.Awaiting = true;
-            
+            btnEdit.IsEnabled = value;
+            btnAdd.IsEnabled = value;
+            btnDelete.IsEnabled = value;
+            searchField.IsEnabled = value;
         }
 
-        private void EnableButtons()
+        private void SetLoadingAndButtons(bool value)
         {
-            btnEdit.IsEnabled = true;
-            btnAdd.IsEnabled = true;
-            btnDelete.IsEnabled = true;
-            searchField.IsEnabled = true;
-            loading.Awaiting = false;
+            SetButtons(value);
+
+            loading.Awaiting = !value;
         }
 
-        private  async void UpdateGrid()
+        private async void UpdateGrid()
         {
-            
             if (searchField.SelectedIndex == ((int)TypeSearch.All))
             {
-
                 typeSearch = TypeSearch.All;
                 dataGrid.Columns[4].Visibility = Visibility.Visible;
             }
@@ -91,130 +63,66 @@ namespace Bibliotech.View.Lectors
                 typeSearch = TypeSearch.Current;
                 dataGrid.Columns[4].Visibility = Visibility.Collapsed;
             }
-            DisableButtons();
-            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch , typeSearch);
-            if (dataTable != null)
-            {
-                dataGrid.ItemsSource = dataTable.DefaultView;
-            }
-            EnableButtons();
+
+            SetLoadingAndButtons(false);
+
+            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch, typeSearch);
+            dataGrid.ItemsSource = dataTable.DefaultView;
+
+            SetLoadingAndButtons(true);
         }
 
-        private void SplitAddress(string temp)
+        private async Task<Lector> GetLector()
         {
-            string[] result = temp.Split(',');
-
-            address.City = result[0];
-            address.City = address.City.Trim();
-
-            address.Neighborhood = result[1];
-            address.Neighborhood = address.Neighborhood.Trim();
-
-            address.Street = result[2];
-            address.Street = address.Street.Trim();
-
-            address.Number = result[3];
-            address.Number = address.Number.Trim();
-
-            try
+            DataRowView row_selected = dataGrid.SelectedItem as DataRowView;
+            if (row_selected == null)
             {
-                address.Complement = result[4];
-                address.Complement = address.Complement.Trim();
-            }
-            catch (System.IndexOutOfRangeException)
-            {
+                return new Lector();
             }
 
+            SetButtons(false);
+
+            int idLector = Convert.ToInt32(row_selected["id_lector"].ToString());
+            Lector lector = await daoLector.GetById(idLector);
+
+            SetButtons(true);
+
+            return lector;
         }
 
-        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SearchField_Click(object sender, RoutedEventArgs e)
         {
-            DataGrid gd = (DataGrid)sender;
-            DataRowView row_selected = gd.SelectedItem as DataRowView;
-
-            if (row_selected != null)
-            {
-                branch.IdBranch = Convert.ToInt32(row_selected["id_branch"].ToString());
-
-                lector.IdLector = Convert.ToInt32(row_selected["id_lector"].ToString());
-
-                lector.Name = row_selected["name"].ToString();
-
-                lector.Responsible = row_selected["responsible"].ToString();
-
-                DateTime? birth = null;
-                if(DateTime.TryParse(row_selected["birth_date"].ToString(), out DateTime date))
-                {
-                    birth = date;
-                }
-                lector.BirthDate = birth;
-
-                long? telephone = null;
-                if(long.TryParse(row_selected["telephone"].ToString(), out long result))
-                {
-                    telephone = result;
-                }
-                lector.Phone = telephone;
-
-                address.IdAddress = Convert.ToInt32(row_selected["id_address"].ToString());
-                string temp = row_selected["endereco"].ToString();
-                SplitAddress(temp);
-            }
-        }
-
-        private void searchField_Click(object sender, RoutedEventArgs e)
-        {
-
             UpdateGrid();
         }
 
-        private void FillFieldsToUpdate()
+        private void FillFieldsToUpdate(Lector lector)
         {
-            AddEditLectorWindow addEditLector = new AddEditLectorWindow(idBranch, true, address.IdAddress);
-
-            addEditLector.tfName.Text = lector.Name;
-
-            addEditLector.tfUserRegistration.Text = lector.IdLector.ToString();
-
-            addEditLector.tfResponsible.Text = lector.Responsible;
-
-            addEditLector.tfBirthDate.Text = lector.BirthDate.ToString();
-
-            addEditLector.tfCity.Text = address.City;
-
-            addEditLector.tfDistrict.Text = address.Neighborhood;
-
-            addEditLector.tfStreet.Text = address.Street;
-
-            addEditLector.tfNumber.Text = address.Number;
-
-            addEditLector.tfComplement.Text = address.Complement;
-
-            addEditLector.tfPhone.Text = lector.Phone.ToString();
-
-            addEditLector.ShowDialog();
+            _ = new AddEditLectorWindow(lector).ShowDialog();
         }
 
-        private void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
+        private async void ButtonEdit_OnClick(object sender, RoutedEventArgs e)
         {
-            if (lector.IdLector > 0)
+            Lector lector = await GetLector();
+
+            if (lector.IdLector <= 0)
             {
-                if (branch.IdBranch != idBranch)
-                {
-                    dialogServices.ShowError("Você não pode editar usuários de outra escola.");
-                    return;
-                }
-                FillFieldsToUpdate();
-                UpdateGrid();
+                return;
             }
-            
+
+            if (lector.IdBranch != idBranch)
+            {
+                dialogServices.ShowError("Você não pode editar usuários de outra escola.");
+                return;
+            }
+
+            FillFieldsToUpdate(lector);
+            UpdateGrid();
         }
 
         private void ButtonAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            AddEditLectorWindow addEditLectorWindow = new AddEditLectorWindow(idBranch, false, address.IdAddress);
+            _ = new AddEditLectorWindow(new Lector()).ShowDialog();
 
-            _ = addEditLectorWindow.ShowDialog();
             UpdateGrid();
         }
 
@@ -226,25 +134,29 @@ namespace Bibliotech.View.Lectors
                 return;
             }
 
+            Lector lector = await GetLector();
+
             bool result = dialogServices.ShowQuestion("Tem certeza que deseja excluir este leitor?", "Não é possível desfazer esta ação.");
             if (result == false)
             {
                 return;
             }
+
             loading.Awaiting = true;
-            DisableButtons();
+            SetLoadingAndButtons(false);
+
             result = await daoLector.Delete(lector.IdLector);
             if (result == false)
             {
                 dialogServices.ShowError("Algo deu errado!\nTente novamente.");
                 loading.Awaiting = false;
-                EnableButtons();
+
+                SetLoadingAndButtons(true);
                 return;
             }
 
             dialogServices.ShowSuccess("Leitor excluído com sucesso!");
             UpdateGrid();
-
         }
     }
 }

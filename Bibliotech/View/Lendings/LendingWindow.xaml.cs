@@ -116,7 +116,7 @@ namespace Bibliotech.View.Lendings
         {
             SearchLectorWindow searchLector = new SearchLectorWindow();
             searchLector.ShowDialog();
-            lector = searchLector.lector;
+            lector = searchLector.Lector;
             if(lector.Name == null)
             {
                 return;

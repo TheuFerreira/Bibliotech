@@ -304,20 +304,12 @@ namespace Bibliotech.View.Reports
             int idLector = Convert.ToInt32(selectedRow["IdLector"]);
 
             Lector lector = await new DAOLector().GetById(idLector);
-            Branch branch = new Branch
-            {
-                IdBranch = 1,
-            };
-            Address address = new Address
-            {
-                IdAddress = 1,
-            };
-
+            
             loading.Awaiting = false;
             btnSearch.IsEnabled = true;
             btnExport.IsEnabled = true;
 
-            _ = new AddEditLectorWindow(branch.IdBranch, false, address.IdAddress).ShowDialog();
+            _ = new AddEditLectorWindow(lector).ShowDialog();
         }
     }
 }

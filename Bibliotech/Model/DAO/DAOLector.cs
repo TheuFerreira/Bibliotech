@@ -172,9 +172,11 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT " +
                     "l.name, l.responsible, l.birth_date, l.telephone, " +
-                    "a.id_address, a.city, a.neighborhood, a.street, a.number, a.complement " +
+                    "a.id_address, a.city, a.neighborhood, a.street, a.number, a.complement, " +
+                    "b.id_branch " +
                     "FROM lector AS l " +
                     "INNER JOIN address AS a ON a.id_address = l.id_address " +
+                    "INNER JOIN branch AS b ON b.id_branch = l.id_branch " +
                     "WHERE l.id_lector = ?;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -205,6 +207,8 @@ namespace Bibliotech.Model.DAO
                 string number = await reader.GetFieldValueAsync<string>(8);
                 string complement = await reader.GetFieldValueAsync<string>(9);
 
+                int idBranch = await reader.GetFieldValueAsync<int>(10);
+
                 Address address = new Address
                 {
                     IdAddress = idAddress,
@@ -217,7 +221,9 @@ namespace Bibliotech.Model.DAO
 
                 Lector lector = new Lector
                 {
-                    IdAddress = address.IdAddress,
+                    IdLector = idLector,
+                    IdBranch = idBranch,
+                    Address = address,
                     Name = name,
                     Responsible = responsible,
                     BirthDate = birthDate,

@@ -1,39 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bibliotech.Model.Entities.Enums;
+using System;
 
 namespace Bibliotech.Model.Entities
 {
     public class Lector
     {
-        private int idLector;
+        public int IdLector { get; set; }
+        public int IdBranch { get; set; }
+        public Address Address { get; set; }
+        public int UserRegistration { get; set; }
+        public string Name { get; set; }
+        public string Responsible { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public long? Phone { get; set; }
+        public Status Status { get; set; }
 
-        private int idBranch;
-
-        private int idAddress;
-
-        private int userRegistration;
-
-        private string name;
-
-        private string responsible;
-
-        private DateTime? birthDate;
-
-        private long? phone;
-
-        private int status;
-
-        public int IdLector { get => idLector; set => idLector = value; }
-        public int IdBranch { get => idBranch; set => idBranch = value; }
-        public int IdAddress { get => idAddress; set => idAddress = value; }
-        public int UserRegistration { get => userRegistration; set => userRegistration = value; }
-        public string Name { get => name; set => name = value; }
-        public string Responsible { get => responsible; set => responsible = value; }
-        public DateTime? BirthDate { get => birthDate; set => birthDate = value; }
-        public long? Phone { get => phone; set => phone = value; }
-        public int Status { get => status; set => status = value; }
+        public Lector()
+        {
+            IdLector = -1;
+            Address = new Address();
+        }
     }
 }

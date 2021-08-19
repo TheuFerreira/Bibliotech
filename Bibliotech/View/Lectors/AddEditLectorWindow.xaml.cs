@@ -1,20 +1,9 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
-using Bibliotech.UserControls;
+using Bibliotech.Singletons;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bibliotech.View.Lectors
 {
@@ -23,33 +12,47 @@ namespace Bibliotech.View.Lectors
     /// </summary>
     public partial class AddEditLectorWindow : Window
     {
-        //mudar depois
-        private int idBranch = 1;
+        private readonly DialogService dialogService = new DialogService();
+        private readonly DAOLector daoLector = new DAOLector();
+        private readonly Lector lector;
+        private readonly Address address;
+        private readonly int idBranch;
 
-        private DialogService dialogService = new DialogService();
-
-        private DAOLector daoLector = new DAOLector();
-
-        private Lector lector = new Lector();
-
-        private Address address = new Address();
-
-        public bool IsUpdate { get; set; }
-
-        Loading loading = new Loading();
-
-        public AddEditLectorWindow(int id_branch, bool is_update, int idAddress)
+        public AddEditLectorWindow(Lector lector)
         {
             InitializeComponent();
 
-            idBranch = id_branch;
-            IsUpdate = is_update;
-            address.IdAddress = idAddress;
+            idBranch = Session.Instance.User.Branch.IdBranch;
+            tbInfo.Text = "Adicionar Leitor";
+            Title = tbInfo.Text;
+
+            this.lector = lector;
+            address = lector.Address;
+            HistoryButton.IsEnabled = lector.IdLector != -1;
+
+            if (lector.IdLector == -1)
+            {
+                return;
+            }
+
+            tbInfo.Text = "Editar Leitor";
+            Title = tbInfo.Text;
+
+            tfName.Text = lector.Name;
+            tfUserRegistration.Text = lector.IdLector.ToString();
+            tfResponsible.Text = lector.Responsible;
+            tfBirthDate.Text = lector.BirthDate.ToString();
+            tfCity.Text = address.City;
+            tfDistrict.Text = address.Neighborhood;
+            tfStreet.Text = address.Street;
+            tfNumber.Text = address.Number;
+            tfComplement.Text = address.Complement;
+            tfPhone.Text = lector.Phone.ToString();
         }
 
         private bool ValidateFields()
         {
-            if (string.IsNullOrEmpty((tfName.Text)) || (double.TryParse(tfName.Text, out _)))
+            if (string.IsNullOrEmpty(tfName.Text) || double.TryParse(tfName.Text, out _))
             {
                 dialogService.ShowError("Escreva um nome válido! \nEste campo é obrigatório, portanto preencha-o.");
                 return false;
@@ -108,17 +111,11 @@ namespace Bibliotech.View.Lectors
 
         private void GroupArguments()
         {
-            if (IsUpdate)
-            {
-                lector.IdLector = Convert.ToInt32(tfUserRegistration.Text);
-            }
-
             lector.Name = tfName.Text;
-
             lector.Responsible = tfResponsible.Text;
 
             lector.BirthDate = null;
-            if(DateTime.TryParse(tfBirthDate.Text, out DateTime temp))
+            if (DateTime.TryParse(tfBirthDate.Text, out DateTime temp))
             {
                 lector.BirthDate = temp;
             }
@@ -130,13 +127,9 @@ namespace Bibliotech.View.Lectors
             }
 
             address.City = tfCity.Text;
-
             address.Neighborhood = tfDistrict.Text;
-
             address.Street = tfStreet.Text;
-
             address.Number = tfNumber.Text;
-
             address.Complement = tfComplement.Text;
         }
 
@@ -148,35 +141,40 @@ namespace Bibliotech.View.Lectors
             }
 
             GroupArguments();
-            if (!IsUpdate)
+
+            if (lector.IdLector == -1)
             {
                 if (!dialogService.ShowQuestion("Tem certeza que deseja adicionar este usuário?", ""))
                 {
                     return;
                 }
+
                 btnSave.IsEnabled = false;
-                loading.Awaiting = true;
                 if (!await daoLector.Insert(idBranch, lector, address))
                 {
                     dialogService.ShowError("Algo deu errado!\nTente novamente.");
                     return;
                 }
+
                 dialogService.ShowSuccess("Leitor adicionado com sucesso!");
-                loading.Awaiting = false;
-                btnSave.IsEnabled = true;   
+                btnSave.IsEnabled = true;
+
                 return;
             }
 
-            if(await daoLector.Update(lector, address))
+            if (await daoLector.Update(lector, address))
             {
-                if (!dialogService.ShowQuestion("Tem certeza que deseja alterar este usuário?", ""))
+                if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja alterar este leitor?"))
                 {
                     return;
                 }
+
                 dialogService.ShowSuccess("Leitor alterado coom sucesso!");
                 Close();
+
                 return;
             }
+
             dialogService.ShowError("Algo deu errado!\nTente novamente.");
         }
 
@@ -184,12 +182,7 @@ namespace Bibliotech.View.Lectors
         {
             GroupArguments();
 
-            LectorHistoryWindow historyWindow = new LectorHistoryWindow(lector.IdLector);
-
-            if (IsUpdate)
-            {
-                _ = historyWindow.ShowDialog();
-            }
+            _ = new LectorHistoryWindow(lector.IdLector).ShowDialog();
         }
     }
 }
