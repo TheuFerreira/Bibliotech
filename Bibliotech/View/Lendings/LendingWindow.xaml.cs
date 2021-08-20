@@ -42,11 +42,13 @@ namespace Bibliotech.View.Lendings
         {
             InitializeComponent();
             book = null;
+            SetDate();   
+        }
 
+        private void SetDate()
+        {
             dtpBegin.date.Text = DateTime.Now.Date.ToShortDateString();
-           
             dtpEnd.date.Text = DateTime.Now.AddDays(7).Date.ToShortDateString();
-            
         }
 
         private void UpdateGrid(bool isDelete)
@@ -208,9 +210,12 @@ namespace Bibliotech.View.Lendings
             if (await daoLending.Insert(exemplaries, lector, begin, end))
             {
                 dialogService.ShowSuccess("Empréstimo realizado com sucesso!");
+                exemplaries.RemoveAll(exemplary => exemplary != null);
+                books.RemoveAll(book => book != null);
             }
 
             ClearFields();
+            SetDate();
             OnOffControls(true);
         }
 
