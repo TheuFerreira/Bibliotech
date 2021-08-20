@@ -12,6 +12,7 @@ namespace Bibliotech.Model.DAO
         private const string BASE_REPORT_SQL_SELECT_LECTOR = "" +
             "SELECT l.id_lector, l.name, IF(pick.pickup IS NULL, 0, pick.pickup), IF(returned.returned IS NULL, 0, returned.returned) AS returned " +
             "FROM lector AS l " +
+            "INNER JOIN branch AS b ON b.id_branch = l.id_branch " +
             "";
 
         private const string BASE_REPORT_SQL_LEFT_JOIN_PICKUP = "" +
@@ -27,6 +28,9 @@ namespace Bibliotech.Model.DAO
                 "FROM lending AS le " +
                 "INNER JOIN lector AS lc ON lc.id_lector = le.id_lector " +
             "";
+
+        private const string BASE_REPORT_SQL_WHERE_CONDITION = "" +
+            "WHERE b.id_branch = ? ";
 
         private async Task<DataView> ReportReader(MySqlCommand command)
         {
@@ -363,7 +367,7 @@ namespace Bibliotech.Model.DAO
 
         }
 
-        public async Task<DataView> ReportSearchByDay(DateTime day)
+        public async Task<DataView> ReportSearchByDay(DateTime day, Branch branch)
         {
             try
             {
@@ -376,12 +380,14 @@ namespace Bibliotech.Model.DAO
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) = ? " +
-                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_WHERE_CONDITION +
                     "";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
             }
@@ -395,7 +401,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByMonth(int year, int month)
+        public async Task<DataView> ReportSearchByMonth(int year, int month, Branch branch)
         {
             try
             {
@@ -408,7 +414,8 @@ namespace Bibliotech.Model.DAO
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
-                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_WHERE_CONDITION +
                     "";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -416,6 +423,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = month;
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
             }
@@ -429,7 +437,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByYear(int year)
+        public async Task<DataView> ReportSearchByYear(int year, Branch branch)
         {
             try
             {
@@ -442,12 +450,14 @@ namespace Bibliotech.Model.DAO
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? " +
-                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_WHERE_CONDITION +
                     "";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
             }
@@ -461,7 +471,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByCustomTime(DateTime start, DateTime end)
+        public async Task<DataView> ReportSearchByCustomTime(DateTime start, DateTime end, Branch branch)
         {
             try
             {
@@ -474,7 +484,8 @@ namespace Bibliotech.Model.DAO
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
-                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector; " +
+                        "GROUP BY lc.id_lector) AS returned ON returned.id_lector = l.id_lector " +
+                    BASE_REPORT_SQL_WHERE_CONDITION +
                     "";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
@@ -482,6 +493,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.DateTime).Value = end;
                 command.Parameters.Add("?", DbType.DateTime).Value = start;
                 command.Parameters.Add("?", DbType.DateTime).Value = end;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
             }

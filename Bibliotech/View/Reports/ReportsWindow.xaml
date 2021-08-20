@@ -1,4 +1,5 @@
-﻿<Window x:Class="Bibliotech.View.Reports.ReportsWindow"
+﻿<Window x:Name="window"
+        x:Class="Bibliotech.View.Reports.ReportsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -239,17 +240,52 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Click="BtnLendingExport_Click"/>
+
+        <Grid
+            x:Name="gridSchool"
+            Margin="200,115"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Height="45"
+            Width="690">
+
+            <uc:CustomComboBox
+                HorizontalAlignment="Left"
+                Title="Filtro:"/>
+            
+            <uc:TextField
+                Margin="0,0,70,0"
+                Width="350"
+                HorizontalAlignment="Center"
+                IsEnabled="False"
+                Title="Escola:"
+                DataContext="{Binding Path=SelectedBranch, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Name}"/>
+
+            <uc:Button
+                x:Name="btnSearchSchool"
+                Height="30"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Width="200"
+                CornerRadius="15"
+                Source="/Bibliotech;component/Resources/img_schools.png"
+                MarginImage="8,6"
+                Text="PROCURAR ESCOLA"
+                Click="BtnSearchSchool_Click"/>
+
+        </Grid>
         
         <uc:Button
             x:Name="btnSearch"
             Text="PESQUISAR"
-            Width="250"
-            Margin="223,127,0,0"
+            Width="200"
+            Margin="0,127,20,0"
             Height="30"
             Source="/Bibliotech;component/Resources/img_zoom.png"
             CornerRadius="15"
             MarginImage="8,5,5,5"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Click="BtnSearch_Click"/>
         

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -13,7 +12,7 @@ namespace Bibliotech.Model.DAO
         public async Task InsertBook(Book book)
         {
             List<int> idAuthors = new List<int>();
-            
+
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
@@ -21,8 +20,8 @@ namespace Bibliotech.Model.DAO
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
                 string insertAuthor = "insert into author(name, status) values (?, 1); select last_insert_id(); ";
-                
-                for(int i = 0; i < book.Authors.Count; i++)
+
+                for (int i = 0; i < book.Authors.Count; i++)
                 {
                     cmd.CommandText = insertAuthor;
                     cmd.Parameters.Clear();
@@ -64,7 +63,7 @@ namespace Bibliotech.Model.DAO
 
                 var result = await cmd.ExecuteScalarAsync();
                 int idBook = Convert.ToInt32(result);
-                
+
                 for (int i = 0; i < idAuthors.Count; i++)
                 {
                     cmd.Parameters.Clear();
@@ -75,7 +74,7 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.Add("?", DbType.Int32).Value = idAuthor;
                     await cmd.ExecuteNonQueryAsync();
                 }
-                
+
                 await transaction.CommitAsync();
 
             }
@@ -101,8 +100,8 @@ namespace Bibliotech.Model.DAO
                 string updateBook = "update book set title = ?, subtitle = ?, publishing_company = ?, gender = ?, " +
                     "edition = ?, pages = ?, year_publication = ?, language = ?, volume = ?, collection = ? " +
                     "where id_book = ? ;";
-                
-               
+
+
                 cmd.CommandText = updateBook;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Title;
                 cmd.Parameters.Add("?", DbType.String).Value = book.Subtitle;
@@ -117,7 +116,7 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
 
                 await cmd.ExecuteNonQueryAsync();
-                
+
                 await transaction.CommitAsync();
 
             }
@@ -131,7 +130,7 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-       
+
         public async Task<List<Book>> GetBook(string text)
         {
             await Connect();
@@ -149,9 +148,9 @@ namespace Bibliotech.Model.DAO
 
                 MySqlCommand cmd = new MySqlCommand(selectBook, SqlConnection);
                 List<Book> books = new List<Book>();
-               
+
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     int idBook = await reader.GetFieldValueAsync<int>(0);
                     string title = await reader.GetFieldValueAsync<string>(1);
@@ -172,7 +171,7 @@ namespace Bibliotech.Model.DAO
                     string language = await reader.GetFieldValueAsync<string>(8);
                     string volume = await reader.GetFieldValueAsync<string>(9);
                     string collection = await reader.GetFieldValueAsync<string>(10);
-                    
+
                     book = new Book()
                     {
                         IdBook = idBook,
@@ -190,10 +189,10 @@ namespace Bibliotech.Model.DAO
 
                     books.Add(book);
                 }
-                
+
                 return books;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 throw ex;
             }
@@ -269,7 +268,7 @@ namespace Bibliotech.Model.DAO
                             "inner join book_has_author as bha on bha.id_book = bk.id_book " +
                             "inner join author as aut on aut.id_author = bha.id_author " +
                             "inner join exemplary as exe on exe.id_book = bk.id_book " +
-                            "where bk.title like '%" +query+ "%' and exe.status = 3 and exe.id_branch = " + idBranch +
+                            "where bk.title like '%" + query + "%' and exe.status = 3 and exe.id_branch = " + idBranch +
                             " group by bk.id_book, exe.id_index;";
 
             try
@@ -296,9 +295,8 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-            
 
-        public async Task<DataView> ReportSearchByTitle()
+        public async Task<DataView> ReportSearchByTitle(Branch branch)
         {
             try
             {
@@ -309,9 +307,11 @@ namespace Bibliotech.Model.DAO
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
                     "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
+                    "WHERE e.id_branch = ? " +
                     "GROUP BY b.id_book;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
                 _ = dt.Columns.Add("title", typeof(string));
@@ -344,7 +344,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByPublishingCompany()
+        public async Task<DataView> ReportSearchByPublishingCompany(Branch branch)
         {
             try
             {
@@ -355,9 +355,11 @@ namespace Bibliotech.Model.DAO
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
                     "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
+                    "WHERE e.id_branch = ? " +
                     "GROUP BY b.publishing_company;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
                 _ = dt.Columns.Add("title", typeof(string));
@@ -390,7 +392,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByAuthors()
+        public async Task<DataView> ReportSearchByAuthors(Branch branch)
         {
             try
             {
@@ -402,9 +404,11 @@ namespace Bibliotech.Model.DAO
                     "INNER JOIN exemplary AS e ON e.id_exemplary = l.id_exemplary " +
                     "INNER JOIN book_has_author AS ba ON ba.id_book = e.id_book " +
                     "INNER JOIN author AS a ON a.id_author = ba.id_author " +
+                    "WHERE e.id_branch = ? " +
                     "GROUP BY a.id_author;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
                 _ = dt.Columns.Add("title", typeof(string));
