@@ -18,7 +18,12 @@ namespace Bibliotech.Model.DAO
             "INNER JOIN exemplary AS e ON l.id_exemplary = e.id_exemplary " +
             "INNER JOIN book AS b ON e.id_book = b.id_book " +
             "INNER JOIN lector AS lc ON l.id_lector = lc.id_lector " +
+            "INNER JOIN users AS u ON l.id_user = u.id_user " +
+            "INNER JOIN branch AS bc ON bc.id_branch = u.id_branch " +
             "";
+
+        private const string BASE_SQL_BY_BRANCH_CONDITION = "" +
+            "AND bc.id_branch = ? ";
 
         private const string BASE_SQL_TYPE_LENDING_CONDITION = "" +
             " AND IF(? = TRUE, " +
@@ -123,7 +128,7 @@ namespace Bibliotech.Model.DAO
             return lendings;
         }
 
-        public async Task<List<Lending>> SearchLendingsByDay(DateTime day, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByDay(DateTime day, TypeLending typeLending, Branch branch)
         {
             try
             {
@@ -132,11 +137,13 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_SQL_LENDING +
                     "Where DATE(l.loan_date) = ? " +
+                        BASE_SQL_BY_BRANCH_CONDITION +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     "; ";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
 
@@ -152,7 +159,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending, Branch branch)
         {
             try
             {
@@ -161,12 +168,14 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_SQL_LENDING +
                     "WHERE YEAR(l.loan_date) = ? AND MONTH(l.loan_date) = ? " +
+                        BASE_SQL_BY_BRANCH_CONDITION +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     ";";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
 
@@ -182,7 +191,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByYear(int year, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByYear(int year, TypeLending typeLending, Branch branch)
         {
             try
             {
@@ -191,11 +200,13 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_SQL_LENDING +
                     "Where YEAR(l.loan_date) = ? " +
+                        BASE_SQL_BY_BRANCH_CONDITION +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     ";";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
 
@@ -211,7 +222,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending)
+        public async Task<List<Lending>> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending, Branch branch)
         {
             try
             {
@@ -220,12 +231,14 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_SQL_LENDING +
                     "Where DATE(l.loan_date) >= ? AND DATE(l.loan_date) <= ? " +
+                        BASE_SQL_BY_BRANCH_CONDITION +
                         BASE_SQL_TYPE_LENDING_CONDITION +
                     ";";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = start;
                 command.Parameters.Add("?", DbType.Date).Value = end;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
 
