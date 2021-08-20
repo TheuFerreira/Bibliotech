@@ -42,5 +42,20 @@ namespace Bibliotech.Model.Entities
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Exemplary exemplary &&
+                   IdExemplary == exemplary.IdExemplary;
+        }
+
+        public override int GetHashCode()
+        {
+            return -320971073 + IdExemplary.GetHashCode();
+        }
+
+        // override object.Equals
+
+
     }
 }

@@ -277,6 +277,10 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.AddWithValue("@expected_date", end);
 
                     _ = await cmd.ExecuteNonQueryAsync();
+
+                    strSql = "update exemplary set status = 2 where exemplary.id_exemplary = " + exemplary[i].IdExemplary;
+                    cmd.CommandText = strSql;
+                    _ = await cmd.ExecuteNonQueryAsync();
                 }
 
                 await transaction.CommitAsync();

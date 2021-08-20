@@ -42,6 +42,11 @@ namespace Bibliotech.View.Lendings
         {
             InitializeComponent();
             book = null;
+
+            dtpBegin.date.Text = DateTime.Now.Date.ToShortDateString();
+           
+            dtpEnd.date.Text = DateTime.Now.AddDays(7).Date.ToShortDateString();
+            
         }
 
         private void UpdateGrid(bool isDelete)
@@ -120,19 +125,25 @@ namespace Bibliotech.View.Lendings
 
         private void DeleteFromList(int index)
         {
-
+            if (!dialogService.ShowQuestion("Tem certeza que deseja\ndeletar este livro?", ""))
+            {
+                return;
+            }
             if (index < 0)
             {
                 return;
             }
+
             if (index > books.Count)
             {
                 return;
             }
+
             if (books.Count < 1 || exemplaries.Count < 1)
             {
                 return;
             }
+
             books.RemoveAt(index);
             exemplaries.RemoveAt(index);
 
@@ -142,30 +153,45 @@ namespace Bibliotech.View.Lendings
         private void GridCellDelete_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             int temp = dataGrid.SelectedIndex;
-            MessageBox.Show(temp.ToString());
             DeleteFromList(temp);
         }
 
         private void btnSearchLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow searchLector = new SearchLectorWindow();
-            searchLector.ShowDialog();
+            _ = searchLector.ShowDialog();
             lector = searchLector.Lector;
-            if(lector.Name == null)
+
+            bool isConfirmed = searchLector.IsConfirmed;
+            if (!isConfirmed)
             {
                 return;
             }
+
+            if (lector.Name == null)
+            {
+                return;
+            }
+
             tfLectorRegister.Text = lector.IdLector.ToString();
             tfNameLector.Text = lector.Name.ToString();
         }
 
         private void btnSearchBook_Click(object sender, RoutedEventArgs e)
         {
-            SearchBookWindow searchBook = new SearchBookWindow();
-            searchBook.ShowDialog();
-            book = searchBook.book;
-            exemplary = searchBook.exemplary;
-            UpdateGrid(false);
+            SearchBookWindow searchBook = new SearchBookWindow();  
+            searchBook.Exemplaries = exemplaries;
+            _ = searchBook.ShowDialog();
+
+            bool isConfirmed = searchBook.IsConfirmed;
+
+            if (isConfirmed)
+            {
+                book = searchBook.book;
+                exemplary = searchBook.exemplary;
+                UpdateGrid(false);
+            }
+
         }
 
         private async void addButton_OnClick(object sender, RoutedEventArgs e)
@@ -187,5 +213,6 @@ namespace Bibliotech.View.Lendings
             ClearFields();
             OnOffControls(true);
         }
+
     }
 }

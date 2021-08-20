@@ -14,9 +14,13 @@ namespace Bibliotech.View.Lectors
     public partial class SearchLectorWindow : Window
     {
         public Lector Lector { get; private set; }
+        public bool IsConfirmed { get => isConfirmed; set => isConfirmed = value; }
 
         private readonly DAOLector daoLector = new DAOLector();
+
         private readonly int idBranch = Session.Instance.User.Branch.IdBranch;
+
+        private bool isConfirmed = false;
 
         public SearchLectorWindow()
         {
@@ -62,6 +66,7 @@ namespace Bibliotech.View.Lectors
             {
                 return;
             }
+            isConfirmed = true;
             Close();
         }
 

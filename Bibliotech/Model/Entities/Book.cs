@@ -43,7 +43,7 @@ namespace Bibliotech.Model.Entities
             Collection = collection;
             Status = Status.Active;
         }
-       
+
         /*
         public override string ToString()
         {

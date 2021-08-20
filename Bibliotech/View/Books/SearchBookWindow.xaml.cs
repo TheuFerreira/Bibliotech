@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Services;
 using Bibliotech.Singletons;
 using Bibliotech.View.Lendings;
 using System;
@@ -28,9 +29,19 @@ namespace Bibliotech.View.Books
 
         public Book book = new Book();
 
+        DialogService dialogService = new DialogService();
+
         public Exemplary exemplary = new Exemplary();
         //trocar pro krai do session
         private int idBranch = Session.Instance.User.Branch.IdBranch;
+
+        private List<Exemplary> exemplaries = new List<Exemplary>();
+
+        public List<Exemplary> Exemplaries { get => exemplaries; set => exemplaries = value; }
+
+        public bool IsConfirmed { get => isConfirmed; set => isConfirmed = value; }
+
+        private bool isConfirmed = false;
 
         public SearchBookWindow()
         {
@@ -42,6 +53,18 @@ namespace Bibliotech.View.Books
         {
             selectButton.IsEnabled = awaiting;
             searchField.IsEnabled = awaiting;
+        }
+
+        private bool VerifyDuplicate()
+        {
+            if (!exemplaries.Contains(exemplary))
+            {
+                return true;
+            }
+
+            dialogService.ShowError("Este livro já está selecionado!\nPor favor selecione outro.");
+            return false;
+
         }
 
         private async void UpdateGrid()
@@ -57,16 +80,7 @@ namespace Bibliotech.View.Books
             OnOffControls(true);
         }
 
-        private void selectButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (dataGrid.SelectedItem == null)
-            {
-                return;
-            }
-            Close();
-        }
-
-       private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataGrid gd = (DataGrid)sender;
             DataRowView row_selected = gd.SelectedItem as DataRowView;
@@ -82,7 +96,23 @@ namespace Bibliotech.View.Books
                 exemplary.IdIndex = Convert.ToInt32(row_selected["id_index"].ToString());
                 exemplary.IdExemplary = Convert.ToInt32(row_selected["id_exemplary"].ToString());
             }
-        
+
+        }
+
+        private void selectButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Escolha um livro primeiro!");
+                return;
+            }
+
+            if(VerifyDuplicate())
+            {
+                isConfirmed = true;
+                Close();
+            }
+            
         }
 
         private void searchField_Click(object sender, RoutedEventArgs e)
