@@ -18,7 +18,8 @@ namespace Bibliotech.Model.DAO
                 string select = " select u.id_user, u.id_type_user, u.name, b.id_branch, b.id_address, b.name " +
                     " from users as u " +
                     " inner join branch as b on b.id_branch = u.id_branch " +
-                    " where binary user_name = @user and aes_decrypt(password, 'bibliotech2021') = @password;";
+                    " where binary user_name = @user and aes_decrypt(password, 'bibliotech2021') = @password " +
+                    "and u.status = 1 and b.status = 1;";
 
                 MySqlCommand cmd = new MySqlCommand(select, SqlConnection);
                 _ = cmd.Parameters.AddWithValue("@user", user);
