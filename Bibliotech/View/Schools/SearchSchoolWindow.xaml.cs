@@ -40,8 +40,10 @@ namespace Bibliotech.View.Schools
         {
             string text = searchField.Text;
             DisableButtons();
+
             branches = await daoSchool.FillDataGrid(text);
             dataGrid.ItemsSource = branches;
+
             EnableButtons();
         }
 

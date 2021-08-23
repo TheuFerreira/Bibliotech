@@ -195,10 +195,10 @@ namespace Bibliotech.Model.DAO
             {
                 await Connect();
 
-                string sql = "select b.id_branch, b.name, b.telephone, b.status, b.id_address, a.city, a.neighborhood, a.street, a.number " +
+                string sql = "select b.id_branch, b.name, b.telephone, b.id_address, a.city, a.neighborhood, a.street, a.number " +
                                 "from branch as b " +
                                 "inner join address as a on b.id_address = a.id_address " +
-                                "where b.name like \"%" + query + "%\";";
+                                "where b.name like \"%" + query + "%\" AND b.status = 1;";
 
                 MySqlCommand cmd = new MySqlCommand(sql, SqlConnection);
 
@@ -213,13 +213,12 @@ namespace Bibliotech.Model.DAO
                     {
                         telephone = await reader.GetFieldValueAsync<long>(2);
                     }
-                    Status status = (Status)await reader.GetFieldValueAsync<int>(3);
 
-                    int idAddress = await reader.GetFieldValueAsync<int>(4);
-                    string city = await reader.GetFieldValueAsync<string>(5);
-                    string neighborhood = await reader.GetFieldValueAsync<string>(6);
-                    string street = await reader.GetFieldValueAsync<string>(7);
-                    string number = await reader.GetFieldValueAsync<string>(8);
+                    int idAddress = await reader.GetFieldValueAsync<int>(3);
+                    string city = await reader.GetFieldValueAsync<string>(4);
+                    string neighborhood = await reader.GetFieldValueAsync<string>(5);
+                    string street = await reader.GetFieldValueAsync<string>(6);
+                    string number = await reader.GetFieldValueAsync<string>(7);
 
                     Address address = new Address
                     {
@@ -236,7 +235,6 @@ namespace Bibliotech.Model.DAO
                         Name = name,
                         Telephone = telephone,
                         Address = address,
-                        Status = status,
                     };
 
                     branches.Add(branch);
