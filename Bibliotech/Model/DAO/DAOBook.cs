@@ -1,4 +1,5 @@
 ﻿using Bibliotech.Model.Entities;
+using Bibliotech.View.Reports.CustomEnums;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -296,7 +297,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByTitle(Branch branch)
+        public async Task<DataView> ReportSearchByTitle(Filter filter, Branch branch)
         {
             try
             {
@@ -307,10 +308,11 @@ namespace Bibliotech.Model.DAO
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
                     "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
-                    "WHERE e.id_branch = ? " +
+                    "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY b.id_book;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
@@ -344,7 +346,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByPublishingCompany(Branch branch)
+        public async Task<DataView> ReportSearchByPublishingCompany(Filter filter, Branch branch)
         {
             try
             {
@@ -355,10 +357,11 @@ namespace Bibliotech.Model.DAO
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
                     "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
-                    "WHERE e.id_branch = ? " +
+                    "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY b.publishing_company;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();
@@ -392,7 +395,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByAuthors(Branch branch)
+        public async Task<DataView> ReportSearchByAuthors(Filter filter, Branch branch)
         {
             try
             {
@@ -404,10 +407,11 @@ namespace Bibliotech.Model.DAO
                     "INNER JOIN exemplary AS e ON e.id_exemplary = l.id_exemplary " +
                     "INNER JOIN book_has_author AS ba ON ba.id_book = e.id_book " +
                     "INNER JOIN author AS a ON a.id_author = ba.id_author " +
-                    "WHERE e.id_branch = ? " +
+                    "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY a.id_author;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 DataTable dt = new DataTable();

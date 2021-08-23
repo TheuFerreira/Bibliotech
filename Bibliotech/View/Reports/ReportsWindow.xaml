@@ -250,10 +250,13 @@
             Width="690">
 
             <uc:CustomComboBox
+                x:Name="cbFilter"
                 HorizontalAlignment="Left"
-                Title="Filtro:"/>
+                Title="Filtro:"
+                SelectionChanged="CbFilter_SelectionChanged"/>
             
             <uc:TextField
+                x:Name="tfSchool"
                 Margin="0,0,70,0"
                 Width="350"
                 HorizontalAlignment="Center"

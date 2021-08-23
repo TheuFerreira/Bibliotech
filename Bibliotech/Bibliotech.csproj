@@ -232,6 +232,7 @@
     <Compile Include="View\Lendings\LendingWindow.xaml.cs">
       <DependentUpon>LendingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Reports\CustomEnums\Filter.cs" />
     <Compile Include="View\Reports\CustomEnums\Period.cs" />
     <Compile Include="View\Reports\CustomEnums\Tabs.cs" />
     <Compile Include="View\Reports\CustomEnums\TypeBook.cs" />

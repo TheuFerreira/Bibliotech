@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
+using Bibliotech.View.Reports.CustomEnums;
 using MySqlConnector;
 using System;
 using System.Data;
@@ -30,7 +31,7 @@ namespace Bibliotech.Model.DAO
             "";
 
         private const string BASE_REPORT_SQL_WHERE_CONDITION = "" +
-            "WHERE b.id_branch = ? ";
+            "WHERE IF (? = 0, b.id_branch = ?, TRUE) ";
 
         private async Task<DataView> ReportReader(MySqlCommand command)
         {
@@ -367,7 +368,7 @@ namespace Bibliotech.Model.DAO
 
         }
 
-        public async Task<DataView> ReportSearchByDay(DateTime day, Branch branch)
+        public async Task<DataView> ReportSearchByDay(DateTime day, Filter filter, Branch branch)
         {
             try
             {
@@ -387,6 +388,7 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
@@ -401,7 +403,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByMonth(int year, int month, Branch branch)
+        public async Task<DataView> ReportSearchByMonth(int year, int month, Filter filter, Branch branch)
         {
             try
             {
@@ -423,6 +425,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.Int32).Value = month;
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
@@ -437,7 +440,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByYear(int year, Branch branch)
+        public async Task<DataView> ReportSearchByYear(int year, Filter filter, Branch branch)
         {
             try
             {
@@ -457,6 +460,7 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);
@@ -471,7 +475,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<DataView> ReportSearchByCustomTime(DateTime start, DateTime end, Branch branch)
+        public async Task<DataView> ReportSearchByCustomTime(DateTime start, DateTime end, Filter filter, Branch branch)
         {
             try
             {
@@ -493,6 +497,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", DbType.DateTime).Value = end;
                 command.Parameters.Add("?", DbType.DateTime).Value = start;
                 command.Parameters.Add("?", DbType.DateTime).Value = end;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 return await ReportReader(command);

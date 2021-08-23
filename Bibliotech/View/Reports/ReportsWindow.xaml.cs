@@ -30,6 +30,7 @@ namespace Bibliotech.View.Reports
         private Period period;
         private TypeLending typeLending;
         private TypeBook typeBook;
+        private Filter filter;
 
         private readonly DAOLending daoLending;
         private readonly DAOLector daoLector;
@@ -57,8 +58,19 @@ namespace Bibliotech.View.Reports
             cbBookType.SelectedItem = typeBook.AsString(EnumFormat.Description);
 
             User currentUser = Session.Instance.User;
-            SelectedBranch = currentUser.Branch;
+            SelectedBranch = new Branch
+            {
+                IdBranch = currentUser.Branch.IdBranch,
+                Name = currentUser.Branch.Name
+            };
+
             gridSchool.Visibility = currentUser.IsController() ? Visibility.Visible : Visibility.Collapsed;
+
+            List<string> typePeriods = Enums.GetValues(typeof(Filter)).Cast<Filter>().Select(x => x.AsString(EnumFormat.Description)).ToList();
+            cbFilter.ItemsSource = typePeriods;
+
+            filter = Filter.Specific;
+            cbFilter.SelectedItem = filter.AsString(EnumFormat.Description);
         }
 
         private void SetPeriodsToComboBoxPeriod()
@@ -192,7 +204,7 @@ namespace Bibliotech.View.Reports
                     {
                         case Period.Day:
                             DateTime? selectedDate = dpDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, SelectedBranch);
+                            lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, filter, SelectedBranch);
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         case Period.Mount:
@@ -203,20 +215,20 @@ namespace Bibliotech.View.Reports
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending, SelectedBranch);
+                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending, filter, SelectedBranch);
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         case Period.Year:
                             selectedItem = cbYear.SelectedItem.ToString();
                             year = int.Parse(selectedItem);
 
-                            lendings = await daoLending.SearchLendingsByYear(year, typeLending, SelectedBranch);
+                            lendings = await daoLending.SearchLendingsByYear(year, typeLending, filter, SelectedBranch);
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         case Period.Custom:
                             DateTime? start = dpStartDate.SelectedDate;
                             DateTime? end = dpEndDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, SelectedBranch);
+                            lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, filter, SelectedBranch);
                             lendingDataGrid.ItemsSource = lendings;
                             break;
                         default:
@@ -228,7 +240,7 @@ namespace Bibliotech.View.Reports
                     {
                         case Period.Day:
                             DateTime? selectedDate = dpDate.SelectedDate;
-                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByDay(selectedDate.Value, SelectedBranch);
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByDay(selectedDate.Value, filter, SelectedBranch);
                             break;
                         case Period.Mount:
                             selectedItem = cbYear.SelectedItem.ToString();
@@ -238,19 +250,19 @@ namespace Bibliotech.View.Reports
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByMonth(year, month, SelectedBranch);
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByMonth(year, month, filter, SelectedBranch);
                             break;
                         case Period.Year:
                             selectedItem = cbYear.SelectedItem.ToString();
                             year = int.Parse(selectedItem);
 
-                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByYear(year, SelectedBranch); ;
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByYear(year, filter, SelectedBranch); ;
                             break;
                         case Period.Custom:
                             DateTime? start = dpStartDate.SelectedDate;
                             DateTime? end = dpEndDate.SelectedDate;
 
-                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByCustomTime(start.Value, end.Value, SelectedBranch); ;
+                            lectorDataGrid.ItemsSource = await daoLector.ReportSearchByCustomTime(start.Value, end.Value, filter, SelectedBranch); ;
                             break;
                         default:
                             break;
@@ -263,13 +275,13 @@ namespace Bibliotech.View.Reports
                     switch (typeBook)
                     {
                         case TypeBook.Title:
-                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByTitle(SelectedBranch);
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByTitle(filter, SelectedBranch);
                             break;
                         case TypeBook.PublishingCompany:
-                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByPublishingCompany(SelectedBranch);
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByPublishingCompany(filter, SelectedBranch);
                             break;
                         case TypeBook.Authors:
-                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByAuthors(SelectedBranch);
+                            bookDataGrid.ItemsSource = await daoBook.ReportSearchByAuthors(filter, SelectedBranch);
                             break;
                         default:
                             break;
@@ -334,6 +346,27 @@ namespace Bibliotech.View.Reports
             Branch branch = searchSchool.Branch;
             SelectedBranch.IdBranch = branch.IdBranch;
             SelectedBranch.Name = branch.Name;
+        }
+
+        private void CbFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedItem = cbFilter.SelectedItem.ToString();
+            filter = Enums.Parse<Filter>(selectedItem, true, EnumFormat.Description);
+
+            switch (filter)
+            {
+                case Filter.Specific:
+                    tfSchool.Visibility = Visibility.Visible;
+                    btnSearchSchool.Visibility = Visibility.Visible;
+                    break;
+                case Filter.All:
+                    tfSchool.Visibility = Visibility.Collapsed;
+                    btnSearchSchool.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Bibliotech.Model.DAO
             "";
 
         private const string BASE_SQL_BY_BRANCH_CONDITION = "" +
-            "AND bc.id_branch = ? ";
+            "AND IF(? = 0, bc.id_branch = ?, TRUE) ";
 
         private const string BASE_SQL_TYPE_LENDING_CONDITION = "" +
             " AND IF(? = TRUE, " +
@@ -128,7 +128,7 @@ namespace Bibliotech.Model.DAO
             return lendings;
         }
 
-        public async Task<List<Lending>> SearchLendingsByDay(DateTime day, TypeLending typeLending, Branch branch)
+        public async Task<List<Lending>> SearchLendingsByDay(DateTime day, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -143,6 +143,7 @@ namespace Bibliotech.Model.DAO
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = day.Date;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
@@ -159,7 +160,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending, Branch branch)
+        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -175,6 +176,7 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
                 command.Parameters.Add("?", DbType.Int32).Value = month;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
@@ -191,7 +193,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByYear(int year, TypeLending typeLending, Branch branch)
+        public async Task<List<Lending>> SearchLendingsByYear(int year, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -206,6 +208,7 @@ namespace Bibliotech.Model.DAO
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Int32).Value = year;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
@@ -222,7 +225,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending, Branch branch)
+        public async Task<List<Lending>> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -238,6 +241,7 @@ namespace Bibliotech.Model.DAO
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.Date).Value = start;
                 command.Parameters.Add("?", DbType.Date).Value = end;
+                command.Parameters.Add("?", DbType.Int32).Value = filter;
                 command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 AddTypeLending(command, typeLending);
