@@ -30,7 +30,7 @@ namespace Bibliotech.Services
 
         public string ShowPasswordDialog(string description)
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog("REPETIR SENHA:", description, TypeTextFieldDialog.Password, FieldType.String);
+            TextFieldDialog fieldDialog = new TextFieldDialog("REPETIR SENHA:", description, TypeTextFieldDialog.Password, FieldType.String, "****");
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;
@@ -38,7 +38,7 @@ namespace Bibliotech.Services
 
         public string ShowAddDialog(string description, string textFieldTitle)
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.Number);
+            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.Number, "123456");
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;
@@ -46,7 +46,7 @@ namespace Bibliotech.Services
 
         public string ShowAddAuthorDialog(string description, string textFieldTitle)
         {
-            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.String);
+            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.String, "@autor");
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;
