@@ -67,7 +67,7 @@
                     HorizontalAlignment="Left" 
                     Width="298"/>
 
-                <uc:TextField 
+                <uc:PasswordField 
                     x:Name="tfPassword"
                     MaxLength="10"
                     VerticalAlignment="Top"

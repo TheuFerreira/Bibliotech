@@ -25,11 +25,6 @@ namespace Bibliotech.View.Users
             _ = new InformationDialog(title, contents, typeDialog).ShowDialog();
         }
 
-        private void ClearControl(TextField textBox)
-        {
-            textBox.Text = string.Empty;
-        }
-
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(tfUser.Text)
@@ -51,8 +46,8 @@ namespace Bibliotech.View.Users
             {
                 ShowMessage("Atenção", "Usuário não encontrado", TypeDialog.Error);
 
-                ClearControl(tfUser);
-                ClearControl(tfPassword);
+                tfUser.Text = string.Empty;
+                tfUser.Text = string.Empty;
 
                 return;
             }

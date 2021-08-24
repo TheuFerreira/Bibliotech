@@ -76,12 +76,12 @@
                     Title="USUÁRIO:"
                     Placeholder="USUÁRIO"/>
 
-                <uc:TextField
+                <uc:PasswordField
                     x:Name="tfPassword"
                     Margin="0,25,0,40"
                     MaxLength="10"
                     Title="SENHA:"
-                    Placeholder="****" />
+                    Placeholder="****"/>
 
                 <Button
                     x:Name="btnEnter"
