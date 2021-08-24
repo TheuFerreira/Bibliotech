@@ -15,10 +15,14 @@ namespace Bibliotech.UserControls.CustomDialog
         {
             InitializeComponent();
 
-            tbPassword.FieldType = fieldType;
-            tbPassword.Title = textFieldTitle;
+            tbField.FieldType = fieldType;
+            tbField.Title = textFieldTitle;
             tbTitle.Text = description;
             TypeTextFieldDialog = typeTextFieldDialog;
+            tfPassword.Title = textFieldTitle;
+
+            tfPassword.Visibility = typeTextFieldDialog == TypeTextFieldDialog.Password ? Visibility.Visible : Visibility.Collapsed;
+            tbField.Visibility = typeTextFieldDialog != TypeTextFieldDialog.Password ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -29,7 +33,21 @@ namespace Bibliotech.UserControls.CustomDialog
 
         public void ButtonConfirm_Click(object sender, RoutedEventArgs e)
         {
-            Text = tbPassword.Text;
+            switch (TypeTextFieldDialog)
+            {
+                case TypeTextFieldDialog.Add:
+                    Text = tbField.Text;
+                    break;
+                case TypeTextFieldDialog.Password:
+                    Text = tfPassword.Text;
+                    break;
+                case TypeTextFieldDialog.Save:
+                    Text = tbField.Text;
+                    break;
+                default:
+                    break;
+            }
+
 
             DialogResult = true;
             Close();

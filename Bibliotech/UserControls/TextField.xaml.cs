@@ -81,7 +81,11 @@ namespace Bibliotech.UserControls
                 return;
             }
 
-            textBox.CaretIndex = textBox.Text.Length;
+            if (Mask != FieldMask.None)
+            {
+                textBox.CaretIndex = textBox.Text.Length;
+            }
+
             string text = textBox.Text;
 
             switch (Mask)
