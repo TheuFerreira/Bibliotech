@@ -160,7 +160,8 @@
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom" OnClick="save_OnClick"/>
+            VerticalAlignment="Bottom" 
+            OnClick="Save_OnClick"/>
 
     </Grid>
 </Window>

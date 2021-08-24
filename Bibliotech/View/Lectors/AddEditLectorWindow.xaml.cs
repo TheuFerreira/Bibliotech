@@ -39,7 +39,7 @@ namespace Bibliotech.View.Lectors
             Title = tbInfo.Text;
 
             tfName.Text = lector.Name;
-            tfUserRegistration.Text = lector.IdLector.ToString();
+            tfUserRegistration.Text = lector.IdLector.ToString("D6");
             tfResponsible.Text = lector.Responsible;
             tfBirthDate.Text = lector.BirthDate.ToString();
             tfCity.Text = address.City;
@@ -136,27 +136,18 @@ namespace Bibliotech.View.Lectors
         private void ClearFields()
         {
             tfName.Text = "";
-
             tfBirthDate.Text = "";
-
             tfCity.Text = "";
-
             tfResponsible.Text = "";
-
             tfStreet.Text = "";
-
             tfNumber.Text = "";
-
             tfUserRegistration.Text = "";
-
             tfComplement.Text = "";
-
             tfDistrict.Text = "";
-
             tfNumber.Text = "";
         }
 
-        private async void save_OnClick(object sender, RoutedEventArgs e)
+        private async void Save_OnClick(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields())
             {
