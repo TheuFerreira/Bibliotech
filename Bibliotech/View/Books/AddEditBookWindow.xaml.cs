@@ -7,6 +7,7 @@ using Bibliotech.UserControls;
 using Bibliotech.Services;
 using System.Collections.Generic;
 using Bibliotech.Model.Entities.Enums;
+using Bibliotech.View.Authors;
 
 namespace Bibliotech.View.Books
 {
@@ -20,7 +21,7 @@ namespace Bibliotech.View.Books
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
         private readonly Loading loading = new Loading();
-
+        private List<int> idAuthors;
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -56,7 +57,6 @@ namespace Bibliotech.View.Books
             tfVolume.Text = Book.Volume;
             tfColletion.Text = Book.Collection;
         }
-        
         private void SeparateAuthor()
         {
             string author = tfAuthor.Text;
@@ -99,14 +99,18 @@ namespace Bibliotech.View.Books
             Book.YearPublication = (string.IsNullOrWhiteSpace(tfYear.Text) ? 0 : Convert.ToInt32(tfYear.Text));
             return true;
         }
+        private void BtnAddAuthor_Click(object sender, RoutedEventArgs e)
+        {
+            SearchAuthorWindow searchAuthor = new SearchAuthorWindow();
+            searchAuthor.ShowDialog();
+            idAuthors.Add(Convert.ToInt32(searchAuthor.SetIdAuthor));
+        }
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {
             loading.Awaiting = true;
             btnSave.IsEnabled = false;
 
             if (!VerifyFields()) return;
-
-            SeparateAuthor();
             
             Book.Title = tfTitle.Text;
             Book.Subtitle = tfSubtitle.Text;
@@ -119,7 +123,7 @@ namespace Bibliotech.View.Books
            
             if(Book.IdBook == -1)
             {
-                await DAOBook.InsertBook(Book);
+                await DAOBook.InsertBook(Book, idAuthors);
                 if (ShowQuestion(" ", "Livro inserido com sucesso! Deseja adicionar um exemplar?"))
                 {
                     ExemplaryWindow exemplaryWindow = new ExemplaryWindow(Book);
@@ -147,5 +151,6 @@ namespace Bibliotech.View.Books
         {
             ShowExemplaries();
         }
+        
     }
 }

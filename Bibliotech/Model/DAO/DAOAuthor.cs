@@ -11,21 +11,47 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOAuthor : Connection
     {
-        public async Task<List<Author>> GetAuthor(int idBook)
+        public async Task InsertAuthor(Author author)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
+
+                string insertAuthor = "insert into author(name, status) values (?, 1); ";
+
+                cmd.CommandText = insertAuthor;
+                cmd.Parameters.Add("?", DbType.String).Value = author.Name;
+
+                await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+            }
+            catch (MySqlException ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+        public async Task<List<Author>> GetAuthor(string text)
         {
             try
             {
                 await Connect();
-                string selectAuthor = "select a.id_author, a.name " +
-                    "from book_has_author as bookauthor " +
-                    "inner join author as a on a.id_author = bookauthor.id_author " +
-                    "inner join book as b on b.id_book = bookauthor.id_bookstatus = 1 " +
-                    "and bookauthor.id_book = ? ; ";
+                string selectAuthor = "select id_author, name " +
+                    "from author where name like '%" + text + "%' and author.status = 1; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectAuthor, SqlConnection);
                 cmd.CommandText = selectAuthor;
+
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add("?", DbType.Int32).Value = idBook;
+                cmd.Parameters.Add("?", DbType.String).Value = text;
 
                 List<Author> authors = new List<Author>();
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);

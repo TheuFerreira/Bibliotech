@@ -10,27 +10,14 @@ namespace Bibliotech.Model.DAO
 {
     public class DAOBook : Connection
     {
-        public async Task InsertBook(Book book)
+        public async Task InsertBook(Book book, List<int> idAuthors)
         {
-            List<int> idAuthors = new List<int>();
-
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
-                string insertAuthor = "insert into author(name, status) values (?, 1); select last_insert_id(); ";
-
-                for (int i = 0; i < book.Authors.Count; i++)
-                {
-                    cmd.CommandText = insertAuthor;
-                    cmd.Parameters.Clear();
-                    string name = book.Authors[i].Name;
-                    cmd.Parameters.Add("?", DbType.String).Value = name;
-                    var idAuthor = await cmd.ExecuteScalarAsync();
-                    idAuthors.Add(Convert.ToInt32(idAuthor));
-                }
 
                 string insertBook = "insert into book(title, subtitle, publishing_company, gender, " +
                     "edition, pages, year_publication, language, volume, collection, status ) values  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  1); select last_insert_id();";
@@ -135,12 +122,12 @@ namespace Bibliotech.Model.DAO
         public async Task<List<Book>> GetBook(string text)
         {
             await Connect();
+            
             try
             {
                 Book book = new Book();
-                book.Authors = new List<Author>();
 
-                string selectBook = "select b.id_book, b.title, b.subtitle, b.publishing_company, b.gender, " +
+                string selectBook = "select b.id_book, b.title, b.subtitle, b.publishing_company, group_concat(distinct name separator ', ') as Name, b.gender, " +
                     "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection from book_has_author as bookauthor " +
                     "inner join author as a on a.id_author = bookauthor.id_author " +
                     "inner join book as b on b.id_book = bookauthor.id_book " +
@@ -157,21 +144,28 @@ namespace Bibliotech.Model.DAO
                     string title = await reader.GetFieldValueAsync<string>(1);
                     string subtitle = await reader.GetFieldValueAsync<string>(2);
                     string publishingCompany = await reader.GetFieldValueAsync<string>(3);
-                    string gender = await reader.GetFieldValueAsync<string>(4);
-                    string edition = await reader.GetFieldValueAsync<string>(5);
+                    string name = await reader.GetFieldValueAsync<string>(4);
+                    string gender = await reader.GetFieldValueAsync<string>(5);
+                    string edition = await reader.GetFieldValueAsync<string>(6);
                     int? pages = null;
-                    if (await reader.IsDBNullAsync(6) == false)
-                    {
-                        pages = await reader.GetFieldValueAsync<int>(6);
-                    }
-                    int? yearPublication = null;
                     if (await reader.IsDBNullAsync(7) == false)
                     {
-                        yearPublication = await reader.GetFieldValueAsync<int>(7);
+                        pages = await reader.GetFieldValueAsync<int>(7);
                     }
-                    string language = await reader.GetFieldValueAsync<string>(8);
-                    string volume = await reader.GetFieldValueAsync<string>(9);
-                    string collection = await reader.GetFieldValueAsync<string>(10);
+                    int? yearPublication = null;
+                    if (await reader.IsDBNullAsync(8) == false)
+                    {
+                        yearPublication = await reader.GetFieldValueAsync<int>(8);
+                    }
+                    string language = await reader.GetFieldValueAsync<string>(9);
+                    string volume = await reader.GetFieldValueAsync<string>(10);
+                    string collection = await reader.GetFieldValueAsync<string>(11);
+
+
+                    Author author = new Author()
+                    {
+                        Name = name,
+                    };
 
                     book = new Book()
                     {
@@ -179,6 +173,7 @@ namespace Bibliotech.Model.DAO
                         Title = title,
                         Subtitle = subtitle,
                         PublishingCompany = publishingCompany,
+                        Author = author,
                         Gender = gender,
                         Edition = edition,
                         Pages = pages,
@@ -188,6 +183,9 @@ namespace Bibliotech.Model.DAO
                         Collection = collection,
                     };
 
+                    book.Authors = new List<Author>();
+
+                    book.Authors.Add(author);
                     books.Add(book);
                 }
 

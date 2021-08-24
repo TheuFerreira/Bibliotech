@@ -9,7 +9,7 @@
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStartupLocation="CenterScreen"
         Title="Procurar Livro" Height="469" Width="890" ResizeMode="NoResize">
-    <Grid>
+    <Grid Loaded="AuthorWindow_Loaded">
         <TextBlock 
             Margin="0,10"
             FontSize="25"
@@ -23,7 +23,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Placeholder="PROCURAR AUTOR"
-            Width="350"/>
+            Width="350" Click="SearchField_Click"/>
 
         <DataGrid 
             x:Name="dataGrid"
@@ -31,7 +31,7 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="NOME" Binding="{Binding Path=id_index}" Width="*"/>
+                <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -46,9 +46,10 @@
             CornerRadius="15"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Left"
-            Text="NOVO AUTOR"/>
+            Text="NOVO AUTOR"  Click="BtnAdd_Click"/>
         
-        <uc:Button x:Name="selectButton"
+        <uc:Button 
+            x:Name="selectButton"
             Margin="10"
             Width="170"
             Height="30"
@@ -58,7 +59,7 @@
             CornerRadius="15"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
-            Text="SELECIONAR"/>
+            Text="SELECIONAR" Click="SelectedButton_Click"/>
 
         <uc:Loading 
             x:Name="loading"

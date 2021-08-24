@@ -44,16 +44,19 @@ namespace Bibliotech.View.Books
                 }
             }
         }
+        private void IsEnabled(bool result)
+        {
+            loading.Awaiting = result;
+            searchField.IsEnabled = !result;
+        }
         private async Task SearchBooks()
         {
             DisableControls(gridPanel.Children);
             string text = searchField.Text;
-            loading.Awaiting = true;
-            searchField.IsEnabled = false;
+            IsEnabled(true);
             books = await DAOBook.GetBook(text);
             dataGrid.ItemsSource = books;
-            searchField.IsEnabled = true;
-            loading.Awaiting = false;
+            IsEnabled(false);
             EnableControls(gridPanel.Children);
         }
         private Book GetIdBook()

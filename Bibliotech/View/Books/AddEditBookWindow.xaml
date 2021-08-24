@@ -69,6 +69,7 @@
                     Width="320"/>
 
                 <uc:Button
+                    x:Name="bntAddAuthor"
                     Margin="0,0,20,0"
                     Height="30"
                     VerticalAlignment="Bottom"
@@ -77,7 +78,7 @@
                     Width="150"
                     CornerRadius="15"
                     Source="/Bibliotech;component/Resources/img_zoom.png"
-                    MarginImage="7,5"/>
+                    MarginImage="7,5" Click="BtnAddAuthor_Click"/>
 
                 <uc:TextField 
                     x:Name="tfGender"
