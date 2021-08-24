@@ -161,7 +161,6 @@ namespace Bibliotech.Model.DAO
                     string volume = await reader.GetFieldValueAsync<string>(10);
                     string collection = await reader.GetFieldValueAsync<string>(11);
 
-
                     Author author = new Author()
                     {
                         Name = name,

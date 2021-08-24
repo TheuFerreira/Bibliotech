@@ -20,6 +20,7 @@ namespace Bibliotech.View.Authors
         private readonly DialogService dialogService;
         private List<Author> authors;
         public List<int> SetIdAuthor;
+        public List<string> SetNameAuthor;
 
         public SearchAuthorWindow()
         {
@@ -30,6 +31,7 @@ namespace Bibliotech.View.Authors
             dialogService = new DialogService();
             authors = new List<Author>();
             SetIdAuthor = new List<int>();
+            SetNameAuthor = new List<string>();
         }
         private void IsEnabled(bool result)
         {
@@ -95,6 +97,7 @@ namespace Bibliotech.View.Authors
         private void SelectedButton_Click(object sender, RoutedEventArgs e)
         {
             SetIdAuthor.Add(GetIdAuthor().IdAuthor);
+            SetNameAuthor.Add(GetIdAuthor().Name);
             dialogService.ShowSuccess("Autor Adicionado");
         }
 

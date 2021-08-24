@@ -14,13 +14,14 @@ namespace Bibliotech.View.Books
     public partial class BooksWindow : Window
     {
         private readonly DAOBook DAOBook;
-        private Book book = new Book();
+        private Book book;
         private List<Book> books;
         
         public BooksWindow()
         {
             InitializeComponent();
             DAOBook = new DAOBook();
+            book = new Book();
             books = new List<Book>();
         }
         private void DisableControls(UIElementCollection childs)
@@ -77,7 +78,7 @@ namespace Bibliotech.View.Books
         }
         private async void BtnAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            AddEditBookWindow addEditBookWindow = new AddEditBookWindow(book);
+            AddEditBookWindow addEditBookWindow = new AddEditBookWindow(book = new Book());
             addEditBookWindow.ShowDialog();
             await SearchBooks();
         }

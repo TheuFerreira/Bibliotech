@@ -19,8 +19,9 @@ namespace Bibliotech.View.Books
         private Author Author = new Author();
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
-        private readonly Loading loading = new Loading();
+        private readonly Loading loading;
         private readonly List<int> idAuthors;
+        private readonly List<string> nameAuthor;
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -29,16 +30,18 @@ namespace Bibliotech.View.Books
             Book = book;
             Book.Authors = new List<Author>();
             idAuthors = new List<int>();
+            nameAuthor = new List<string>();
+            loading = new Loading();
 
             Title = "Adicionar Livro";
             tbInfo.Text = "Adicionar Livro";
-
+           
             if (book.IdBook == -1)
             {
                 return;
             }
-            
-           EditBook();
+           
+            EditBook();
         } 
         private void EditBook()
         {
@@ -48,7 +51,7 @@ namespace Bibliotech.View.Books
             tfTitle.Text = Book.Title;
             tfSubtitle.Text = Book.Subtitle;
             tfPublishingCompany.Text = Book.PublishingCompany;
-           tfAuthor.Text = Book.Authors.ToString(); 
+            tfAuthor.Text = Book.Author.Name;
             tfGender.Text = Book.Gender;
             tfEdition.Text = Book.Edition;
             tfNumberPages.Text = Book.Pages.ToString();
@@ -90,11 +93,17 @@ namespace Bibliotech.View.Books
             {
                 return;
             }
-            
             foreach(int list in searchAuthor.SetIdAuthor)
             {
                 idAuthors.Add(list);
             }
+            foreach(string name in searchAuthor.SetNameAuthor)
+            {
+                nameAuthor.Add(name);
+                tfAuthor.Text += $"{name.ToString()},";
+            }
+
+           
             
         }
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -103,6 +112,7 @@ namespace Bibliotech.View.Books
             btnSave.IsEnabled = false;
 
             if (!VerifyFields()) return;
+
             
             Book.Title = tfTitle.Text;
             Book.Subtitle = tfSubtitle.Text;
