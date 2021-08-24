@@ -306,7 +306,7 @@ namespace Bibliotech.View.Reports
             int selectedIndex = lendingDataGrid.SelectedIndex;
             Lending lending = lendings[selectedIndex];
 
-            Book book = await new DAOBook().GetById(lending.Exemplaries[0].Book.IdBook);
+            Book book = await new DAOBook().GetById(lending.Exemplary.Book.IdBook);
 
             loading.Awaiting = false;
             btnSearch.IsEnabled = true;

@@ -11,15 +11,17 @@ namespace Bibliotech.UserControls.CustomDialog
         public TypeTextFieldDialog TypeTextFieldDialog { get; set; }
         public string Text { get; set; }
 
-        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog, FieldType fieldType)
+        public TextFieldDialog(string textFieldTitle, string description, TypeTextFieldDialog typeTextFieldDialog, FieldType fieldType, string placeholder)
         {
             InitializeComponent();
 
             tbField.FieldType = fieldType;
             tbField.Title = textFieldTitle;
+            tbField.Placeholder = placeholder;
             tbTitle.Text = description;
             TypeTextFieldDialog = typeTextFieldDialog;
             tfPassword.Title = textFieldTitle;
+            tfPassword.Placeholder = placeholder;
 
             tfPassword.Visibility = typeTextFieldDialog == TypeTextFieldDialog.Password ? Visibility.Visible : Visibility.Collapsed;
             tbField.Visibility = typeTextFieldDialog != TypeTextFieldDialog.Password ? Visibility.Visible : Visibility.Collapsed;

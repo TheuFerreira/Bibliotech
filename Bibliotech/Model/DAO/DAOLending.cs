@@ -120,7 +120,7 @@ namespace Bibliotech.Model.DAO
                 Lending lending = new Lending
                 {
                     Lector = lector,
-                    Exemplaries = new List<Exemplary>() { exemplary },
+                    Exemplary = exemplary,
                 };
                 lendings.Add(lending);
             }
