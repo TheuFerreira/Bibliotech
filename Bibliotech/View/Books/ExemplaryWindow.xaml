@@ -31,8 +31,7 @@
             Title="FILTRAR:"
             Width="200"
             HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            SelectionChanged="Filter_SelectionChanged"/>
+            VerticalAlignment="Top"/>
 
         <DataGrid
             x:Name="dataGrid"

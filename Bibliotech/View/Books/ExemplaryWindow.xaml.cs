@@ -36,14 +36,6 @@ namespace Bibliotech.View.Books
             dialogService = new DialogService();
             Book = book;
 
-            searchField.ItemsSource = Enum.GetValues(typeof(TypeSearch))
-                .Cast<TypeSearch>()
-                .Select(x => x.AsString(EnumFormat.Description))
-                .ToList();
-
-            typeSearch = TypeSearch.Current;
-            searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
-
             filter.ItemsSource = Enum.GetValues(typeof(Status))
                 .Cast<Status>()
                 .Where(x => x != Status.Active)
@@ -52,6 +44,16 @@ namespace Bibliotech.View.Books
 
             filterStatus = Status.All;
             filter.SelectedItem = filterStatus.AsString(EnumFormat.Description);
+
+            searchField.ItemsSource = Enum.GetValues(typeof(TypeSearch))
+                .Cast<TypeSearch>()
+                .Select(x => x.AsString(EnumFormat.Description))
+                .ToList();
+
+            typeSearch = TypeSearch.Current;
+            searchField.SelectedItem = typeSearch.AsString(EnumFormat.Description);
+
+            filter.SelectionChanged += Filter_SelectionChanged;
         }
 
         private async void SearchEemplaries()
