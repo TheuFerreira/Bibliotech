@@ -6,7 +6,6 @@ using Bibliotech.Model.DAO;
 using Bibliotech.UserControls;
 using Bibliotech.Services;
 using System.Collections.Generic;
-using Bibliotech.Model.Entities.Enums;
 using Bibliotech.View.Authors;
 
 namespace Bibliotech.View.Books
@@ -21,7 +20,7 @@ namespace Bibliotech.View.Books
         private readonly DAOAuthor DAOAuthor;
         private readonly DAOBook DAOBook;
         private readonly Loading loading = new Loading();
-        private List<int> idAuthors;
+        private readonly List<int> idAuthors;
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -29,6 +28,7 @@ namespace Bibliotech.View.Books
             DAOBook = new DAOBook();
             Book = book;
             Book.Authors = new List<Author>();
+            idAuthors = new List<int>();
 
             Title = "Adicionar Livro";
             tbInfo.Text = "Adicionar Livro";
@@ -57,22 +57,6 @@ namespace Bibliotech.View.Books
             tfVolume.Text = Book.Volume;
             tfColletion.Text = Book.Collection;
         }
-        private void SeparateAuthor()
-        {
-            string author = tfAuthor.Text;
-            string[] authors = author.Split(',');
-            foreach(var nameAuthor in authors)
-            {
-                Author = new Author
-                {
-                    IdAuthor = -1,
-                    Name = nameAuthor,
-                    Status = Status.Active
-                };
-
-                Book.Authors.Add(Author);
-            }
-        }
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
         {
             InformationDialog dialog = new InformationDialog(title, contents, typeDialog);
@@ -88,8 +72,7 @@ namespace Bibliotech.View.Books
         {
             if (string.IsNullOrWhiteSpace(tfTitle.Text)
                || string.IsNullOrWhiteSpace(tfSubtitle.Text)
-               || string.IsNullOrWhiteSpace(tfPublishingCompany.Text)
-               || string.IsNullOrWhiteSpace(tfAuthor.Text))
+               || string.IsNullOrWhiteSpace(tfPublishingCompany.Text))
             {
                 ShowMessage("Atenção", "Preencha os espaços com * !!!", TypeDialog.Error);
                 return false;
@@ -103,7 +86,16 @@ namespace Bibliotech.View.Books
         {
             SearchAuthorWindow searchAuthor = new SearchAuthorWindow();
             searchAuthor.ShowDialog();
-            idAuthors.Add(Convert.ToInt32(searchAuthor.SetIdAuthor));
+            if(searchAuthor.SetIdAuthor  == null)
+            {
+                return;
+            }
+            
+            foreach(int list in searchAuthor.SetIdAuthor)
+            {
+                idAuthors.Add(list);
+            }
+            
         }
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {

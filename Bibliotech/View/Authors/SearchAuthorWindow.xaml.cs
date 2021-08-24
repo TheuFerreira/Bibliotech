@@ -31,24 +31,38 @@ namespace Bibliotech.View.Authors
             authors = new List<Author>();
             SetIdAuthor = new List<int>();
         }
-        
+        private void IsEnabled(bool result)
+        {
+            loading.Awaiting = result;
+            addButton.IsEnabled = !result;
+            editButton.IsEnabled = !result;
+            selectButton.IsEnabled = !result;
+            searchField.IsEnabled = !result;
+        }
         private async void AddNewAuthor(string Title, string Descriprion)
         {
             string text = dialogService.ShowAddAuthorDialog(Descriprion, Title);
             if (text == string.Empty) return;
             author.Name = text;
+            IsEnabled(true);
             author.Status = Status.Active;
             await DAOAuthor.InsertAuthor(author);
+            IsEnabled(false);
             dialogService.ShowSuccess("Autor inserido com Sucesso!");
         }
-
-        private void IsEnabled(bool result)
+        private async void EditAuthor(Author author)
         {
-            loading.Awaiting = result;
-            addButton.IsEnabled = !result;
-            selectButton.IsEnabled = !result;
-            searchField.IsEnabled = !result;
+            string text = dialogService.ShowAddAuthorDialog("Editar Autor", "Editar Autor");
+            if (text == string.Empty) return;
+            IsEnabled(true);
+            author.Name = text;
+            author.Status = Status.Active;
+            await DAOAuthor.UpdateAuthor(author);
+            IsEnabled(false);
+            dialogService.ShowSuccess("Autor alterado com Sucesso!");
+            await SearchAuthor();
         }
+
         private async Task SearchAuthor()
         {
             string text = searchField.Text;
@@ -81,6 +95,12 @@ namespace Bibliotech.View.Authors
         private void SelectedButton_Click(object sender, RoutedEventArgs e)
         {
             SetIdAuthor.Add(GetIdAuthor().IdAuthor);
+            dialogService.ShowSuccess("Autor Adicionado");
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditAuthor(GetIdAuthor());
         }
     }
 }

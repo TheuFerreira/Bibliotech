@@ -59,7 +59,7 @@
             CornerRadius="15"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Center"
-            Text="EDITAR AUTOR"/>
+            Text="EDITAR AUTOR" Click="EditButton_Click"/>
 
         <uc:Button 
             x:Name="selectButton"

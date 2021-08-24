@@ -52,8 +52,8 @@ namespace Bibliotech.View.Books
         private async Task SearchBooks()
         {
             DisableControls(gridPanel.Children);
-            string text = searchField.Text;
             IsEnabled(true);
+            string text = searchField.Text;
             books = await DAOBook.GetBook(text);
             dataGrid.ItemsSource = books;
             IsEnabled(false);
@@ -71,7 +71,6 @@ namespace Bibliotech.View.Books
             ExemplaryWindow exemplary = new ExemplaryWindow(book);
             exemplary.Show();
         }
-        
         private async void BooksWindow_Loaded(object sender, RoutedEventArgs e)
         {
             await SearchBooks();
