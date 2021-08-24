@@ -2,6 +2,7 @@
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
 using EnumsNET;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,7 @@ namespace Bibliotech.View.Books
         private Status filterStatus;
         private readonly DialogService dialogService;
         private readonly Book Book;
-
-        // SUBSTITUIR DEPOIS PELO SINGLETON
-        private readonly Branch currentBranch = new Branch(1, "Senador");
+        private readonly Branch currentBranch;
 
         public ExemplaryWindow(Book book)
         {
@@ -45,8 +44,11 @@ namespace Bibliotech.View.Books
             filterStatus = Status.All;
             filter.SelectedItem = filterStatus.AsString(EnumFormat.Description);
 
+            User currentUser = Session.Instance.User;
+            currentBranch = currentUser.Branch;
             searchField.ItemsSource = Enum.GetValues(typeof(TypeSearch))
                 .Cast<TypeSearch>()
+                .Where(x => !currentUser.IsUser() || x != TypeSearch.All)
                 .Select(x => x.AsString(EnumFormat.Description))
                 .ToList();
 
