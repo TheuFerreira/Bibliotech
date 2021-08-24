@@ -4,5 +4,6 @@
     {
         Add = 1,
         Password = 2,
+        Save = 3,
     }
 }

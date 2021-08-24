@@ -43,5 +43,13 @@ namespace Bibliotech.Services
 
             return result == false ? string.Empty : fieldDialog.Text;
         }
+
+        public string ShowSaveDialog(string description, string textFieldTitle)
+        {
+            TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Save, FieldType.String);
+            bool? result = fieldDialog.ShowDialog();
+
+            return result == false ? string.Empty : fieldDialog.Text;
+        }
     }
 }
