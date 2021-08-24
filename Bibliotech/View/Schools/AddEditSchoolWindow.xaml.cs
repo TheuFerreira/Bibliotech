@@ -38,10 +38,10 @@ namespace Bibliotech.View.Schools
             InitializeComponent();
 
             this.isFirstBranch = isFirstBranch;
+            this.branch = branch;
+
             tbInfo.Text = "Adicionar Escola";
             Title = tbInfo.Text;
-
-            this.branch = branch;
 
             FillFieldWithBranchInfo();
         }
@@ -132,27 +132,28 @@ namespace Bibliotech.View.Schools
             branch.Address = address;
 
             btnSave.IsEnabled = false;
-            if (await daoSchool.Save(branch))
+            bool result = await daoSchool.Save(branch);
+            if (result == false)
             {
-                dialogService.ShowSuccess("Escola salva com sucesso");
-                ClearFields();
-
-                if (isFirstBranch)
-                {
-                    dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
-                    DialogResult = true;
-                    Close();
-                }
-                else if (branch.IdBranch != -1)
-                {
-                    Close();
-                }
+                dialogService.ShowError("Algo deu errado\nTente novamente");
+                btnSave.IsEnabled = true;
 
                 return;
             }
 
-            dialogService.ShowError("Algo deu errado\nTente novamente");
-            btnSave.IsEnabled = true;
+            dialogService.ShowSuccess("Escola salva com sucesso");
+            ClearFields();
+
+            if (isFirstBranch)
+            {
+                dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
+                DialogResult = true;
+                Close();
+            }
+            else if (branch.IdBranch != -1)
+            {
+                Close();
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)

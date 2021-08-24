@@ -1,7 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Singletons;
-using Bibliotech.UserControls;
 using Bibliotech.UserControls.CustomDialog;
 using System.Windows;
 
@@ -47,7 +46,7 @@ namespace Bibliotech.View.Users
                 ShowMessage("Atenção", "Usuário não encontrado", TypeDialog.Error);
 
                 tfUser.Text = string.Empty;
-                tfUser.Text = string.Empty;
+                tfPassword.Text = string.Empty;
 
                 return;
             }

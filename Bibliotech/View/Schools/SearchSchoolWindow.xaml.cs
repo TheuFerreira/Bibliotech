@@ -1,7 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Windows;
 
 namespace Bibliotech.View.Schools

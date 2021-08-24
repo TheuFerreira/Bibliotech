@@ -26,23 +26,6 @@ namespace Bibliotech.Model.Entities
             IdBook = -1;
         }
 
-        public Book(string title, string subtitle, List<Author> authors, string publishingCompany, string gender,
-            string edition, int? pages, int? year, string language, string volume, string collection)
-        {
-            Title = title;
-            Subtitle = subtitle;
-            PublishingCompany = publishingCompany;
-            Authors = authors;
-            Gender = gender;
-            Edition = edition;
-            Pages = pages;
-            YearPublication = year;
-            Language = language;
-            Volume = volume;
-            Collection = collection;
-            Status = Status.Active;
-        }
-
         public override string ToString()
         {
             string authors = string.Empty;

@@ -53,7 +53,7 @@ namespace Bibliotech.View.Schools
 
         private async void ButtonOnOff_OnClick(object sender, RoutedEventArgs e)
         {
-            
+
             if (dataGrid.SelectedItem == null)
             {
                 return;
