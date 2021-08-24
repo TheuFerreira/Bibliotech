@@ -1,12 +1,10 @@
 ﻿using Bibliotech.Model.Entities.Enums;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Bibliotech.Model.Entities
 {
     public class Book
     {
-        private DAO.DAOAuthor DAOAuthor;
         public int IdBook { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
@@ -27,6 +25,7 @@ namespace Bibliotech.Model.Entities
         {
             IdBook = -1;
         }
+
         public Book(string title, string subtitle, List<Author> authors, string publishingCompany, string gender,
             string edition, int? pages, int? year, string language, string volume, string collection)
         {
@@ -44,15 +43,15 @@ namespace Bibliotech.Model.Entities
             Status = Status.Active;
         }
 
-        /*
         public override string ToString()
         {
             string authors = string.Empty;
-            foreach (Author author in Authors)
+            for (int i = 0; i < Authors.Count; i++)
             {
+                Author author = Authors[i];
                 authors += $"{author.Name}";
 
-                if (author != Authors.ElementAt(Authors.Count - 1))
+                if (i < Authors.Count - 1)
                 {
                     authors += ", ";
                 }
@@ -60,6 +59,5 @@ namespace Bibliotech.Model.Entities
 
             return authors;
         }
-        */
     }
 }
