@@ -43,7 +43,7 @@ namespace Bibliotech.View.Authors
         }
         private async void AddNewAuthor(string Title, string Descriprion)
         {
-            string text = dialogService.ShowAddAuthorDialog(Descriprion, Title);
+            string text = dialogService.ShowAddTextDialog(Descriprion, Title);
             if (text == string.Empty) return;
             author.Name = text;
             IsEnabled(true);
@@ -54,7 +54,7 @@ namespace Bibliotech.View.Authors
         }
         private async void EditAuthor(Author author)
         {
-            string text = dialogService.ShowAddAuthorDialog("Editar Autor", "Editar Autor");
+            string text = dialogService.ShowAddTextDialog("Editar Autor", "Editar Autor");
             if (text == string.Empty) return;
             IsEnabled(true);
             author.Name = text;
@@ -64,7 +64,6 @@ namespace Bibliotech.View.Authors
             dialogService.ShowSuccess("Autor alterado com Sucesso!");
             await SearchAuthor();
         }
-
         private async Task SearchAuthor()
         {
             string text = searchField.Text;
@@ -100,7 +99,6 @@ namespace Bibliotech.View.Authors
             SetNameAuthor.Add(GetIdAuthor().Name);
             dialogService.ShowSuccess("Autor Adicionado");
         }
-
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             EditAuthor(GetIdAuthor());

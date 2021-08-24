@@ -44,7 +44,7 @@ namespace Bibliotech.Services
             return result == false ? string.Empty : fieldDialog.Text;
         }
 
-        public string ShowAddAuthorDialog(string description, string textFieldTitle)
+        public string ShowAddTextDialog(string description, string textFieldTitle)
         {
             TextFieldDialog fieldDialog = new TextFieldDialog(textFieldTitle, description, TypeTextFieldDialog.Add, FieldType.String, "@autor");
             bool? result = fieldDialog.ShowDialog();

@@ -21,7 +21,6 @@ namespace Bibliotech.View.Books
         private readonly DAOBook DAOBook;
         private readonly Loading loading;
         private readonly List<int> idAuthors;
-        private readonly List<string> nameAuthor;
         public AddEditBookWindow(Book book)
         {
             InitializeComponent();
@@ -30,7 +29,6 @@ namespace Bibliotech.View.Books
             Book = book;
             Book.Authors = new List<Author>();
             idAuthors = new List<int>();
-            nameAuthor = new List<string>();
             loading = new Loading();
 
             Title = "Adicionar Livro";
@@ -75,7 +73,8 @@ namespace Bibliotech.View.Books
         {
             if (string.IsNullOrWhiteSpace(tfTitle.Text)
                || string.IsNullOrWhiteSpace(tfSubtitle.Text)
-               || string.IsNullOrWhiteSpace(tfPublishingCompany.Text))
+               || string.IsNullOrWhiteSpace(tfPublishingCompany.Text)
+               || string.IsNullOrWhiteSpace(tfAuthor.Text))
             {
                 ShowMessage("Atenção", "Preencha os espaços com * !!!", TypeDialog.Error);
                 return false;
@@ -99,11 +98,8 @@ namespace Bibliotech.View.Books
             }
             foreach(string name in searchAuthor.SetNameAuthor)
             {
-                nameAuthor.Add(name);
                 tfAuthor.Text += $"{name.ToString()},";
             }
-
-           
             
         }
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
@@ -153,6 +149,5 @@ namespace Bibliotech.View.Books
         {
             ShowExemplaries();
         }
-        
     }
 }
