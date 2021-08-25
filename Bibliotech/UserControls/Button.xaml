@@ -30,7 +30,8 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Foreground="{StaticResource ButtonTextSolidColor}"
-                                        Text="{Binding ElementName=uc, Path=Text}"/>
+                                        Text="{Binding ElementName=uc, Path=Text}"
+                                        />
                                 </Grid>
                                 
                             </Border>
