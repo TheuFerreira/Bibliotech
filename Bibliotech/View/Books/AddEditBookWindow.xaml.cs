@@ -139,5 +139,10 @@ namespace Bibliotech.View.Books
         {
             ShowExemplaries();
         }
+
+        private void tfBarCode_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
