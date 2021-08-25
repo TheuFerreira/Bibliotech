@@ -58,6 +58,18 @@ namespace Bibliotech.View.Books
             filter.SelectionChanged += Filter_SelectionChanged;
         }
 
+        private void SetButtons(bool value)
+        {
+            searchField.IsEnabled = value;
+            filter.IsEnabled = value;
+            btnLost.IsEnabled = value;
+            btnNew.IsEnabled = value;
+            btnPrint.IsEnabled = value;
+            btnInactive.IsEnabled = value;
+
+            loading.Awaiting = !value;
+        }
+
         private async void SearchEemplaries()
         {
             string text = searchField.Text;
@@ -67,8 +79,12 @@ namespace Bibliotech.View.Books
 
             columnSchool.Visibility = typeSearch == TypeSearch.Current ? Visibility.Hidden : Visibility.Visible;
 
+            SetButtons(false);
+
             exemplaries = await daoExemplary.GetExemplarysByBook(Book, typeSearch, currentBranch, text, filterStatus);
             dataGrid.ItemsSource = exemplaries;
+
+            SetButtons(true);
         }
 
         private void SearchField_Click(object sender, RoutedEventArgs e)
@@ -112,7 +128,10 @@ namespace Bibliotech.View.Books
                 return;
             }
 
+            SetButtons(false);
             result = await daoExemplary.SetStatus(exemplary, Status.Lost);
+            SetButtons(true);
+
             if (result == false)
             {
                 return;
@@ -120,6 +139,7 @@ namespace Bibliotech.View.Books
 
             exemplary.Status = Status.Lost;
             dialogService.ShowInformation("Livro Extraviado!!!");
+
         }
 
         private async void BtnInactive_OnClick(object sender, RoutedEventArgs e)
@@ -142,7 +162,10 @@ namespace Bibliotech.View.Books
                 return;
             }
 
+            SetButtons(false);
             result = await daoExemplary.SetStatus(exemplary, Status.Inactive);
+            SetButtons(true);
+
             if (result == false)
             {
                 return;
@@ -166,7 +189,10 @@ namespace Bibliotech.View.Books
                 dialogService.ShowError("A quantidade precisa ser maior que 0!");
             }
 
+            SetButtons(false);
             bool result = await daoExemplary.AddExemplaries(currentBranch, Book, numberExemplaries);
+            SetButtons(true);
+
             if (result == false)
             {
                 return;
