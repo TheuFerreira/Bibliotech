@@ -1,16 +1,9 @@
-﻿using System;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Bibliotech.Singletons;
+using System.Data;
 
 namespace Bibliotech.View.Devolutions
 {
@@ -19,9 +12,51 @@ namespace Bibliotech.View.Devolutions
     /// </summary>
     public partial class SearchLectorWindow : Window
     {
+        private readonly DAOLector DAOLector;
+        private readonly int IdBranch = Session.Instance.User.Branch.IdBranch;
+        private  List<Lector> lectors;
+        private List<Lector> Selectedlectors;
         public SearchLectorWindow()
         {
             InitializeComponent();
+            DAOLector = new DAOLector();
+            lectors = new List<Lector>();
+        }
+
+        private void IsEnabled(bool result)
+        {
+            loading.Awaiting = result;
+            searchField.IsEnabled = !result;
+            btnSelectLector.IsEnabled = !result;
+
+        }
+        private async void SearchLector()
+        {
+            IsEnabled(true);
+            string text = searchField.Text;
+            lectors = await DAOLector.GetLectors(IdBranch, text);
+            dataGrid.ItemsSource = lectors;
+            IsEnabled(false);
+        }
+        private Lector lector()
+        {
+            int index = dataGrid.SelectedIndex;
+            Lector lector = lectors[index];
+            return lector;
+        }
+        private void SelectLectorWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            SearchLector();
+        }
+
+        private void BtnSelectLector_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void SearchField_Click(object sender, RoutedEventArgs e)
+        {
+            SearchLector();
         }
     }
 }

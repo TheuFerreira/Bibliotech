@@ -23,5 +23,11 @@ namespace Bibliotech.View.Devolutions
         {
             InitializeComponent();
         }
+
+        private void BtnSearhLector_Click(object sender, RoutedEventArgs e)
+        {
+            SearchLectorWindow lectorWindow = new SearchLectorWindow();
+            lectorWindow.ShowDialog();
+        }
     }
 }

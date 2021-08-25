@@ -3,6 +3,7 @@ using Bibliotech.Model.Entities.Enums;
 using Bibliotech.View.Reports.CustomEnums;
 using MySqlConnector;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -503,6 +504,45 @@ namespace Bibliotech.Model.DAO
                 return await ReportReader(command);
             }
             catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<List<Lector>> GetLectors(int idBranch, string text)
+        {
+            List<Lector> lectors = new List<Lector>();
+            try
+            {
+                await Connect();
+                string selectLector = "select id_lector, name from lector as l where l.id_branch = ? and name like '%" + text + "%' ; ";
+                MySqlCommand cmd = new MySqlCommand(selectLector, SqlConnection);
+
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("?", DbType.Int32).Value = idBranch;
+
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while(await reader.ReadAsync())
+                {
+                    int idLector = await reader.GetFieldValueAsync<int>(0);
+                    string nameLector = await reader.GetFieldValueAsync<string>(1);
+
+                    Lector lector = new Lector()
+                    {
+                        IdLector = idLector,
+                        Name = nameLector,
+                    };
+
+                    lectors.Add(lector);
+                }
+
+                return lectors;
+            }
+            catch(MySqlException ex)
             {
                 throw ex;
             }

@@ -25,22 +25,5 @@ namespace Bibliotech.Model.Entities
         {
             IdBook = -1;
         }
-
-        public override string ToString()
-        {
-            string authors = string.Empty;
-            for (int i = 0; i < Authors.Count; i++)
-            {
-                Author author = Authors[i];
-                authors += $"{author.Name}";
-
-                if (i < Authors.Count - 1)
-                {
-                    authors += ", ";
-                }
-            }
-
-            return authors;
-        }
     }
 }
