@@ -5,10 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Books"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Livros" Height="720" Width="1280">
+
+    <Window.Resources>
+        <converters:AuthorsValueConverter x:Key="AuthorsConverter"/>
+    </Window.Resources>
+    
     <Grid Loaded="BooksWindow_Loaded">
         <uc:SearchField
             x:Name="searchField"
@@ -27,7 +33,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=Title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=Subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=Author.Name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=Authors, Converter={StaticResource AuthorsConverter}}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="EDITORA" Binding="{Binding Path=PublishingCompany}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>

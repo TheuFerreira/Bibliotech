@@ -122,7 +122,7 @@
                 x:Name="btnDatabase"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
-                Width="75"
+                Width="55"
                 Height="45" Click="BtnDatabase_Click" Grid.ColumnSpan="2">
 
                 <Button.Style>
@@ -131,7 +131,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
                                     <Image 
-                                        Margin="5"
+                                        Margin="8"
                                         Source="/Bibliotech;component/Resources/img_database.png"/>
 
                                     <ControlTemplate.Triggers>

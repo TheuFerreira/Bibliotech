@@ -6,14 +6,15 @@
         xmlns:local="clr-namespace:Bibliotech.View.Authors"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         WindowStartupLocation="CenterScreen"
         Title="Procurar Livro" Height="469" Width="890" ResizeMode="NoResize">
-    <Grid Loaded="AuthorWindow_Loaded">
+    <Grid>
         <TextBlock 
             Margin="0,10"
             FontSize="25"
-            Text="SELECIONE O AUTOR"
+            Text="AUTORES"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"/>
 
@@ -28,11 +29,24 @@
         <DataGrid 
             x:Name="dataGrid"
             Margin="0,100,0,50" 
-            ItemsSource="{Binding}">
+            ItemsSource="{Binding}"
+            SelectionChanged="DataGrid_SelectionChanged">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*"/>
             </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=Status}" Value="1">
+                            <Setter Property="Background" Value="{StaticResource SelectedRowSolidColor}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
 
         <uc:Button 
