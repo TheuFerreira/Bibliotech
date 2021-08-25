@@ -24,6 +24,25 @@ namespace Bibliotech.Model.Entities
         public Book()
         {
             IdBook = -1;
+
+            Authors = new List<Author>();
+        }
+
+        public string GetAuthorsToString()
+        {
+            string text = string.Empty;
+            for (int i = 0; i < Authors.Count; i++)
+            {
+                Author author = Authors[i];
+                text += author.Name;
+
+                if (i < Authors.Count - 1)
+                {
+                    text += ", ";
+                }
+            }
+
+            return text;
         }
     }
 }
