@@ -42,7 +42,7 @@
                     <Setter Property="Background" Value="Transparent"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=Status}" Value="1">
-                            <Setter Property="Background" Value="Red"/>
+                            <Setter Property="Background" Value="{StaticResource SelectedRowSolidColor}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

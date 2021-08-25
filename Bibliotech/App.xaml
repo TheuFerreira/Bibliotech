@@ -16,6 +16,7 @@
         <SolidColorBrush x:Key="LineSelectColor" Color="#EEEEEE"/>
         <SolidColorBrush x:Key="ButtonTextSolidColor" Color="#9F9F9F"/>
         <SolidColorBrush x:Key="CancelSolidColor" Color="#F5F5F5"/>
+        <SolidColorBrush x:Key="SelectedRowSolidColor" Color="#92C2C4"/>
         <Color x:Key="NormalColor">#939393</Color>
         <Color x:Key="HoverColor">#46474B</Color>
 
