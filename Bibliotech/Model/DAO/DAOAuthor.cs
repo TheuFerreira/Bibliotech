@@ -1,33 +1,27 @@
 ﻿using Bibliotech.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MySqlConnector;
+using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
 {
     public class DAOAuthor : Connection
     {
-        public async Task InsertAuthor(Author author)
+        public async Task Insert(Author author)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
-
                 string insertAuthor = "insert into author(name, status) values (?, 1); ";
 
-                cmd.CommandText = insertAuthor;
-                cmd.Parameters.Add("?", DbType.String).Value = author.Name;
+                MySqlCommand cmd = new MySqlCommand(insertAuthor, SqlConnection, transaction);
+                _ = cmd.Parameters.Add("?", DbType.String).Value = author.Name;
 
-                await cmd.ExecuteNonQueryAsync();
+                _ = await cmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
-
             }
             catch (MySqlException ex)
             {
@@ -39,19 +33,20 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        public async Task<List<Author>> GetAuthor(string text)
+
+        public async Task<List<Author>> GetAll(string text)
         {
             try
             {
                 await Connect();
-                string selectAuthor = "select id_author, name " +
-                    "from author where name like '%" + text + "%' and author.status = 1; ";
+                string selectAuthor = "" +
+                    "select a.id_author, a.name " +
+                    "from author AS a " +
+                    "where a.name like '%" + text + "%' " +
+                        "and a.status = 1 " +
+                    "order by a.name; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectAuthor, SqlConnection);
-                cmd.CommandText = selectAuthor;
-
-                cmd.Parameters.Clear();
-                cmd.Parameters.Add("?", DbType.String).Value = text;
 
                 List<Author> authors = new List<Author>();
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
@@ -81,24 +76,22 @@ namespace Bibliotech.Model.DAO
             }
 
         }
-        public async Task UpdateAuthor(Author author)
+
+        public async Task Update(Author author)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
             try
             {
-                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
-
                 string updateBook = "update author set name = ? where id_author = ? ;";
 
-                cmd.CommandText = updateBook;
+                MySqlCommand cmd = new MySqlCommand(updateBook, SqlConnection, transaction);
                 cmd.Parameters.Add("?", DbType.String).Value = author.Name;
                 cmd.Parameters.Add("?", DbType.Int32).Value = author.IdAuthor;
 
-                await cmd.ExecuteNonQueryAsync();
+                _ = await cmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
-
             }
             catch (MySqlException ex)
             {
@@ -108,6 +101,49 @@ namespace Bibliotech.Model.DAO
             finally
             {
                 await Disconnect();
+            }
+        }
+
+        public async Task RemoveAllByBook(Book book, MySqlCommand cmd)
+        {
+            try
+            {
+                cmd.Parameters.Clear();
+
+                string deleteAllAuthors = "DELETE FROM book_has_author WHERE id_book = ?;";
+
+                cmd.CommandText = deleteAllAuthors;
+                cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+
+                _ = await cmd.ExecuteNonQueryAsync();
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task AddAllInBook(Book book, MySqlCommand cmd)
+        {
+            try
+            {
+                for (int i = 0; i < book.Authors.Count; i++)
+                {
+                    cmd.Parameters.Clear();
+
+                    string insertBookHasAuthor = "insert book_has_author (id_book, id_author) values (?, ?) ; ";
+                    cmd.CommandText = insertBookHasAuthor;
+
+                    Author author = book.Authors[i];
+                    cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+                    cmd.Parameters.Add("?", DbType.Int32).Value = author.IdAuthor;
+
+                    _ = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
             }
         }
     }

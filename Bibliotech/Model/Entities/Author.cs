@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bibliotech.Model.Entities.Enums;
+﻿using Bibliotech.Model.Entities.Enums;
 
 namespace Bibliotech.Model.Entities
 {
@@ -12,22 +7,22 @@ namespace Bibliotech.Model.Entities
         public int IdAuthor { get; set; }
         public string Name { get; set; }
         public Status Status { get; set; }
+
         public Author()
         {
             IdAuthor = -1;
-        }
-
-        public Author(string name)
-        {
-            Name = name;
             Status = Status.Active;
         }
 
-        public override string ToString()
+        public override bool Equals(object obj)
         {
-            if (Name!=null) 
-                return Name.ToString();
-            return "";
+            return obj is Author author &&
+                   IdAuthor == author.IdAuthor;
+        }
+
+        public override int GetHashCode()
+        {
+            return -854221301 + IdAuthor.GetHashCode();
         }
     }
 }
