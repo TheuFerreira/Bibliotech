@@ -128,7 +128,8 @@ namespace Bibliotech.Model.DAO
                 Book book = new Book();
 
                 string selectBook = "select b.id_book, b.title, b.subtitle, b.publishing_company, group_concat(distinct name separator ', ') as Name, b.gender, " +
-                    "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection from book_has_author as bookauthor " +
+                    "b.edition, b.pages, b.year_publication, b.language, b.volume, b.collection " +
+                    "from book_has_author as bookauthor " +
                     "inner join author as a on a.id_author = bookauthor.id_author " +
                     "inner join book as b on b.id_book = bookauthor.id_book " +
                     "where b.title like '%" + text + "%' and b.status = 1 and a.status = 1 " +

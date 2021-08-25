@@ -15,12 +15,13 @@ namespace Bibliotech.View.Devolutions
         private readonly DAOLector DAOLector;
         private readonly int IdBranch = Session.Instance.User.Branch.IdBranch;
         private  List<Lector> lectors;
-        private List<Lector> Selectedlectors;
+        public Lector Selectedlectors;
         public SearchLectorWindow()
         {
             InitializeComponent();
             DAOLector = new DAOLector();
             lectors = new List<Lector>();
+            Selectedlectors = new Lector();
         }
 
         private void IsEnabled(bool result)
@@ -51,7 +52,7 @@ namespace Bibliotech.View.Devolutions
 
         private void BtnSelectLector_Click(object sender, RoutedEventArgs e)
         {
-            
+            Selectedlectors = lector();
         }
 
         private void SearchField_Click(object sender, RoutedEventArgs e)

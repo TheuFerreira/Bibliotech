@@ -23,7 +23,10 @@ namespace Bibliotech.View.Devolutions
         {
             InitializeComponent();
         }
+        private void SearchExemplaries()
+        {
 
+        }
         private void BtnSearhLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow lectorWindow = new SearchLectorWindow();
