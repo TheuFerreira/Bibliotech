@@ -12,6 +12,7 @@
         Title="Exemplares" Height="720" Width="1280">
     <Window.Resources>
         <converters:EnumValueConverter x:Key="EnumConverter"/>
+        <converters:AuthorsValueConverter x:Key="AuthorsConverter"/>
     </Window.Resources>
     <Grid>
 
@@ -42,7 +43,7 @@
                 <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat=D2}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Book.Title}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn x:Name="columnSchool" Header="ESCOLA" Width="*" Binding="{Binding Path=Branch.Name}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Book}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Book.Authors, Converter={StaticResource AuthorsConverter}}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="STATUS" Width="100" Binding="{Binding Path=Status, Converter={StaticResource EnumConverter}}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="" Width="50" Binding="{Binding Path=icon}">
                     <DataGridTextColumn.CellStyle>
