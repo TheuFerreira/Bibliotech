@@ -620,6 +620,7 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
             try
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);

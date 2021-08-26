@@ -78,21 +78,19 @@ namespace Bibliotech.View.Devolutions
         }
         private void BtnMisplaced_OnClick(object sender, RoutedEventArgs e)
         {
-            
+            IsEnabledControls(true);
             DAOLector.GetStatusDevolution(4, book().IdExemplary);
+            IsEnabledControls(false);
             ShowMessage(" ", "Exemplar extraviado com sucesso!!!");
-            SearchExemplaries();
-            ClearFields();
-
         }
 
         private void BtnDevolution_OnClick(object sender, RoutedEventArgs e)
         {
+            IsEnabledControls(true);
             DAOLector.GetStatusDevolution(3, book().IdExemplary);
+            IsEnabledControls(false);
             ShowMessage(" ", "Exemplar devolvido com sucesso!!!");
-            SearchExemplaries();
-            ClearFields();
-
+           
         }
     }
 }
