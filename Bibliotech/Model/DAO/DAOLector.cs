@@ -326,9 +326,8 @@ namespace Bibliotech.Model.DAO
         public async Task<DataTable> FillDataGrid(string query, int idlector)
         {
             await Connect();
-            string strSql;
 
-            strSql = "select IF (len.return_date IS NOT NULL, " +
+            string strSql = "select IF (len.return_date IS NOT NULL, " +
                     "3, " +
                     "IF(NOW() > len.expected_date, " +
                         "5, " +
@@ -336,15 +335,12 @@ namespace Bibliotech.Model.DAO
                             "4, " +
                             "2) " +
                         ") " +
-                    ") AS status, bk.title, exe.id_exemplary, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
+                    ") AS status, bk.title, exe.id_index, len.loan_date, if(len.return_date is null, 'N/A', len.return_date) as return_date1 " +
                      "from lending as len " +
                      "inner join lector as lec on lec.id_lector = len.id_lector " +
-                     //"INNER JOIN lending_has_exemplary as lhe on lhe.id_lending = len.id_lending " +
                      "INNER JOIN exemplary as exe on exe.id_exemplary = len.id_exemplary " +
                      "inner join book as bk on bk.id_book = exe.id_book " +
                      "where lec.id_lector = " + idlector + " and bk.title like '%" + query + "%';";
-
-
 
             try
             {

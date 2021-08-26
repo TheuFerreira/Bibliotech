@@ -122,10 +122,12 @@ namespace Bibliotech.Model.DAO
                     "FROM book AS b " +
                     "INNER JOIN exemplary AS e ON b.id_book = e.id_book " +
                     "WHERE b.id_book = ? " +
+                        "AND e.id_branch = ? " +
                         "AND e.status != 0;";
 
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection, transaction);
                 command.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
 
                 object result = await command.ExecuteScalarAsync();
                 int lastindex = 0;

@@ -195,10 +195,10 @@ namespace Bibliotech.Model.DAO
             {
                 await Connect();
 
-                string sql = "select b.id_branch, b.name, b.telephone, b.id_address, a.city, a.neighborhood, a.street, a.number " +
+                string sql = "select b.id_branch, b.name, b.telephone, b.id_address, a.city, a.neighborhood, a.street, a.number, b.status " +
                                 "from branch as b " +
                                 "inner join address as a on b.id_address = a.id_address " +
-                                "where b.name like \"%" + query + "%\" AND b.status = 1;";
+                                "where b.name like \"%" + query + "%\";";
 
                 MySqlCommand cmd = new MySqlCommand(sql, SqlConnection);
 
@@ -219,6 +219,7 @@ namespace Bibliotech.Model.DAO
                     string neighborhood = await reader.GetFieldValueAsync<string>(5);
                     string street = await reader.GetFieldValueAsync<string>(6);
                     string number = await reader.GetFieldValueAsync<string>(7);
+                    Status statusBranch = (Status)await reader.GetFieldValueAsync<int>(8);
 
                     Address address = new Address
                     {
@@ -235,6 +236,7 @@ namespace Bibliotech.Model.DAO
                         Name = name,
                         Telephone = telephone,
                         Address = address,
+                        Status = statusBranch,
                     };
 
                     branches.Add(branch);

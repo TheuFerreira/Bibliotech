@@ -32,7 +32,7 @@
             ItemsSource="{Binding}" SelectionChanged="dataGrid_SelectionChanged">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="EXEMPLAR" Binding="{Binding Path=id_index}" Width="100"/>
+                <DataGridTextColumn Header="EXEMPLAR" Binding="{Binding Path=id_index, StringFormat=D3}" Width="100"/>
                 <DataGridTextColumn Header="TÍTULO" Binding="{Binding Path=title}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="SUBTÍTULO" Binding="{Binding Path=subtitle}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Binding="{Binding Path=autores}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
