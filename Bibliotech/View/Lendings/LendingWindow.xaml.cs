@@ -64,7 +64,7 @@ namespace Bibliotech.View.Lendings
             }
             if (!isDelete)
             {
-                book.idExemplary = exemplary.IdIndex;
+                book.IdExemplary = exemplary.IdIndex;
                 books.Add(book);
                 exemplaries.Add(exemplary);
             }

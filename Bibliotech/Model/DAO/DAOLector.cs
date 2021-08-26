@@ -551,5 +551,100 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
+        
+        public async Task<List<Book>> GetBooks(int idLector)
+        {
+            try
+            {
+                await Connect();
+                string selectBooks = "" +
+                    "select e.id_exemplary, e.id_index, b.title, b.subtitle, group_concat(distinct a.name separator', ') as name, b.publishing_company " +
+                    "from lending as le " +
+                    "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
+                    "inner join book_has_author as ba on ba.id_book = e.id_book " +
+                    "inner join book as b on b.id_book = ba.id_book " +
+                    "inner join author as a on a.id_author = ba.id_author " +
+                    "inner join lector as lec on lec.id_lector = le.id_lector " +
+                    "where lec.id_lector = ? and e.status = 2 " +
+                    "group by le.id_lending; ";
+                
+
+                MySqlCommand cmd = new MySqlCommand(selectBooks, SqlConnection);
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("?", DbType.Int32).Value = idLector;
+                List<Book> books = new List<Book>();
+                List<Author> authors = new List<Author>();
+
+                MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int idExemplary = await reader.GetFieldValueAsync<int>(0);
+                    int idIndex = await reader.GetFieldValueAsync<int>(1);
+                    string title = await reader.GetFieldValueAsync<string>(2);
+                    string subtitle = await reader.GetFieldValueAsync<string>(3);
+                    string name = await reader.GetFieldValueAsync<string>(4);
+                    string publishingCompany = await reader.GetFieldValueAsync<string>(5);
+
+                    Author author = new Author()
+                    {
+                        Name = name,
+                    };
+                    authors.Add(author);
+
+                    Book book = new Book()
+                    {
+                        IdExemplary = idExemplary,
+                        Index = idIndex,
+                        Title = title,
+                        Subtitle = subtitle,
+                        Authors = authors,
+                        PublishingCompany = publishingCompany,
+                    };
+                    
+                    books.Add(book);
+                }
+
+                return books;
+            }
+            catch(MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async void GetStatusDevolution(int status, int idExemplary)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
+
+                string update = "update exemplary set status = ? where id_exemplary = ?; ";
+
+                cmd.CommandText = update;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("?", DbType.Int32).Value = status;
+                cmd.Parameters.Add("?", DbType.Int32).Value = idExemplary;
+
+                await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+            }
+            catch(MySqlException ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+        
     }
 }

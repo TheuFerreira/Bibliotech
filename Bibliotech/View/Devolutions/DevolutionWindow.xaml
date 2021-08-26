@@ -61,6 +61,7 @@
                 VerticalAlignment="Top">
 
                 <uc:CustomDatePicker
+                    x:Name="dateDevolution"
                     Title="DATA DA DEVOLUÇÃO:"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top" 
@@ -76,11 +77,11 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=exemplary}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=subtitle}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=author}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=publishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=Index}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Title}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Author}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=PublishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -90,22 +91,25 @@
             VerticalAlignment="Bottom">
 
             <uc:ButtonImage
+                x:Name="btnMisplaced"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_lost.png"
-                Text="EXTRAVIOUR"/>
+                Text="EXTRAVIOUR" OnClick="BtnMisplaced_OnClick"/>
 
             <uc:ButtonImage
+                x:Name="btnExtend"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_ok.png"
                 Text="ESTENDER PRAZO"/>
 
             <uc:ButtonImage
+                x:Name="btnDevolution"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_ok.png"
-                Text="EMPRESTAR"/>
+                Text="DEVOLVER" OnClick="BtnDevolution_OnClick"/>
         </Grid>
 
         <uc:Loading 

@@ -53,6 +53,7 @@ namespace Bibliotech.View.Devolutions
         private void BtnSelectLector_Click(object sender, RoutedEventArgs e)
         {
             Selectedlectors = lector();
+            Close();
         }
 
         private void SearchField_Click(object sender, RoutedEventArgs e)
