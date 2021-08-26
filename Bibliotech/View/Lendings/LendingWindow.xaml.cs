@@ -175,7 +175,7 @@ namespace Bibliotech.View.Lendings
                 return;
             }
 
-            tfLectorRegister.Text = lector.IdLector.ToString();
+            tfLectorRegister.Text = lector.IdLector.ToString("D6");
             tfNameLector.Text = lector.Name.ToString();
         }
 

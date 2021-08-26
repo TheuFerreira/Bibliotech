@@ -59,7 +59,7 @@
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=id_exemplary}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=id_exemplary, StringFormat=D3}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="EMPRÉSITMO" Width="200" Binding="{Binding Path=loan_date}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="DEVOLUÇÃO" Width="200" Binding="{Binding Path=return_date1}" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
