@@ -101,7 +101,7 @@
                 x:Name="btnExtend"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
-                Source="/Bibliotech;component/Resources/img_ok.png"
+                Source="/Bibliotech;component/Resources/img_extend.png"
                 Text="ESTENDER PRAZO"/>
 
             <uc:ButtonImage
