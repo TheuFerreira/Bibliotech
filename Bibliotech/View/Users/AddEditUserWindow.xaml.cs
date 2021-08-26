@@ -89,7 +89,7 @@ namespace Bibliotech.View.Users
                 return;
             }
 
-            btnSearchSchools.IsEnabled = loggedUser.IsController();
+            btnSearchSchools.IsEnabled = loggedUser.IsController() && user.IdUser == -1;
 
             if (user.IdUser == -1)
             {
