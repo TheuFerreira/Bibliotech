@@ -5,10 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Devolutions"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Devoluções" Height="720" Width="1280">
+    
+    <Window.Resources>
+        <converters:DateTimeValueConverter x:Key="DateTimeConverter"/>
+        <converters:AuthorsValueConverter x:Key="Author"/>
+    </Window.Resources>
+    
     <Grid>
 
         <TextBlock 
@@ -77,11 +84,13 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=Index}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Title}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Author}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=PublishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=IdIndex}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Book.Title}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Book.Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="AUTOR(ES)" Width="200" Binding="{Binding Path=Book.Authors,Converter={StaticResource Author}}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EDITORA" Width="*" Binding="{Binding Path=Book.PublishingCompany}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="DEVOLUÇÃO" Width="200" Binding="{Binding Path=Lending.ExpectedDate,Converter={StaticResource DateTimeConverter}}" ElementStyle="{StaticResource ColumnText}"/>
+
             </DataGrid.Columns>
         </DataGrid>
 
@@ -102,7 +111,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_extend.png"
-                Text="ESTENDER PRAZO"/>
+                Text="ESTENDER PRAZO" OnClick="BtnExtend_OnClick"/>
 
             <uc:ButtonImage
                 x:Name="btnDevolution"

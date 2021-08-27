@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -515,7 +516,14 @@ namespace Bibliotech.Model.DAO
             try
             {
                 await Connect();
-                string selectLector = "select id_lector, name from lector as l where l.id_branch = ? and name like '%" + text + "%' ; ";
+                string selectLector = "" +
+                    "select l.id_lector, l.name " +
+                    "from lector as l " +
+                    "inner join lending as le on le.id_lector = l.id_lector " +
+                    "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
+                    "where l.id_branch = 1 and e.status = 2 and name like '%" + text + "%' " +
+                    "group by l.id_lector ; ";
+                    
                 MySqlCommand cmd = new MySqlCommand(selectLector, SqlConnection);
 
                 cmd.Parameters.Clear();
@@ -548,13 +556,14 @@ namespace Bibliotech.Model.DAO
             }
         }
         
-        public async Task<List<Book>> GetBooks(int idLector)
+        public async Task<List<Exemplary>> GetBooks(int idLector)
         {
             try
             {
                 await Connect();
                 string selectBooks = "" +
-                    "select e.id_exemplary, e.id_index, b.title, b.subtitle, group_concat(distinct a.name separator', ') as name, b.publishing_company " +
+                    "select le.id_lending, e.id_exemplary, e.id_index, b.title, b.subtitle, " +
+                    "group_concat(distinct a.name separator', ') as name, b.publishing_company, le.expected_date as date " +
                     "from lending as le " +
                     "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
                     "inner join book_has_author as ba on ba.id_book = e.id_book " +
@@ -562,47 +571,62 @@ namespace Bibliotech.Model.DAO
                     "inner join author as a on a.id_author = ba.id_author " +
                     "inner join lector as lec on lec.id_lector = le.id_lector " +
                     "where lec.id_lector = ? and e.status = 2 " +
-                    "group by le.id_lending; ";
-                
+                    "group by e.id_exemplary; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectBooks, SqlConnection);
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add("?", DbType.Int32).Value = idLector;
-                List<Book> books = new List<Book>();
+                List<Exemplary> exemplaries = new List<Exemplary>();
                 List<Author> authors = new List<Author>();
 
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
                 while (await reader.ReadAsync())
                 {
-                    int idExemplary = await reader.GetFieldValueAsync<int>(0);
-                    int idIndex = await reader.GetFieldValueAsync<int>(1);
-                    string title = await reader.GetFieldValueAsync<string>(2);
-                    string subtitle = await reader.GetFieldValueAsync<string>(3);
-                    string name = await reader.GetFieldValueAsync<string>(4);
-                    string publishingCompany = await reader.GetFieldValueAsync<string>(5);
+                    int idLending = await reader.GetFieldValueAsync<int>(0);
+                    int idExemplary = await reader.GetFieldValueAsync<int>(1);
+                    int idIndex = await reader.GetFieldValueAsync<int>(2);
+                    string title = await reader.GetFieldValueAsync<string>(3);
+                    string subtitle = await reader.GetFieldValueAsync<string>(4);
+                    string name = await reader.GetFieldValueAsync<string>(5);
+                    string publishingCompany = await reader.GetFieldValueAsync<string>(6);
+                    DateTime date = await reader.GetFieldValueAsync<DateTime>(7);
 
+                    Lending lending = new Lending()
+                    {
+                        IdLending = idLending,
+                        ExpectedDate = date,
+                    };
+                    
                     Author author = new Author()
                     {
                         Name = name,
                     };
+
                     authors.Add(author);
 
                     Book book = new Book()
                     {
-                        IdExemplary = idExemplary,
-                        Index = idIndex,
                         Title = title,
                         Subtitle = subtitle,
                         Authors = authors,
                         PublishingCompany = publishingCompany,
                     };
-                    
-                    books.Add(book);
+
+                    Exemplary exemplary = new Exemplary()
+                    {
+                        Lending = lending,
+                        IdExemplary = idExemplary,
+                        IdIndex = idIndex,
+                        Book = book,
+                    };
+
+                    exemplaries.Add(exemplary);
+                    }
+
+                    return exemplaries;
                 }
 
-                return books;
-            }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 throw ex;
             }
@@ -612,7 +636,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async void GetStatusDevolution(int status, int idExemplary)
+        public async Task GetStatusDevolution(int status, int idExemplary, int idLending, DateTime devolution)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
@@ -629,10 +653,50 @@ namespace Bibliotech.Model.DAO
                 cmd.Parameters.Add("?", DbType.Int32).Value = idExemplary;
 
                 await cmd.ExecuteNonQueryAsync();
+
+                update = "update lending set return_date = ? where id_lending = ? ;  ";
+
+                cmd.CommandText = update;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("?", DbType.Date).Value = devolution;
+                cmd.Parameters.Add("?", DbType.Int32).Value = idLending;
+
+                await cmd.ExecuteNonQueryAsync();
                 await transaction.CommitAsync();
 
             }
             catch(MySqlException ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task GetExtendDevolution(DateTime date, int idLending)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
+
+                string update = "update lending set expected_date = ? where id_lending = ? ; ";
+
+                cmd.CommandText = update;
+                cmd.Parameters.Clear();
+                cmd.Parameters.Add("?", DbType.Date).Value = date;
+                cmd.Parameters.Add("?", DbType.Int32).Value = idLending;
+
+                await cmd.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+            }
+            catch (MySqlException ex)
             {
                 await transaction.RollbackAsync();
                 throw ex;

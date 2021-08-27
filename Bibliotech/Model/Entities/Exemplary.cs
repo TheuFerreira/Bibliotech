@@ -8,6 +8,7 @@ namespace Bibliotech.Model.Entities
         public int IdExemplary { get; set; }
         public Book Book { get; set; }
         public Branch Branch { get; set; }
+        public Lending Lending { get; set; }
         public int IdIndex { get; set; }
         public Status Status
         {

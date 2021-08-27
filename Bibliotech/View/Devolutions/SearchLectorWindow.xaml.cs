@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Bibliotech.Singletons;
 using System.Data;
+using Bibliotech.Services;
 
 namespace Bibliotech.View.Devolutions
 {
@@ -13,6 +14,7 @@ namespace Bibliotech.View.Devolutions
     public partial class SearchLectorWindow : Window
     {
         private readonly DAOLector DAOLector;
+        private DialogService dialogService;
         private readonly int IdBranch = Session.Instance.User.Branch.IdBranch;
         private  List<Lector> lectors;
         public Lector Selectedlectors;
@@ -22,6 +24,7 @@ namespace Bibliotech.View.Devolutions
             DAOLector = new DAOLector();
             lectors = new List<Lector>();
             Selectedlectors = new Lector();
+            dialogService = new DialogService();
         }
 
         private void IsEnabled(bool result)
@@ -52,6 +55,12 @@ namespace Bibliotech.View.Devolutions
 
         private void BtnSelectLector_Click(object sender, RoutedEventArgs e)
         {
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Selecione um Leitor!!!");
+                return;
+            }
+
             Selectedlectors = lector();
             Close();
         }

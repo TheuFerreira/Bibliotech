@@ -1,19 +1,10 @@
 ﻿using Bibliotech.Model.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Bibliotech.Model.DAO;
 using Bibliotech.Services;
+using Bibliotech.Converters;
 
 namespace Bibliotech.View.Devolutions
 {
@@ -23,16 +14,19 @@ namespace Bibliotech.View.Devolutions
     public partial class DevolutionWindow : Window
     {
         private Lector lector;
-        private List<Book> books;
+        private Exemplary exemplary;
+        private List<Exemplary> exemplaries;
         private readonly DAOLector DAOLector;
         private readonly DialogService dialogService;
         public DevolutionWindow()
         {
             InitializeComponent();
             DAOLector = new DAOLector();
-            books = new List<Book>();
             dialogService = new DialogService();
+            exemplary = new Exemplary();
+            SetDate();
         } 
+
         private void IsEnabledControls(bool result)
         {
             loading.Awaiting = result;
@@ -40,23 +34,57 @@ namespace Bibliotech.View.Devolutions
             btnMisplaced.IsEnabled = !result;
             btnExtend.IsEnabled = !result;
             btnDevolution.IsEnabled = !result;
+            if(dataGrid.Items.Count == 0)
+            {
+                btnMisplaced.IsEnabled = false;
+                btnExtend.IsEnabled = false;
+                btnDevolution.IsEnabled = false;
+            }
         }
+
         private async void SearchExemplaries()
         {
             IsEnabledControls(true);
-            books = await DAOLector.GetBooks(lector.IdLector);
-            dataGrid.ItemsSource = books;
+            exemplaries = new List<Exemplary>();
+            exemplaries = await DAOLector.GetBooks(lector.IdLector);
+            dataGrid.ItemsSource = exemplaries;
             IsEnabledControls(false);
         } 
-        private void ShowMessage(string title, string description)
+
+        private bool ValidateFields()
         {
-            dialogService.ShowSuccess(description);
+            if (string.IsNullOrEmpty(tfLectorRegister.Text))
+            {
+                dialogService.ShowError("Escolha um Leitor.");
+                return false;
+            }
+
+            if (exemplaries.Count < 1)
+            {
+                dialogService.ShowError("Escolha um Livro.");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(dateDevolution.date.Text))
+            {
+                dialogService.ShowError("Escolha uma data de devolução.");
+                return false;
+            }
+
+            return true;
         }
+
         private void ClearFields()
         {
             tfLectorRegister.Text = string.Empty;
             tfNameLector.Text = string.Empty;
         }
+
+        private void SetDate()
+        {
+            dateDevolution.date.Text = DateTime.Now.Date.ToShortDateString();
+        }
+
         private void BtnSearhLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow lectorWindow = new SearchLectorWindow();
@@ -66,31 +94,85 @@ namespace Bibliotech.View.Devolutions
             lector = lectorWindow.Selectedlectors;
             tfLectorRegister.Text = lector.IdLector.ToString();
             tfNameLector.Text = lector.Name;
-            
+             
             SearchExemplaries();
 
         }
-        private Book book()
+       
+        private Exemplary Exemplary()
         {
             int index = dataGrid.SelectedIndex;
-            Book book = books[index];
-            return book;
-        }
-        private void BtnMisplaced_OnClick(object sender, RoutedEventArgs e)
-        {
-            IsEnabledControls(true);
-            DAOLector.GetStatusDevolution(4, book().IdExemplary);
-            IsEnabledControls(false);
-            ShowMessage(" ", "Exemplar extraviado com sucesso!!!");
+            Exemplary exemplary = exemplaries[index];
+            return exemplary;
         }
 
-        private void BtnDevolution_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnMisplaced_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!ValidateFields())
+            {
+                return;
+            }
+
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Selecione um exemplar!!!");
+                return;
+            }
+
+            exemplary = Exemplary();
+
             IsEnabledControls(true);
-            DAOLector.GetStatusDevolution(3, book().IdExemplary);
+            DateTime dateMisplaced = DateTime.Parse(dateDevolution.date.Text);
+            await DAOLector.GetStatusDevolution(4, exemplary.IdExemplary, exemplary.Lending.IdLending, dateMisplaced);
             IsEnabledControls(false);
-            ShowMessage(" ", "Exemplar devolvido com sucesso!!!");
-           
+            dialogService.ShowSuccess("Exemplar extraviado com sucesso!!!");
+        }
+
+        private async void BtnDevolution_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!ValidateFields())
+            {
+                return;
+            }
+
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Selecione um exemplar!!!");
+                return;
+            }
+
+            exemplary = Exemplary();
+            IsEnabledControls(true);
+
+            DateTime dateDEvolution = DateTime.Parse(dateDevolution.date.Text);
+            await DAOLector.GetStatusDevolution(3, exemplary.IdExemplary, exemplary.Lending.IdLending, dateDEvolution);
+
+            dialogService.ShowSuccess("Exemplar devolvido com sucesso!!!");
+            IsEnabledControls(false);
+            SearchExemplaries();
+        }
+
+        private async void BtnExtend_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(!ValidateFields())
+            {
+                return;
+            }
+
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Selecione um exemplar!!!");
+                return;
+            }
+
+            exemplary = Exemplary();
+
+            IsEnabledControls(true);
+            DateTime date = DateTime.Now.AddDays(7);
+            await DAOLector.GetExtendDevolution(date, exemplary.Lending.IdLending);
+            dialogService.ShowSuccess("Data Atualizada");
+            IsEnabledControls(false);
+            SearchExemplaries();
         }
     }
 }
