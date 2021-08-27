@@ -85,7 +85,8 @@
 
                 <Button
                     x:Name="btnEnter"
-                    Margin="60,0" Click="BtnEnter_Click">
+                    Margin="60,0" 
+                    Click="BtnEnter_Click">
 
                     <Button.Style>
                         <Style TargetType="Button">
@@ -93,6 +94,7 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
                                         <Border
+                                            Name="bd"
                                             CornerRadius="15"
                                             Background="{StaticResource ForegroundSolidColor}">
 
@@ -107,6 +109,10 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="Cursor" Value="Hand"/>
+                                            </Trigger>
+
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter TargetName="bd" Property="Opacity" Value=".5"/>
                                             </Trigger>
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>

@@ -4,11 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bibliotech.View.Lectors"
+        xmlns:converters="clr-namespace:Bibliotech.Converters"
         mc:Ignorable="d"
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
         Title="Histórico" Height="720" Width="1280">
+
+    <Window.Resources>
+        <converters:DateTimeValueConverter x:Key="DateTimeConverter"/>
+    </Window.Resources>
+    
     <Grid>
 
         <uc:SearchField
@@ -60,8 +66,8 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=id_index, StringFormat=D3}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="EMPRÉSITMO" Width="200" Binding="{Binding Path=loan_date}" ElementStyle="{StaticResource ColumnText}"/>
-                <DataGridTextColumn Header="DEVOLUÇÃO" Width="200" Binding="{Binding Path=return_date1}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EMPRÉSITMO" Width="200" Binding="{Binding Path=loan_date,Converter={StaticResource DateTimeConverter}}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="DEVOLUÇÃO" Width="200" Binding="{Binding Path=return_date1, Converter={StaticResource DateTimeConverter}}" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
 
