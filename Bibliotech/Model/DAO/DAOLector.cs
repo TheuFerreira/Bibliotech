@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -193,15 +192,20 @@ namespace Bibliotech.Model.DAO
                 await reader.ReadAsync();
 
                 string name = await reader.GetFieldValueAsync<string>(0);
-                string responsible = await reader.GetFieldValueAsync<string>(1);
-                DateTime? birthDate = null;
-                long? telephone = null;
 
+                string responsible = "";
+                if (await reader.IsDBNullAsync(1) == false)
+                {
+                    responsible = await reader.GetFieldValueAsync<string>(1);
+                }
+
+                DateTime? birthDate = null;
                 if (await reader.IsDBNullAsync(2) == false)
                 {
                     birthDate = await reader.GetFieldValueAsync<DateTime>(2);
                 }
 
+                long? telephone = null;
                 if (await reader.IsDBNullAsync(3) == false)
                 {
                     telephone = await reader.GetFieldValueAsync<long>(3);
@@ -212,7 +216,12 @@ namespace Bibliotech.Model.DAO
                 string neighborhood = await reader.GetFieldValueAsync<string>(6);
                 string street = await reader.GetFieldValueAsync<string>(7);
                 string number = await reader.GetFieldValueAsync<string>(8);
-                string complement = await reader.GetFieldValueAsync<string>(9);
+
+                string complement = "";
+                if (await reader.IsDBNullAsync(9) == false)
+                {
+                    complement = await reader.GetFieldValueAsync<string>(9);
+                }
 
                 int idBranch = await reader.GetFieldValueAsync<int>(10);
 
@@ -523,14 +532,14 @@ namespace Bibliotech.Model.DAO
                     "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
                     "where l.id_branch = 1 and e.status = 2 and name like '%" + text + "%' " +
                     "group by l.id_lector ; ";
-                    
+
                 MySqlCommand cmd = new MySqlCommand(selectLector, SqlConnection);
 
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add("?", DbType.Int32).Value = idBranch;
 
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     int idLector = await reader.GetFieldValueAsync<int>(0);
                     string nameLector = await reader.GetFieldValueAsync<string>(1);
@@ -546,7 +555,7 @@ namespace Bibliotech.Model.DAO
 
                 return lectors;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 throw ex;
             }
@@ -555,7 +564,7 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        
+
         public async Task<List<Exemplary>> GetBooks(int idLector)
         {
             try
@@ -596,7 +605,7 @@ namespace Bibliotech.Model.DAO
                         IdLending = idLending,
                         ExpectedDate = date,
                     };
-                    
+
                     Author author = new Author()
                     {
                         Name = name,
@@ -621,10 +630,10 @@ namespace Bibliotech.Model.DAO
                     };
 
                     exemplaries.Add(exemplary);
-                    }
-
-                    return exemplaries;
                 }
+
+                return exemplaries;
+            }
 
             catch (MySqlException ex)
             {
@@ -665,7 +674,7 @@ namespace Bibliotech.Model.DAO
                 await transaction.CommitAsync();
 
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 await transaction.RollbackAsync();
                 throw ex;
@@ -706,6 +715,6 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        
+
     }
 }
