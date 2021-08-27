@@ -212,8 +212,8 @@ namespace Bibliotech.View.Lendings
             if (await daoLending.Insert(exemplaries, lector, begin, end))
             {
                 dialogService.ShowSuccess("Empréstimo realizado com sucesso!");
-                exemplaries.RemoveAll(exemplary => exemplary != null);
-                books.RemoveAll(book => book != null);
+                _ = exemplaries.RemoveAll(exemplary => exemplary != null);
+                _ = books.RemoveAll(book => book != null);
             }
 
             ClearFields();
