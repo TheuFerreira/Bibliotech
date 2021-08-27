@@ -24,5 +24,10 @@ namespace Bibliotech.Model.Entities
         {
             return -854221301 + IdAuthor.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

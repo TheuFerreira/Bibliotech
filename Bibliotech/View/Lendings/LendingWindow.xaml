@@ -92,7 +92,7 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=idExemplary}" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="EXEMPLAR" Width="150" Binding="{Binding Path=IdExemplary}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Title}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="AUTOR(ES)" Width="*" Binding="{Binding Path=Author}" ElementStyle="{StaticResource ColumnText}"/>

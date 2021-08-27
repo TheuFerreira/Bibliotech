@@ -9,6 +9,7 @@ using Bibliotech.View.Schools;
 using Bibliotech.View.Users;
 using Bibliotech.View.Books;
 using Bibliotech.View;
+using Bibliotech.View.Lectors;
 
 namespace Bibliotech
 {

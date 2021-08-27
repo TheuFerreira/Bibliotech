@@ -194,6 +194,8 @@ namespace Bibliotech.View.Lendings
                 UpdateGrid(false);
             }
 
+
+
         }
 
         private async void addButton_OnClick(object sender, RoutedEventArgs e)
