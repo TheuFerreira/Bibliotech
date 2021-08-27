@@ -29,10 +29,10 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="95*"/>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="58*"/>
+                <ColumnDefinition Width="101*"/>
             </Grid.ColumnDefinitions>
 
             <ctrl:ButtonImage 
@@ -41,10 +41,10 @@
                 Text="LEITOR"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_lectors.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnLectors_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnLectors_OnClick" Margin="170,25,10,25"/>
 
             <ctrl:ButtonImage 
                 x:Name="btnLendings"
@@ -52,10 +52,10 @@
                 Text="EMPRÉSTIMO"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_lendings.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnLendings_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnLendings_OnClick" Margin="29,25,27,25"/>
 
             <ctrl:ButtonImage 
                 x:Name="btnDevolutions"
@@ -63,10 +63,10 @@
                 Text="DEVOLUÇÃO"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_devolutions.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnDevolutions_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnDevolutions_OnClick" Margin="20,25,12,25"/>
 
             <ctrl:ButtonImage 
                 x:Name="btnBooks"
@@ -74,17 +74,17 @@
                 Text="LIVROS"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_books.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnBooks_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnBooks_OnClick" Margin="28,25,176,25"/>
         </Grid>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="524*"/>
+                <ColumnDefinition Width="237*"/>
+                <ColumnDefinition Width="511*"/>
             </Grid.ColumnDefinitions>
 
             <ctrl:ButtonImage 
@@ -93,20 +93,20 @@
                 Text="USUÁRIOS"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_users.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnUsers_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnUsers_OnClick" Margin="295,25,29,25"/>
 
             <ctrl:ButtonImage 
                 Grid.Column="1"
                 Text="MANUAL"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_manual.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center" Margin="11,25,26,25"/>
 
             <ctrl:ButtonImage 
                 x:Name="btnReports"
@@ -114,10 +114,10 @@
                 Text="RELATÓRIOS"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_reports.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" OnClick="BtnReports_OnClick"/>
+                VerticalAlignment="Center" OnClick="BtnReports_OnClick" Margin="10,25,301,25"/>
         </Grid>
 
         <Grid Grid.Row="3">
@@ -127,8 +127,8 @@
                 Text="ESCOLAS"
                 HasBorder="False"
                 Source="/Bibliotech;component/Resources/img_schools.png"
-                Width="140"
-                Height="110"
+                Width="200"
+                Height="150"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" OnClick="BtnSchools_OnClick"/>
 
@@ -152,7 +152,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
-                
+
                 <TextBlock 
                     VerticalAlignment="Center"
                     Foreground="{StaticResource NormalSolidColor}" 
@@ -169,8 +169,8 @@
                     Foreground="{StaticResource NormalSolidColor}" 
                     Text="SECRETARIA MUNICIPAL DE EDUCAÇÃO"/>
             </StackPanel>
-            
+
         </Grid>
-        
+
     </Grid>
 </Window>
