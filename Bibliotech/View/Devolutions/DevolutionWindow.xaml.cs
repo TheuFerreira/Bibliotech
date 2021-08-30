@@ -136,8 +136,9 @@ namespace Bibliotech.View.Devolutions
             IsEnabledControls(true);
             DateTime dateMisplaced = DateTime.Parse(dateDevolution.date.Text);
             await DAOLector.GetStatusDevolution(4, exemplary.IdExemplary, exemplary.Lending.IdLending, dateMisplaced);
-            IsEnabledControls(false);
             dialogService.ShowSuccess("Exemplar extraviado com sucesso!!!");
+            IsEnabledControls(false);
+            SearchExemplaries();
         }
 
         private async void BtnDevolution_OnClick(object sender, RoutedEventArgs e)
