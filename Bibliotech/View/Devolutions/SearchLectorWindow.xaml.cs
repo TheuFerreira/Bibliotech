@@ -32,7 +32,6 @@ namespace Bibliotech.View.Devolutions
             loading.Awaiting = result;
             searchField.IsEnabled = !result;
             btnSelectLector.IsEnabled = !result;
-
         }
         private async void SearchLector()
         {

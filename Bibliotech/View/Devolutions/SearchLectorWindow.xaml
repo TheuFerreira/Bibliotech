@@ -32,8 +32,32 @@
             ItemsSource="{Binding}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50"/>
-                <DataGridTextColumn Header="REGISTRO DE LEITOR" Binding="{Binding Path=IdLector}" Width="200" ElementStyle="{StaticResource ColumnText}"/>
+                <DataGridTextColumn Header="" Binding="{Binding Path=icon}" Width="50">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridCell">
+                                            <Grid>
+                                                <Image
+                                                x:Name="img"
+                                                Width="25"
+                                                Height="25"
+                                                Source="/Bibliotech;component/Resources/img_warning.png"/>
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding Path=icon}" Value="0">
+                                                    <Setter TargetName="img" Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="REGISTRO DE LEITOR" Binding="{Binding Path=IdLector}" Width="200" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>

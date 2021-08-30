@@ -23,9 +23,11 @@ namespace Bibliotech.View.Devolutions
             InitializeComponent();
             DAOLector = new DAOLector();
             dialogService = new DialogService();
+
             exemplary = new Exemplary();
-            SetDate();
-        } 
+            dateDevolution.date.Text = DateTime.Now.Date.ToShortDateString();
+            
+        }
 
         private void IsEnabledControls(bool result)
         {
@@ -49,7 +51,7 @@ namespace Bibliotech.View.Devolutions
             exemplaries = await DAOLector.GetBooks(lector.IdLector);
             dataGrid.ItemsSource = exemplaries;
             IsEnabledControls(false);
-        } 
+        }
 
         private bool ValidateFields()
         {
@@ -71,6 +73,12 @@ namespace Bibliotech.View.Devolutions
                 return false;
             }
 
+            if(dateDevolution.date.SelectedDate < DateTime.Now.Date)
+            {
+                dialogService.ShowError("Escolha uma data de devolução maior que a atual.");
+                return false;
+            }
+
             return true;
         }
 
@@ -80,11 +88,6 @@ namespace Bibliotech.View.Devolutions
             tfNameLector.Text = string.Empty;
         }
 
-        private void SetDate()
-        {
-            dateDevolution.date.Text = DateTime.Now.Date.ToShortDateString();
-        }
-
         private void BtnSearhLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow lectorWindow = new SearchLectorWindow();
@@ -92,8 +95,17 @@ namespace Bibliotech.View.Devolutions
 
             lector = new Lector();
             lector = lectorWindow.Selectedlectors;
-            tfLectorRegister.Text = lector.IdLector.ToString();
-            tfNameLector.Text = lector.Name;
+
+            if(lector.IdLector == -1)
+            {
+                tfLectorRegister.Text = " ";
+                tfNameLector.Text = " ";
+            }
+            else
+            {
+                tfLectorRegister.Text = lector.IdLector.ToString();
+                tfNameLector.Text = lector.Name;
+            }
              
             SearchExemplaries();
 
@@ -168,7 +180,7 @@ namespace Bibliotech.View.Devolutions
             exemplary = Exemplary();
 
             IsEnabledControls(true);
-            DateTime date = DateTime.Now.AddDays(7);
+            DateTime date = Convert.ToDateTime(dateDevolution.date.SelectedDate);
             await DAOLector.GetExtendDevolution(date, exemplary.Lending.IdLending);
             dialogService.ShowSuccess("Data Atualizada");
             IsEnabledControls(false);
