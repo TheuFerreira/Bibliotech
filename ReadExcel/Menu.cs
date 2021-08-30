@@ -9,11 +9,15 @@ namespace ReadExcel
     public class Menu
     {
         public static AuthorService AuthorService { get; set; }
+        public static BookService BookService {  get; set; }
 
         public static void Render()
         {
             AuthorService = new AuthorService();
             AuthorService.LoadAuthors().Wait();
+
+            BookService = new BookService();
+            BookService.LoadBooks().Wait();
 
             int option = -1;
             while (option != 0)
@@ -66,6 +70,8 @@ namespace ReadExcel
             }
 
             ISheet sheet = OpenExcelFile(filePath);
+            BookService.ReadSheetToGetBooks(sheet);
+            BookService.AddNewToDatabase().Wait();
         }
 
         private static ISheet OpenExcelFile(string path)

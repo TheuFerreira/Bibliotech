@@ -2,6 +2,7 @@
 using MySqlConnector;
 using ReadExcel.Model.Entities;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace ReadExcel.Model.DAO
@@ -94,6 +95,30 @@ namespace ReadExcel.Model.DAO
             finally
             {
                 await Disconnect();
+            }
+        }
+
+        public async Task AddAllInBook(MySqlCommand cmd, Book book)
+        {
+            try
+            {
+                for (int i = 0; i < book.Authors.Count; i++)
+                {
+                    cmd.Parameters.Clear();
+
+                    string insertBookHasAuthor = "insert book_has_author (id_book, id_author) values (?, ?) ; ";
+                    cmd.CommandText = insertBookHasAuthor;
+
+                    Author author = book.Authors[i];
+                    cmd.Parameters.Add("?", DbType.Int32).Value = book.IdBook;
+                    cmd.Parameters.Add("?", DbType.Int32).Value = author.IdAuthor;
+
+                    _ = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
             }
         }
     }

@@ -43,7 +43,7 @@ namespace ReadExcel.Services
             {
                 IRow row = sheet.GetRow(i);
                 string value = GetCellStringValue(row);
-                
+
                 List<Author> authors = ValueToAuthors(value);
                 authors.ForEach(AddAuthorInListIfNotContains);
             }
