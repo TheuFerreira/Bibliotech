@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -273,6 +274,7 @@ namespace Bibliotech.Model.DAO
             {
                 for (int i = 0; i < exemplary.Count; i++)
                 {
+                    
                     MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
                     cmd.Parameters.AddWithValue("@id_exemplary", exemplary[i].IdExemplary);
                     cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
@@ -280,7 +282,8 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.AddWithValue("@loan_date", begin);
                     cmd.Parameters.AddWithValue("@expected_date", end);
 
-                    _ = await cmd.ExecuteNonQueryAsync();
+                    object o = await cmd.ExecuteNonQueryAsync();
+                    //MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString());
 
                     strSql = "update exemplary set status = 2 where exemplary.id_exemplary = " + exemplary[i].IdExemplary;
                     cmd.CommandText = strSql;
