@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:Bibliotech">
     <Application.Resources>
 
-        <SolidColorBrush x:Key="BackgroundSolidColor" Color="#EEEEEE"/>
+        <SolidColorBrush x:Key="BackgroundSolidColor" Color="#D4D4D4"/>
         <SolidColorBrush x:Key="NormalSolidColor" Color="#939393"/>
         <SolidColorBrush x:Key="ForegroundSolidColor" Color="#480853"/>
         <SolidColorBrush x:Key="ConfirmSolidColor" Color="#37BF07"/>
@@ -14,7 +14,7 @@
         <SolidColorBrush x:Key="HeaderSolidColor" Color="#909090"/>
         <SolidColorBrush x:Key="GridLineSolidColor" Color="#BCBCBC"/>
         <SolidColorBrush x:Key="LineSelectColor" Color="#EEEEEE"/>
-        <SolidColorBrush x:Key="ButtonTextSolidColor" Color="#9F9F9F"/>
+        <SolidColorBrush x:Key="ButtonTextSolidColor" Color="#404040"/>
         <SolidColorBrush x:Key="CancelSolidColor" Color="#F5F5F5"/>
         <SolidColorBrush x:Key="SelectedRowSolidColor" Color="#92C2C4"/>
         <Color x:Key="NormalColor">#939393</Color>
