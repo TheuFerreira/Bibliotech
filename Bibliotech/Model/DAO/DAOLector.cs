@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -193,15 +192,20 @@ namespace Bibliotech.Model.DAO
                 await reader.ReadAsync();
 
                 string name = await reader.GetFieldValueAsync<string>(0);
-                string responsible = await reader.GetFieldValueAsync<string>(1);
-                DateTime? birthDate = null;
-                long? telephone = null;
 
+                string responsible = "";
+                if (await reader.IsDBNullAsync(1) == false)
+                {
+                    responsible = await reader.GetFieldValueAsync<string>(1);
+                }
+
+                DateTime? birthDate = null;
                 if (await reader.IsDBNullAsync(2) == false)
                 {
                     birthDate = await reader.GetFieldValueAsync<DateTime>(2);
                 }
 
+                long? telephone = null;
                 if (await reader.IsDBNullAsync(3) == false)
                 {
                     telephone = await reader.GetFieldValueAsync<long>(3);
@@ -212,7 +216,12 @@ namespace Bibliotech.Model.DAO
                 string neighborhood = await reader.GetFieldValueAsync<string>(6);
                 string street = await reader.GetFieldValueAsync<string>(7);
                 string number = await reader.GetFieldValueAsync<string>(8);
-                string complement = await reader.GetFieldValueAsync<string>(9);
+
+                string complement = "";
+                if (await reader.IsDBNullAsync(9) == false)
+                {
+                    complement = await reader.GetFieldValueAsync<string>(9);
+                }
 
                 int idBranch = await reader.GetFieldValueAsync<int>(10);
 
@@ -285,7 +294,10 @@ namespace Bibliotech.Model.DAO
             await Connect();
             string strSql;
 
-            strSql = "SELECT IF(len.status IS NULL, 0, 1) AS icon, l.id_lector, l.name, l.responsible, l.birth_date, l.telephone, concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, b.name s_name, b.id_branch, a.id_address  " +
+            strSql = "SELECT IF(len.status IS NULL, 0, 1) AS icon, l.id_lector, l.name, l.responsible, " +
+                     "l.birth_date, l.telephone, " +
+                     "concat(a.city, ', ', a.neighborhood, ', ', a.street, ', ', a.number, if(a.complement is null, '', concat(', ', a.complement))) as endereco, " +
+                     "b.name s_name, b.id_branch, a.id_address  " +
                      "FROM lector AS l " +
                      "INNER JOIN branch as b ON b.id_branch = l.id_branch " +
                      "INNER JOIN address as a ON a.id_address = l.id_address " +
@@ -521,16 +533,16 @@ namespace Bibliotech.Model.DAO
                     "from lector as l " +
                     "inner join lending as le on le.id_lector = l.id_lector " +
                     "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
-                    "where l.id_branch = 1 and e.status = 2 and name like '%" + text + "%' " +
+                    "where l.id_branch = ?  and e.status = 2 and name like '%" + text + "%' " +
                     "group by l.id_lector ; ";
-                    
+
                 MySqlCommand cmd = new MySqlCommand(selectLector, SqlConnection);
 
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add("?", DbType.Int32).Value = idBranch;
 
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-                while(await reader.ReadAsync())
+                while (await reader.ReadAsync())
                 {
                     int idLector = await reader.GetFieldValueAsync<int>(0);
                     string nameLector = await reader.GetFieldValueAsync<string>(1);
@@ -546,7 +558,7 @@ namespace Bibliotech.Model.DAO
 
                 return lectors;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 throw ex;
             }
@@ -555,7 +567,7 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        
+
         public async Task<List<Exemplary>> GetBooks(int idLector)
         {
             try
@@ -563,7 +575,8 @@ namespace Bibliotech.Model.DAO
                 await Connect();
                 string selectBooks = "" +
                     "select le.id_lending, e.id_exemplary, e.id_index, b.title, b.subtitle, " +
-                    "group_concat(distinct a.name separator', ') as name, b.publishing_company, le.expected_date as date " +
+                    "group_concat(distinct a.name separator', ') as name, b.publishing_company, " +
+                    "le.expected_date as date, le.return_date " +
                     "from lending as le " +
                     "inner join exemplary as e on e.id_exemplary = le.id_exemplary " +
                     "inner join book_has_author as ba on ba.id_book = e.id_book " +
@@ -574,12 +587,15 @@ namespace Bibliotech.Model.DAO
                     "group by e.id_exemplary; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectBooks, SqlConnection);
+
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add("?", DbType.Int32).Value = idLector;
+
                 List<Exemplary> exemplaries = new List<Exemplary>();
                 List<Author> authors = new List<Author>();
 
                 MySqlDataReader reader = await cmd.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+
                 while (await reader.ReadAsync())
                 {
                     int idLending = await reader.GetFieldValueAsync<int>(0);
@@ -589,14 +605,21 @@ namespace Bibliotech.Model.DAO
                     string subtitle = await reader.GetFieldValueAsync<string>(4);
                     string name = await reader.GetFieldValueAsync<string>(5);
                     string publishingCompany = await reader.GetFieldValueAsync<string>(6);
-                    DateTime date = await reader.GetFieldValueAsync<DateTime>(7);
+                    DateTime expectedDate = await reader.GetFieldValueAsync<DateTime>(7);
+                    DateTime? returnDate = null;
+                        
+                   if(await reader.IsDBNullAsync(8) == false)
+                    {
+                        returnDate = await reader.GetFieldValueAsync<DateTime>(8);
+                    }
 
                     Lending lending = new Lending()
                     {
                         IdLending = idLending,
-                        ExpectedDate = date,
+                        ExpectedDate = expectedDate,
+                        ReturnDate = returnDate,
                     };
-                    
+
                     Author author = new Author()
                     {
                         Name = name,
@@ -621,10 +644,10 @@ namespace Bibliotech.Model.DAO
                     };
 
                     exemplaries.Add(exemplary);
-                    }
-
-                    return exemplaries;
                 }
+
+                return exemplaries;
+            }
 
             catch (MySqlException ex)
             {
@@ -665,7 +688,7 @@ namespace Bibliotech.Model.DAO
                 await transaction.CommitAsync();
 
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 await transaction.RollbackAsync();
                 throw ex;
@@ -706,6 +729,6 @@ namespace Bibliotech.Model.DAO
                 await Disconnect();
             }
         }
-        
+
     }
 }
