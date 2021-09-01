@@ -211,7 +211,7 @@ namespace Bibliotech.View.Reports
             catch (Exception)
             { throw new Exception("Deu Merda"); }
 
-            await Task.Delay(500000);
+            await Task.Delay(3000);
             btnExport.IsEnabled = true;
         }
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
