@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Services;
 using Bibliotech.Singletons;
 using Bibliotech.View.Books;
 using Bibliotech.View.Lectors;
@@ -8,8 +9,11 @@ using Bibliotech.View.Schools;
 using EnumsNET;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,6 +39,8 @@ namespace Bibliotech.View.Reports
         private readonly DAOLending daoLending;
         private readonly DAOLector daoLector;
         private readonly DAOBook daoBook;
+
+        private readonly DialogService dialogService = new DialogService();
 
         public ReportsWindow()
         {
@@ -178,9 +184,67 @@ namespace Bibliotech.View.Reports
             }
         }
 
+        private async void CreateExcelFIle(DataGrid dataGrid, string type)
+        {
+            btnExport.IsEnabled = false;
+            string data = DateTime.Now.ToString();
+            data = data.Replace("/", "_");
+            data = data.Replace(":", "-");
+
+            string nome = type + "Export" + data + ".xls";
+            
+            dataGrid.SelectAllCells();
+            dataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, dataGrid);
+            dataGrid.UnselectAllCells();
+            String result = (string)Clipboard.GetData(DataFormats.Text);
+   
+            try
+            {
+                StreamWriter sw = new StreamWriter(nome);
+                sw.WriteLine(result);
+                
+                sw.Close();
+                Process.Start(nome);
+
+            }
+            catch (Exception)
+            { throw new Exception("Deu Merda"); }
+
+            await Task.Delay(500000);
+            btnExport.IsEnabled = true;
+        }
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
         {
-            throw new Exception("Falta Implementar a Exportação nos Empréstimos");
+            switch (tabs)
+            {
+                case Tabs.Lendings:
+                    if(lendingDataGrid.Items.Count < 1)
+                    {
+                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                        return;
+                    }
+                    CreateExcelFIle(lendingDataGrid, "Lending");
+                    break;
+
+                case Tabs.Lectors:
+                    if (lectorDataGrid.Items.Count < 1)
+                    {
+                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                        return;
+                    }
+                    CreateExcelFIle(lectorDataGrid, "Lector");
+                    break;
+
+                case Tabs.Books:
+                    if (bookDataGrid.Items.Count < 1)
+                    {
+                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                        return;
+                    }
+                    CreateExcelFIle(bookDataGrid, "Book");
+                    break;
+            }
         }
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
