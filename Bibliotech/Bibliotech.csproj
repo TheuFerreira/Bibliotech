@@ -241,6 +241,7 @@
     <Compile Include="View\Lendings\LendingWindow.xaml.cs">
       <DependentUpon>LendingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Reports\CustomEnums\ExportType.cs" />
     <Compile Include="View\Reports\CustomEnums\Filter.cs" />
     <Compile Include="View\Reports\CustomEnums\Period.cs" />
     <Compile Include="View\Reports\CustomEnums\Tabs.cs" />
@@ -248,6 +249,9 @@
     <Compile Include="View\Reports\CustomEnums\TypeLending.cs" />
     <Compile Include="View\Reports\ReportsWindow.xaml.cs">
       <DependentUpon>ReportsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Reports\TypeReportWindow.xaml.cs">
+      <DependentUpon>TypeReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Schools\AddEditSchoolWindow.xaml.cs">
       <DependentUpon>AddEditSchoolWindow.xaml</DependentUpon>
@@ -387,6 +391,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Reports\ReportsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Reports\TypeReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -547,6 +555,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\img_extend.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_pdf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_excel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
