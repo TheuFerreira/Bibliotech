@@ -10,6 +10,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.IO;
+using iTextSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Bibliotech.BarCode;
 
 namespace Bibliotech.View.Books
 {
@@ -26,6 +31,7 @@ namespace Bibliotech.View.Books
         private readonly DialogService dialogService;
         private readonly Book Book;
         private readonly Branch currentBranch;
+        private  GenerateAndPrintBarCorde generateAndPrintBarCorde;
 
         public ExemplaryWindow(Book book)
         {
@@ -33,6 +39,7 @@ namespace Bibliotech.View.Books
 
             daoExemplary = new DAOExamplary();
             dialogService = new DialogService();
+            generateAndPrintBarCorde = new GenerateAndPrintBarCorde();
             Book = book;
 
             filter.ItemsSource = Enum.GetValues(typeof(Status))
@@ -69,7 +76,7 @@ namespace Bibliotech.View.Books
 
             loading.Awaiting = !value;
         }
-
+        
         private async void SearchEemplaries()
         {
             string text = searchField.Text;
@@ -99,7 +106,9 @@ namespace Bibliotech.View.Books
 
         private void CellPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            throw new Exception("MÉTODO AINDA NÃO IMPLEMENTADO");
+            exemplaries = new List<Exemplary>();
+            exemplaries.Add(GetExemplaryInGrid());
+            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
         }
 
         private Exemplary GetExemplaryInGrid()
@@ -204,7 +213,7 @@ namespace Bibliotech.View.Books
 
         private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new Exception("MÉTODO AINDA NÃO IMPLEMENTADO");
+            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
         }
     }
 }
