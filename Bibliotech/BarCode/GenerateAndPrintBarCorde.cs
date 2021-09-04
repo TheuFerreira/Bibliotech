@@ -8,6 +8,7 @@ using iTextSharp.text.pdf;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Windows;
+using iText.Barcodes;
 
 namespace Bibliotech.BarCode
 {
@@ -68,7 +69,7 @@ namespace Bibliotech.BarCode
                 bookTitle = e.Book.Title;
 
                 string concat = $"" + idBranch + "" + idBook + "" + idIndex;
-                BarcodeEAN barcodeEAN = new BarcodeEAN();
+                iTextSharp.text.pdf.BarcodeEan barcodeEAN = new BarcodeEan();
                 barcodeEAN.Code = concat;
                 Image image = barcodeEAN.CreateImageWithBarcode(cb, null, null);
 
@@ -86,8 +87,8 @@ namespace Bibliotech.BarCode
                 pdfPTable.SetWidths(cols);
 
                 pdfPTable.DefaultCell.Border = PdfPCell.BOTTOM_BORDER;
-                pdfPTable.DefaultCell.BorderColor = BaseColor.BLACK;
-                pdfPTable.DefaultCell.BorderColorBottom = BaseColor.WHITE;
+                pdfPTable.DefaultCell.BorderColor = BaseColor.Black;
+                pdfPTable.DefaultCell.BorderColorBottom = BaseColor.White;
                 pdfPTable.DefaultCell.Padding = 10;
 
                 pdfPTable.CompleteRow();

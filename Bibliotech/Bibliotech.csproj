@@ -137,7 +137,7 @@
     <Compile Include="Converters\DateTimeValueConverter.cs" />
     <Compile Include="Converters\EnumValueConverter.cs" />
     <Compile Include="Converters\TypeUserValueConverter.cs" />
-    <Compile Include="GenerateAndPrintBarCorde.cs" />
+    <Compile Include="BarCode\GenerateAndPrintBarCorde.cs" />
     <Compile Include="Model\DAO\Connection.cs" />
     <Compile Include="Model\DAO\DAOAddress.cs" />
     <Compile Include="Model\DAO\DAOAuthor.cs" />
