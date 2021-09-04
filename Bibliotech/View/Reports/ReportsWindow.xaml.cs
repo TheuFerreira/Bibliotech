@@ -7,6 +7,9 @@ using Bibliotech.View.Lectors;
 using Bibliotech.View.Reports.CustomEnums;
 using Bibliotech.View.Schools;
 using EnumsNET;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -184,7 +187,8 @@ namespace Bibliotech.View.Reports
             }
         }
 
-        private async void CreateExcelFIle(DataGrid dataGrid, string type)
+        //Exporta para excel
+        private async void ExportToExcel(DataGrid dataGrid, string type)
         {
             btnExport.IsEnabled = false;
             string data = DateTime.Now.ToString();
@@ -192,58 +196,262 @@ namespace Bibliotech.View.Reports
             data = data.Replace(":", "-");
 
             string nome = type + "Export" + data + ".xls";
-            
+
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "XLS (*.xls) |*.xls";
+            saveFile.FileName = nome;
+
+            if (saveFile.ShowDialog() != true)
+            {
+                btnExport.IsEnabled = true;
+                return;
+            }
+
             dataGrid.SelectAllCells();
             dataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
             ApplicationCommands.Copy.Execute(null, dataGrid);
             dataGrid.UnselectAllCells();
-            String result = (string)Clipboard.GetData(DataFormats.Text);
-   
+            string result = (string)Clipboard.GetData(DataFormats.Text);
+            MessageBox.Show(result);
+
             try
             {
-                StreamWriter sw = new StreamWriter(nome);
+                StreamWriter sw = new StreamWriter(saveFile.FileName);
                 sw.WriteLine(result);
                 
                 sw.Close();
-                Process.Start(nome);
-
+                if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                {
+                    _ = Process.Start(saveFile.FileName);
+                }
             }
             catch (Exception)
             { throw new Exception("Deu Merda"); }
-
-            await Task.Delay(3000);
-            btnExport.IsEnabled = true;
+            finally
+            {
+                await Task.Delay(3000);
+                btnExport.IsEnabled = true;
+            }
         }
+
+        //cria a matriz 
+        private string[,] ToArray(DataGrid datagrid)
+        {
+            /* datagrid.SelectAllCells();
+             datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+             ApplicationCommands.Copy.Execute(null, datagrid);
+             datagrid.UnselectAllCells();
+             String result = (string)Clipboard.GetData(DataFormats.CommaSeparatedValue);
+
+
+
+             int x = datagrid.Items.Count;
+             int y = datagrid.Columns.Count;
+             string[,] matriz = new string[x+1, y];
+             string[] temp;
+
+             temp = result.Split(',', '\n');
+             int index = 0;
+
+             for (int i = 0; i <= x; i++)
+             {
+                 for (int j = 0; j < y; j++)
+                 {
+                     matriz[i, j] = temp[index];
+                     index++;
+                 }
+             }
+             string a = "";
+             foreach (var item in matriz)
+             {
+                 a = a + item;
+             }
+             MessageBox.Show(a);
+
+             return matriz;*/
+
+
+            datagrid.SelectAllCells();
+            datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+            ApplicationCommands.Copy.Execute(null, datagrid);
+            datagrid.UnselectAllCells();
+
+            string result = (string)Clipboard.GetText(TextDataFormat.CommaSeparatedValue);
+
+            int x = datagrid.Items.Count;
+            int y = datagrid.Columns.Count;
+
+            string[,] matriz = new string[x, y];
+            string[] temp;
+
+            temp = result.Split(',', '\n');
+            int index = 0;
+
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    matriz[i, j] = temp[index];
+                    index++;
+                }
+            }
+
+            return matriz;
+        }
+
+        //exporta grid pdf
+        private async void ExportToPdf(DataGrid datagrid, string type)
+        {
+            
+            if (datagrid.Items.Count < 1)
+            {
+                return;
+            }
+
+            string data = DateTime.Now.ToString();
+            data = data.Replace("/", "_");
+            data = data.Replace(":", "-");
+
+            string nome = type + "Export" + data + ".pdf";
+
+            btnExport.IsEnabled = false;
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "PDF (*.pdf) |*.pdf";
+            saveFile.FileName = nome;
+
+
+            int x = datagrid.Items.Count;
+            int y = datagrid.Columns.Count;
+
+            string[,] matriz = new string[x+1, y];
+            matriz = ToArray(datagrid);
+
+
+            if (saveFile.ShowDialog() != true)
+            {
+                btnExport.IsEnabled = true;
+                return;
+            }
+
+            try
+            {
+                PdfPTable pTable = new PdfPTable(y);
+                pTable.DefaultCell.Padding = 2;
+                pTable.WidthPercentage = 100;
+                pTable.HorizontalAlignment = Element.ALIGN_LEFT;
+
+
+                for (int i = 0; i < y; i++)
+                {
+                    PdfPCell pCell = new PdfPCell(new Phrase(matriz[0, i]));
+                    pCell.BackgroundColor = BaseColor.Cyan;
+                    pCell.Border = 0;
+                    pTable.AddCell(pCell);
+
+                }
+
+                for (int i = 1; i <= x; i++)
+                {
+                    for (int j = 0; j < y; j++)
+                    {
+                        PdfPCell pCell = new PdfPCell(new Phrase(matriz[i, j]));
+                        pCell.Border = 0;
+                        pCell.BackgroundColor = BaseColor.White;
+                        pTable.AddCell(pCell);
+                    }
+                }
+
+
+                Document document = new Document(PageSize.A4, 8f, 16f, 16f, 8f);
+                PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(saveFile.FileName, FileMode.Append));
+
+                document.Open();
+                document.Add(pTable);
+                document.Close();
+
+                if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                {
+                    _ = Process.Start(saveFile.FileName);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Deu Merda");
+            }
+            finally
+            {
+                await Task.Delay(3000);
+                btnExport.IsEnabled = true;
+            }
+        }
+
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
         {
-            switch (tabs)
+            
+
+            if (dialogService.ShowQuestion("Excel ou PDF?", ""))
             {
-                case Tabs.Lendings:
-                    if(lendingDataGrid.Items.Count < 1)
-                    {
-                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
-                        return;
-                    }
-                    CreateExcelFIle(lendingDataGrid, "Lending");
-                    break;
+                switch (tabs)
+                {
+                    case Tabs.Lendings:
+                        if (lendingDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToExcel(lendingDataGrid, "Lending");
+                        break;
 
-                case Tabs.Lectors:
-                    if (lectorDataGrid.Items.Count < 1)
-                    {
-                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
-                        return;
-                    }
-                    CreateExcelFIle(lectorDataGrid, "Lector");
-                    break;
+                    case Tabs.Lectors:
+                        if (lectorDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToExcel(lectorDataGrid, "Lector");
+                        break;
 
-                case Tabs.Books:
-                    if (bookDataGrid.Items.Count < 1)
-                    {
-                        dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
-                        return;
-                    }
-                    CreateExcelFIle(bookDataGrid, "Book");
-                    break;
+                    case Tabs.Books:
+                        if (bookDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToExcel(bookDataGrid, "Book");
+                        break;
+                }
+            }
+            else
+            {
+                switch (tabs)
+                {
+                    case Tabs.Lendings:
+                        if (lendingDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToPdf(lendingDataGrid, "Lending");
+                        break;
+
+                    case Tabs.Lectors:
+                        if (lectorDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToPdf(lectorDataGrid, "Lector");
+                        break;
+
+                    case Tabs.Books:
+                        if (bookDataGrid.Items.Count < 1)
+                        {
+                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            return;
+                        }
+                        ExportToPdf(bookDataGrid, "Book");
+                        break;
+                }
             }
         }
 
