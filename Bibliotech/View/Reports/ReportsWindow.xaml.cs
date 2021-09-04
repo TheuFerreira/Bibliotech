@@ -212,7 +212,6 @@ namespace Bibliotech.View.Reports
             ApplicationCommands.Copy.Execute(null, dataGrid);
             dataGrid.UnselectAllCells();
             string result = (string)Clipboard.GetData(DataFormats.Text);
-            MessageBox.Show(result);
 
             try
             {
@@ -271,42 +270,67 @@ namespace Bibliotech.View.Reports
              return matriz;*/
 
 
-            datagrid.SelectAllCells();
-            datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, datagrid);
-            datagrid.UnselectAllCells();
-
-            string result = (string)Clipboard.GetText(TextDataFormat.CommaSeparatedValue);
-
             int x = datagrid.Items.Count;
             int y = datagrid.Columns.Count;
 
-            string[,] matriz = new string[x, y];
-            string[] temp;
+            string[,] matriz = new string[x + 1, y];
 
-            temp = result.Split(',', '\n');
-            int index = 0;
+            int i = 0;
+            int j = 0;
 
-            for (int i = 0; i < x; i++)
+            var rows = datagrid.Items;
+
+
+            foreach (DataGridColumn item in datagrid.Columns)
             {
-                for (int j = 0; j < y; j++)
-                {
-                    matriz[i, j] = temp[index];
-                    index++;
-                }
+                if(item.Header!=null)
+                matriz[0, j] = item.Header.ToString();
+                j++;
             }
 
+            i = 1;
+            j = 0;
+
+            foreach (var row in rows)
+            {
+                var rowView = row;
+                foreach (DataGridColumn column in datagrid.Columns)
+                {
+                    if (column.GetCellContent(row) is TextBlock)
+                    {
+                        TextBlock cellContent = column.GetCellContent(row) as TextBlock;
+                        //MessageBox.Show(i + " "+ j);
+                        matriz[i, j] = cellContent.Text;
+
+                    }
+                    j++;
+                }
+                i++;
+                j = 0;
+            }
+            string rerer = "";
+             foreach (var item in matriz)
+             {
+                if (item != null)
+                {
+                    rerer = rerer + item.ToString();
+                }
+                    
+                 //MessageBox.Show(item.ToString());
+             }
+             MessageBox.Show(rerer);
             return matriz;
         }
 
         //exporta grid pdf
-        private async void ExportToPdf(DataGrid datagrid, string type)
+        private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
             
             if (datagrid.Items.Count < 1)
             {
                 return;
             }
+            
 
             string data = DateTime.Now.ToString();
             data = data.Replace("/", "_");
@@ -322,6 +346,10 @@ namespace Bibliotech.View.Reports
 
             int x = datagrid.Items.Count;
             int y = datagrid.Columns.Count;
+            if (haveImage)
+            {
+                y--;
+            }
 
             string[,] matriz = new string[x+1, y];
             matriz = ToArray(datagrid);
@@ -341,11 +369,14 @@ namespace Bibliotech.View.Reports
                 pTable.HorizontalAlignment = Element.ALIGN_LEFT;
 
 
+
                 for (int i = 0; i < y; i++)
                 {
                     PdfPCell pCell = new PdfPCell(new Phrase(matriz[0, i]));
                     pCell.BackgroundColor = BaseColor.Cyan;
                     pCell.Border = 0;
+                    
+                    
                     pTable.AddCell(pCell);
 
                 }
@@ -355,8 +386,12 @@ namespace Bibliotech.View.Reports
                     for (int j = 0; j < y; j++)
                     {
                         PdfPCell pCell = new PdfPCell(new Phrase(matriz[i, j]));
+                        pCell.Padding = 10;
+                        /*pCell.BorderColor = BaseColor.Gray;
                         pCell.Border = 0;
-                        pCell.BackgroundColor = BaseColor.White;
+                        pCell.EnableBorderSide(3);
+                       
+                        pCell.BackgroundColor = BaseColor.White;*/
                         pTable.AddCell(pCell);
                     }
                 }
@@ -387,9 +422,10 @@ namespace Bibliotech.View.Reports
 
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
         {
-            
 
-            if (dialogService.ShowQuestion("Excel ou PDF?", ""))
+            /*TypeReportWindow typeReport = new TypeReportWindow();
+            typeReport.ShowDialog();*/
+            if (dialogService.ShowQuestion("Excel ou pdf",""))
             {
                 switch (tabs)
                 {
@@ -431,7 +467,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToPdf(lendingDataGrid, "Lending");
+                        ExportToPdf(lendingDataGrid, "Lending", true);
                         break;
 
                     case Tabs.Lectors:
@@ -440,7 +476,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToPdf(lectorDataGrid, "Lector");
+                        ExportToPdf(lectorDataGrid, "Lector", true);
                         break;
 
                     case Tabs.Books:
@@ -449,10 +485,11 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToPdf(bookDataGrid, "Book");
+                        ExportToPdf(bookDataGrid, "Book", false);
                         break;
                 }
             }
+            
         }
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
