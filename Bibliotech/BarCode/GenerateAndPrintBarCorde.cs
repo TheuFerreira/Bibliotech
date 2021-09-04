@@ -7,6 +7,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
 using Microsoft.Win32;
+using System.Windows;
 
 namespace Bibliotech.BarCode
 {
@@ -41,7 +42,19 @@ namespace Bibliotech.BarCode
             _ = doc.SetMargins(5, 5, 20, 10);
             _ = doc.AddCreationDate();
 
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "Código de Barras.pdf";
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.Title = "Salvar";
+            saveFileDialog.Filter = "PDF Files|*.pdf";
+            saveFileDialog.DefaultExt = "pdf";
+            saveFileDialog.FileName = " - Código de Barras";
+            saveFileDialog.ShowDialog();
+
+            MessageBox.Show(saveFileDialog.FileName);
+
+            string path = saveFileDialog.FileName;
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(path, FileMode.Create));
             PdfContentByte cb = new PdfContentByte(writer);
             string bookTitle = string.Empty;
