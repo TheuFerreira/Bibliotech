@@ -14,7 +14,7 @@ namespace ReadExcel.Services
         public List<Book> Books { get; private set; }
 
         private readonly DAOBook daoAuthor;
-        
+
         private const int FIELD_Title = 0;
         private const int FIELD_Subtitle = 1;
         private const int FIELD_Authors = 2;
@@ -77,7 +77,8 @@ namespace ReadExcel.Services
                 string volume = GetCellStringValue(row, FIELD_Volume);
 
                 List<Author> authors = GetAuthors(cellAuthors);
-                authors = authors.Distinct().ToList();
+
+                
 
                 Book book = new Book
                 {
@@ -103,7 +104,9 @@ namespace ReadExcel.Services
         {
             ICell cell = row.GetCell(position);
             if (cell == null)
+            {
                 return string.Empty;
+            }
 
             string value = cell.ToString();
             return TrimAllSpacies(value);
@@ -117,15 +120,14 @@ namespace ReadExcel.Services
         private int? GetCellIntValue(IRow row, int position)
         {
             ICell cell = row.GetCell(position);
-            if (cell == null)
+            if (cell == null || string.IsNullOrWhiteSpace(cell.ToString()))
+            {
                 return null;
-
-            if (string.IsNullOrWhiteSpace(cell.ToString()))
-                return null;
+            }
 
             return int.Parse(cell.ToString().Trim());
         }
-    
+
         private List<Author> GetAuthors(string value)
         {
             List<Author> authors = Menu.AuthorService.ValueToAuthors(value);
@@ -179,7 +181,7 @@ namespace ReadExcel.Services
             return false;
         }
 
-        public void Print() 
+        public void Print()
         {
             Console.WriteLine("--------------------------------------------");
             Books = Books.OrderBy(x => x.Title).ToList();

@@ -9,7 +9,7 @@ namespace ReadExcel
     public class Menu
     {
         public static AuthorService AuthorService { get; set; }
-        public static BookService BookService {  get; set; }
+        public static BookService BookService { get; set; }
 
         public static void Render()
         {
@@ -32,8 +32,10 @@ namespace ReadExcel
 
                 string line = Console.ReadLine();
                 if (int.TryParse(line, out int value))
+                {
                     option = value;
-            
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -41,6 +43,8 @@ namespace ReadExcel
                         break;
                     case 2:
                         AddNewBooks();
+                        break;
+                    default:
                         break;
                 }
             }

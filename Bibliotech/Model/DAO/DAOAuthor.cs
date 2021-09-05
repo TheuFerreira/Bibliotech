@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.Entities;
 using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -15,12 +16,16 @@ namespace Bibliotech.Model.DAO
 
             try
             {
-                string insertAuthor = "insert into author(name, status) values (?, 1); ";
+                string insertAuthor = "" +
+                    "insert into author(name, status) values (?, 1); " +
+                    "select last_insert_id(); ";
 
                 MySqlCommand cmd = new MySqlCommand(insertAuthor, SqlConnection, transaction);
                 _ = cmd.Parameters.Add("?", DbType.String).Value = author.Name;
 
-                _ = await cmd.ExecuteNonQueryAsync();
+                object result = await cmd.ExecuteScalarAsync();
+                author.IdAuthor = int.Parse(result.ToString());
+
                 await transaction.CommitAsync();
             }
             catch (MySqlException ex)

@@ -52,10 +52,7 @@ namespace ReadExcel.Services
         private string GetCellStringValue(IRow row)
         {
             ICell cell = row.GetCell(FIELD_AUTHORS);
-            if (cell == null)
-                return string.Empty;
-
-            return cell.ToString();
+            return cell == null ? string.Empty : cell.ToString();
         }
 
         public List<Author> ValueToAuthors(string value)
@@ -84,7 +81,9 @@ namespace ReadExcel.Services
         {
             bool contain = AuthorIsInList(author);
             if (contain)
+            {
                 return;
+            }
 
             Authors.Add(author);
         }
@@ -107,23 +106,21 @@ namespace ReadExcel.Services
         {
             string name1 = author1.Name.ToLower().RemoveDiacritics();
             string name2 = author2.Name.ToLower().RemoveDiacritics();
-            if (name1.Equals(name2))
-            {
-                return true;
-            }
-
-            return false;
+            return name1.Equals(name2);
         }
 
         public Author GetAuthorInList(Author author)
         {
-            return Authors.Find(x =>
+            foreach (Author aut in Authors)
             {
-                if (AuthorIsInList(author))
-                    return true;
+                bool result = CompareTwoAuthors(aut, author);
+                if (result)
+                {
+                    return aut;
+                }
+            }
 
-                return false;
-            });
+            return null;
         }
 
         public void Print()
