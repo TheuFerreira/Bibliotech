@@ -2,6 +2,7 @@
 using ReadExcel.Model.DAO;
 using ReadExcel.Model.Entities;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ReadExcel.Services
@@ -17,6 +18,9 @@ namespace ReadExcel.Services
         public async Task AddNewToDatabase(Branch branch)
         {
             await new DAOExemplary().AddListOfExemplaries(branch, Menu.BookService.Books);
+
+            ClearExemplaries();
+
             Console.WriteLine("Novos Exemplares Inseridos!!");
             Console.Write("Pressione qualquer tecla para continuar");
             Console.ReadLine();
@@ -106,6 +110,14 @@ namespace ReadExcel.Services
             for (int k = 0; k < quantity; k++)
             {
                 book.Exemplaries.Add(new Exemplary());
+            }
+        }
+
+        private void ClearExemplaries()
+        {
+            foreach (Book book in Menu.BookService.Books)
+            {
+                book.Authors = new List<Author>();
             }
         }
 
