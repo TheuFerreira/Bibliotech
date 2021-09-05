@@ -78,8 +78,6 @@ namespace ReadExcel.Services
 
                 List<Author> authors = GetAuthors(cellAuthors);
 
-                
-
                 Book book = new Book
                 {
                     IdBook = -1,
@@ -128,7 +126,7 @@ namespace ReadExcel.Services
             return int.Parse(cell.ToString().Trim());
         }
 
-        private List<Author> GetAuthors(string value)
+        public List<Author> GetAuthors(string value)
         {
             List<Author> authors = Menu.AuthorService.ValueToAuthors(value);
             for (int j = 0; j < authors.Count; j++)
