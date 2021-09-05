@@ -423,8 +423,8 @@ namespace Bibliotech.View.Reports
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
         {
 
-            /*TypeReportWindow typeReport = new TypeReportWindow();
-            typeReport.ShowDialog();*/
+            TypeReportWindow typeReport = new TypeReportWindow();
+            typeReport.ShowDialog();
             if (dialogService.ShowQuestion("Excel ou pdf",""))
             {
                 switch (tabs)
