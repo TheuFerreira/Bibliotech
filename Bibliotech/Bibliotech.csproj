@@ -556,5 +556,11 @@
   <ItemGroup>
     <Resource Include="Resources\img_extend.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_excel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\img_pdf.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
