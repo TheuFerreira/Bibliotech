@@ -2,19 +2,16 @@
 using Bibliotech.Services;
 using System;
 using System.IO;
-using iTextSharp;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Windows;
-using iText.Barcodes;
 
 namespace Bibliotech.BarCode
 {
     public class GenerateAndPrintBarCorde
     {
-        private DialogService dialogService;
         protected Document doc;
 
         protected PdfPCell GetNewCell(string texto, Font fonte, int Alinhamento, float espacamento, int borda, BaseColor corBorda, BaseColor corFundo)
@@ -35,30 +32,28 @@ namespace Bibliotech.BarCode
         }
         public void BaseDocument(List<Exemplary> exemplary, Branch currentBranch)
         {
-            dialogService = new DialogService();
-            dialogService.ShowInformation("Gerando");
             doc = new Document(PageSize.A4);
             Font font = FontFactory.GetFont(BaseFont.HELVETICA, 10);
 
             _ = doc.SetMargins(5, 5, 20, 10);
             _ = doc.AddCreationDate();
 
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveFileDialog.AddExtension = true;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.Title = "Salvar";
-            saveFileDialog.Filter = "PDF Files|*.pdf";
-            saveFileDialog.DefaultExt = "pdf";
-            saveFileDialog.FileName = " - Código de Barras";
-            saveFileDialog.ShowDialog();
-
-            MessageBox.Show(saveFileDialog.FileName);
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                AddExtension = true,
+                RestoreDirectory = true,
+                Title = "Salvar",
+                Filter = "PDF Files|*.pdf",
+                DefaultExt = "pdf",
+                FileName = "Código de Barras"
+            };
+            _ = saveFileDialog.ShowDialog();
 
             string path = saveFileDialog.FileName;
             PdfWriter writer = PdfWriter.GetInstance(doc, new FileStream(path, FileMode.Create));
             PdfContentByte cb = new PdfContentByte(writer);
-            string bookTitle = string.Empty;
+
             doc.Open();
 
             foreach (Exemplary e in exemplary)
@@ -66,14 +61,13 @@ namespace Bibliotech.BarCode
                 string idBranch = currentBranch.IdBranch.ToString().PadLeft(4, '0');
                 string idBook = e.Book.IdBook.ToString().PadLeft(4, '0');
                 string idIndex = e.IdIndex.ToString().PadLeft(5, '0');
-                bookTitle = e.Book.Title;
 
                 string concat = $"" + idBranch + "" + idBook + "" + idIndex;
-                iTextSharp.text.pdf.BarcodeEan barcodeEAN = new BarcodeEan();
+                BarcodeEan barcodeEAN = new BarcodeEan();
                 barcodeEAN.Code = concat;
                 Image image = barcodeEAN.CreateImageWithBarcode(cb, null, null);
 
-                doc.AddAuthor(currentBranch.Name.ToString());
+                _ = doc.AddAuthor(currentBranch.Name.ToString());
 
                 string name = string.Empty;
 
@@ -99,30 +93,10 @@ namespace Bibliotech.BarCode
                 pdfPTable.AddCell(getNewCell(e.Book.PublishingCompany, font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER));
                 pdfPTable.AddCell(image);
 
-                doc.Add(pdfPTable);
+                _ = doc.Add(pdfPTable);
             }
 
             doc.Close();
-
-            dialogService.ShowInformation("finished");
-            /*
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            saveFileDialog.AddExtension = true;
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.Title = "Salvar";
-            saveFileDialog.Filter = "PDF Files|*.pdf";
-            saveFileDialog.DefaultExt = "pdf";
-            saveFileDialog.FileName = bookTitle + " - Código de Barras";
-            
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                FileStream fileStream = new FileStream(saveFileDialog.FileName, FileMode.Create);
-                StreamWriter streamWriter = new StreamWriter(fileStream);
-                streamWriter.Write(doc);
-                streamWriter.Close();
-            }
-            */
         }
 
     }

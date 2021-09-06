@@ -106,13 +106,21 @@ namespace Bibliotech.View.Books
 
         private void CellPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (dataGrid.SelectedItem == null)
+            {
+                dialogService.ShowError("Você deve selecionar um exemplar!!!");
+                return;
+            }
+            SetButtons(false);
             exemplaries = new List<Exemplary>();
-            exemplaries.Add(GetExemplaryInGrid());
+            Exemplary exemplary = GetExemplaryInGrid();
+            exemplaries.Add(exemplary); 
             generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
+            SetButtons(true);
         }
 
         private Exemplary GetExemplaryInGrid()
-        {
+        { 
             int selectedExemplary = dataGrid.SelectedIndex;
             return exemplaries[selectedExemplary];
         }
@@ -213,7 +221,9 @@ namespace Bibliotech.View.Books
 
         private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
+            SetButtons(false);
             generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
+            SetButtons(true);
         }
     }
 }
