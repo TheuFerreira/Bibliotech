@@ -297,8 +297,8 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT b.title, COUNT(l.id_lending) " +
                     "FROM book AS b " +
-                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
-                    "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
+                    "LEFT JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "LEFT JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
                     "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY b.id_book;";
 
@@ -346,8 +346,8 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT b.publishing_company, COUNT(l.id_lending) " +
                     "FROM book AS b " +
-                    "INNER JOIN exemplary AS e ON e.id_book = b.id_book " +
-                    "INNER JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
+                    "LEFT JOIN exemplary AS e ON e.id_book = b.id_book " +
+                    "LEFT JOIN lending AS l ON l.id_exemplary = e.id_exemplary " +
                     "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY b.publishing_company;";
 
@@ -395,9 +395,9 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT a.name, COUNT(l.id_lending) " +
                     "FROM lending AS l " +
-                    "INNER JOIN exemplary AS e ON e.id_exemplary = l.id_exemplary " +
-                    "INNER JOIN book_has_author AS ba ON ba.id_book = e.id_book " +
-                    "INNER JOIN author AS a ON a.id_author = ba.id_author " +
+                    "LEFT JOIN exemplary AS e ON e.id_exemplary = l.id_exemplary " +
+                    "LEFT JOIN book_has_author AS ba ON ba.id_book = e.id_book " +
+                    "RIGHT JOIN author AS a ON a.id_author = ba.id_author " +
                     "WHERE IF(? = 0, e.id_branch = ?, TRUE) " +
                     "GROUP BY a.id_author;";
 
