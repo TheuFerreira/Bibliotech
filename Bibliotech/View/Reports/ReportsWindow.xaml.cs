@@ -234,7 +234,7 @@ namespace Bibliotech.View.Reports
         }
 
         //cria a matriz 
-        private string[,] ToArray(DataGrid datagrid)
+        private string[,] ToArray(DataGrid datagrid, bool HaveImage)
         {
             /* datagrid.SelectAllCells();
              datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
@@ -272,6 +272,8 @@ namespace Bibliotech.View.Reports
 
             int x = datagrid.Items.Count;
             int y = datagrid.Columns.Count;
+            if (HaveImage)
+                y--;
 
             string[,] matriz = new string[x + 1, y];
 
@@ -280,12 +282,15 @@ namespace Bibliotech.View.Reports
 
             var rows = datagrid.Items;
 
+            MessageBox.Show(x + " " + y);
 
             foreach (DataGridColumn item in datagrid.Columns)
             {
                 if(item.Header!=null)
                 matriz[0, j] = item.Header.ToString();
                 j++;
+                if (j >= y)
+                    break;
             }
 
             i = 1;
@@ -300,7 +305,17 @@ namespace Bibliotech.View.Reports
                     {
                         TextBlock cellContent = column.GetCellContent(row) as TextBlock;
                         //MessageBox.Show(i + " "+ j);
-                        matriz[i, j] = cellContent.Text;
+                        Console.WriteLine(cellContent.Text);
+                        try
+                        {
+                            matriz[i, j] = cellContent.Text;
+                        }
+                        catch (Exception)
+                        {
+
+                           
+                        }
+                        
 
                     }
                     j++;
@@ -308,23 +323,97 @@ namespace Bibliotech.View.Reports
                 i++;
                 j = 0;
             }
-            string rerer = "";
+            /*string rerer = "";
+            int index = 0;
+
              foreach (var item in matriz)
              {
-                if (item != null)
+                try
                 {
+                    if(item!= null)
                     rerer = rerer + item.ToString();
+                    if(index%4 == 0)
+                    {
+                        rerer = rerer + '\n';
+                    }
                 }
+                catch (Exception)
+                {
+
+
+                }
+                finally
+                {
+                    index++;
+                }
+                
+
+                
                     
                  //MessageBox.Show(item.ToString());
              }
-             MessageBox.Show(rerer);
+             MessageBox.Show(rerer);*/
             return matriz;
         }
+        private string[,] aa(DataGrid dataGrid)
+        {
+            int x = dataGrid.Items.Count;
+            int y = dataGrid.Columns.Count;
 
+            string[] vetor = new string[y];
+
+            string[,] matriz = new string[x+1, y];
+
+            /*foreach (DataRowView row in dataGrid.Items)
+            {
+                string contacto = row.Row.ItemArray[0].ToString();
+                string nome = row.Row.ItemArray[1].ToString();
+                string idade = "";
+               // string idade = row.Row.ItemArray[2].ToString();
+                string registo = contacto + " | " + nome + " | " + idade;
+                MessageBox.Show(registo);
+            }*/
+            /*int i = 0;
+            foreach (DataRowView row in dataGrid.Items)
+            {
+                //if(i<y)
+                {
+                    vetor[i] = row.Row.ItemArray[i].ToString();
+                    MessageBox.Show(vetor[i]);
+
+                   // MessageBox.Show("a");
+
+                }
+                i++;
+               if(i == y)
+                {
+                    i = 0;
+                }
+            }*/
+            int i = 0;
+            foreach (DataRowView row in dataGrid.Items)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    matriz[i, j] = row.Row.ItemArray[j].ToString();
+                }
+                i++;
+            }
+
+           /* foreach (string item in matriz)
+            {
+                MessageBox.Show(item);
+            }*/
+
+            return matriz;
+
+            
+        }
         //exporta grid pdf
         private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
+           /* aa(datagrid);
+            return;*/
             
             if (datagrid.Items.Count < 1)
             {
@@ -352,7 +441,7 @@ namespace Bibliotech.View.Reports
             }
 
             string[,] matriz = new string[x+1, y];
-            matriz = ToArray(datagrid);
+            matriz = aa(datagrid); //ToArray(datagrid, haveImage);
 
 
             if (saveFile.ShowDialog() != true)
@@ -373,10 +462,12 @@ namespace Bibliotech.View.Reports
                 for (int i = 0; i < y; i++)
                 {
                     PdfPCell pCell = new PdfPCell(new Phrase(matriz[0, i]));
-                    pCell.BackgroundColor = BaseColor.Cyan;
+                    pCell.BackgroundColor = BaseColor.Gray;
                     pCell.Border = 0;
-                    
-                    
+                    pCell.PaddingLeft = 5;
+                    pCell.PaddingRight = 5;
+                    pCell.PaddingBottom = 10;
+                    pCell.PaddingTop = 10;
                     pTable.AddCell(pCell);
 
                 }
@@ -386,12 +477,12 @@ namespace Bibliotech.View.Reports
                     for (int j = 0; j < y; j++)
                     {
                         PdfPCell pCell = new PdfPCell(new Phrase(matriz[i, j]));
-                        pCell.Padding = 10;
-                        /*pCell.BorderColor = BaseColor.Gray;
                         pCell.Border = 0;
-                        pCell.EnableBorderSide(3);
-                       
-                        pCell.BackgroundColor = BaseColor.White;*/
+                        pCell.Padding = 5;
+                        if (i % 2 == 0 && i > 0)
+                            pCell.BackgroundColor = BaseColor.LightGray;
+                        else
+                            pCell.BackgroundColor = BaseColor.White;
                         pTable.AddCell(pCell);
                     }
                 }
@@ -411,7 +502,7 @@ namespace Bibliotech.View.Reports
             }
             catch (Exception)
             {
-                throw new Exception("Deu Merda");
+                throw;
             }
             finally
             {
@@ -424,8 +515,9 @@ namespace Bibliotech.View.Reports
         {
 
             TypeReportWindow typeReport = new TypeReportWindow();
-            typeReport.ShowDialog();
-            if (dialogService.ShowQuestion("Excel ou pdf",""))
+            _ = typeReport.ShowDialog();
+
+            if (typeReport.ExportType == ExportType.Excel)
             {
                 switch (tabs)
                 {
@@ -457,7 +549,7 @@ namespace Bibliotech.View.Reports
                         break;
                 }
             }
-            else
+            else if(typeReport.ExportType == ExportType.PDF)
             {
                 switch (tabs)
                 {
@@ -488,6 +580,10 @@ namespace Bibliotech.View.Reports
                         ExportToPdf(bookDataGrid, "Book", false);
                         break;
                 }
+            }
+            else
+            {
+                return;
             }
             
         }
