@@ -112,10 +112,9 @@ namespace Bibliotech.View.Books
                 return;
             }
             SetButtons(false);
-            exemplaries = new List<Exemplary>();
-            Exemplary exemplary = GetExemplaryInGrid();
-            exemplaries.Add(exemplary); 
-            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
+            List<Exemplary> exemplarySelected = new List<Exemplary>();
+            exemplarySelected.Add(GetExemplaryInGrid());
+            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch);
             SetButtons(true);
         }
 
