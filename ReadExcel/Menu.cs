@@ -1,8 +1,10 @@
 ﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using ReadExcel.Model.DAO;
 using ReadExcel.Model.Entities;
 using ReadExcel.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ReadExcel
@@ -89,6 +91,35 @@ namespace ReadExcel
 
         private static void AddNewExemplaries()
         {
+            List<Branch> branches = new DAOBranch().GetAll();
+            Branch selectedBranch = null;
+
+            int op = -1;
+            while (op == -1)
+            {
+                Console.Clear();
+                Console.WriteLine("Escolha uma escola!!!");
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    Console.WriteLine($"{i} - {branches[i].Name}");
+                }
+
+                string line = Console.ReadLine();
+                if (int.TryParse(line, out int result) == false)
+                {
+                    continue;
+                }
+
+                op = result;
+                if (op >= branches.Count)
+                {
+                    continue;
+                }
+
+                selectedBranch = branches[op];
+                break;
+            }
+
             string filePath = dialogService.OpenSheetDialog();
             if (filePath == string.Empty)
             {
@@ -97,7 +128,7 @@ namespace ReadExcel
 
             ISheet sheet = OpenExcelFile(filePath);
             ExemplaryService.ReadSheetToGetExemplaries(sheet);
-            ExemplaryService.AddNewToDatabase(new Branch() { IdBranch = 1, }).Wait();
+            ExemplaryService.AddNewToDatabase(selectedBranch).Wait();
         }
 
         private static ISheet OpenExcelFile(string path)
