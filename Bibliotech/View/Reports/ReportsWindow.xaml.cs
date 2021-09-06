@@ -12,7 +12,6 @@ using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,8 +29,6 @@ namespace Bibliotech.View.Reports
     /// </summary>
     public partial class ReportsWindow : Window
     {
-        private List<Lending> lendings;
-
         public Branch SelectedBranch { get; set; }
         private Tabs tabs;
         private Period period;
@@ -217,7 +214,7 @@ namespace Bibliotech.View.Reports
             {
                 StreamWriter sw = new StreamWriter(saveFile.FileName);
                 sw.WriteLine(result);
-                
+
                 sw.Close();
                 if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
                 {
@@ -234,7 +231,7 @@ namespace Bibliotech.View.Reports
         }
 
         //cria a matriz 
-        private string[,] ToArray(DataGrid datagrid)
+        private string[,] ToArray(DataGrid datagrid, bool HaveImage)
         {
             /* datagrid.SelectAllCells();
              datagrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
@@ -272,6 +269,8 @@ namespace Bibliotech.View.Reports
 
             int x = datagrid.Items.Count;
             int y = datagrid.Columns.Count;
+            if (HaveImage)
+                y--;
 
             string[,] matriz = new string[x + 1, y];
 
@@ -280,12 +279,15 @@ namespace Bibliotech.View.Reports
 
             var rows = datagrid.Items;
 
+            MessageBox.Show(x + " " + y);
 
             foreach (DataGridColumn item in datagrid.Columns)
             {
-                if(item.Header!=null)
-                matriz[0, j] = item.Header.ToString();
+                if (item.Header != null)
+                    matriz[0, j] = item.Header.ToString();
                 j++;
+                if (j >= y)
+                    break;
             }
 
             i = 1;
@@ -300,7 +302,17 @@ namespace Bibliotech.View.Reports
                     {
                         TextBlock cellContent = column.GetCellContent(row) as TextBlock;
                         //MessageBox.Show(i + " "+ j);
-                        matriz[i, j] = cellContent.Text;
+                        Console.WriteLine(cellContent.Text);
+                        try
+                        {
+                            matriz[i, j] = cellContent.Text;
+                        }
+                        catch (Exception)
+                        {
+
+
+                        }
+
 
                     }
                     j++;
@@ -308,29 +320,103 @@ namespace Bibliotech.View.Reports
                 i++;
                 j = 0;
             }
-            string rerer = "";
+            /*string rerer = "";
+            int index = 0;
+
              foreach (var item in matriz)
              {
-                if (item != null)
+                try
                 {
+                    if(item!= null)
                     rerer = rerer + item.ToString();
+                    if(index%4 == 0)
+                    {
+                        rerer = rerer + '\n';
+                    }
                 }
+                catch (Exception)
+                {
+
+
+                }
+                finally
+                {
+                    index++;
+                }
+                
+
+                
                     
                  //MessageBox.Show(item.ToString());
              }
-             MessageBox.Show(rerer);
+             MessageBox.Show(rerer);*/
             return matriz;
         }
+        private string[,] aa(DataGrid dataGrid)
+        {
+            int x = dataGrid.Items.Count;
+            int y = dataGrid.Columns.Count;
 
+            string[] vetor = new string[y];
+
+            string[,] matriz = new string[x + 1, y];
+
+            /*foreach (DataRowView row in dataGrid.Items)
+            {
+                string contacto = row.Row.ItemArray[0].ToString();
+                string nome = row.Row.ItemArray[1].ToString();
+                string idade = "";
+               // string idade = row.Row.ItemArray[2].ToString();
+                string registo = contacto + " | " + nome + " | " + idade;
+                MessageBox.Show(registo);
+            }*/
+            /*int i = 0;
+            foreach (DataRowView row in dataGrid.Items)
+            {
+                //if(i<y)
+                {
+                    vetor[i] = row.Row.ItemArray[i].ToString();
+                    MessageBox.Show(vetor[i]);
+
+                   // MessageBox.Show("a");
+
+                }
+                i++;
+               if(i == y)
+                {
+                    i = 0;
+                }
+            }*/
+            int i = 0;
+            foreach (DataRowView row in dataGrid.Items)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    matriz[i, j] = row.Row.ItemArray[j].ToString();
+                }
+                i++;
+            }
+
+            /* foreach (string item in matriz)
+             {
+                 MessageBox.Show(item);
+             }*/
+
+            return matriz;
+
+
+        }
         //exporta grid pdf
         private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
-            
+            /* aa(datagrid);
+             return;*/
+
             if (datagrid.Items.Count < 1)
             {
                 return;
             }
-            
+
 
             string data = DateTime.Now.ToString();
             data = data.Replace("/", "_");
@@ -351,8 +437,8 @@ namespace Bibliotech.View.Reports
                 y--;
             }
 
-            string[,] matriz = new string[x+1, y];
-            matriz = ToArray(datagrid);
+            string[,] matriz = new string[x + 1, y];
+            matriz = aa(datagrid); //ToArray(datagrid, haveImage);
 
 
             if (saveFile.ShowDialog() != true)
@@ -373,10 +459,12 @@ namespace Bibliotech.View.Reports
                 for (int i = 0; i < y; i++)
                 {
                     PdfPCell pCell = new PdfPCell(new Phrase(matriz[0, i]));
-                    pCell.BackgroundColor = BaseColor.Cyan;
+                    pCell.BackgroundColor = BaseColor.Gray;
                     pCell.Border = 0;
-                    
-                    
+                    pCell.PaddingLeft = 5;
+                    pCell.PaddingRight = 5;
+                    pCell.PaddingBottom = 10;
+                    pCell.PaddingTop = 10;
                     pTable.AddCell(pCell);
 
                 }
@@ -386,12 +474,12 @@ namespace Bibliotech.View.Reports
                     for (int j = 0; j < y; j++)
                     {
                         PdfPCell pCell = new PdfPCell(new Phrase(matriz[i, j]));
-                        pCell.Padding = 10;
-                        /*pCell.BorderColor = BaseColor.Gray;
                         pCell.Border = 0;
-                        pCell.EnableBorderSide(3);
-                       
-                        pCell.BackgroundColor = BaseColor.White;*/
+                        pCell.Padding = 5;
+                        if (i % 2 == 0 && i > 0)
+                            pCell.BackgroundColor = BaseColor.LightGray;
+                        else
+                            pCell.BackgroundColor = BaseColor.White;
                         pTable.AddCell(pCell);
                     }
                 }
@@ -411,7 +499,7 @@ namespace Bibliotech.View.Reports
             }
             catch (Exception)
             {
-                throw new Exception("Deu Merda");
+                throw;
             }
             finally
             {
@@ -424,8 +512,9 @@ namespace Bibliotech.View.Reports
         {
 
             TypeReportWindow typeReport = new TypeReportWindow();
-            typeReport.ShowDialog();
-            if (dialogService.ShowQuestion("Excel ou pdf",""))
+            _ = typeReport.ShowDialog();
+
+            if (typeReport.ExportType == ExportType.Excel)
             {
                 switch (tabs)
                 {
@@ -457,7 +546,7 @@ namespace Bibliotech.View.Reports
                         break;
                 }
             }
-            else
+            else if (typeReport.ExportType == ExportType.PDF)
             {
                 switch (tabs)
                 {
@@ -489,7 +578,11 @@ namespace Bibliotech.View.Reports
                         break;
                 }
             }
-            
+            else
+            {
+                return;
+            }
+
         }
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -513,8 +606,8 @@ namespace Bibliotech.View.Reports
                     {
                         case Period.Day:
                             DateTime? selectedDate = dpDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Mount:
                             selectedItem = cbYear.SelectedItem.ToString();
@@ -524,21 +617,19 @@ namespace Bibliotech.View.Reports
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByMonth(year, month, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Year:
                             selectedItem = cbYear.SelectedItem.ToString();
                             year = int.Parse(selectedItem);
 
-                            lendings = await daoLending.SearchLendingsByYear(year, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByYear(year, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Custom:
                             DateTime? start = dpStartDate.SelectedDate;
                             DateTime? end = dpEndDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, filter, SelectedBranch);
                             break;
                         default:
                             break;
@@ -613,9 +704,10 @@ namespace Bibliotech.View.Reports
             loading.Awaiting = true;
 
             int selectedIndex = lendingDataGrid.SelectedIndex;
-            Lending lending = lendings[selectedIndex];
+            DataRowView row = lendingDataGrid.Items[selectedIndex] as DataRowView;
+            int idBook = int.Parse(row.Row.ItemArray[0].ToString());
 
-            Book book = await new DAOBook().GetById(lending.Exemplary.Book.IdBook);
+            Book book = await new DAOBook().GetById(idBook);
 
             loading.Awaiting = false;
             btnSearch.IsEnabled = true;

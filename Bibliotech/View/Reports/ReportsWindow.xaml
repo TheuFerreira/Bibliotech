@@ -52,11 +52,11 @@
                         ItemsSource="{Binding}">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=Exemplary.IdIndex, StringFormat=D2}"/>
-                            <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=Exemplary.Book.Title}" ElementStyle="{StaticResource ColumnText}"/>
-                            <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=Exemplary.Book.Subtitle}" ElementStyle="{StaticResource ColumnText}"/>
-                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175" Binding="{Binding Path=Lector.IdLector, StringFormat=D6}"/>
-                            <DataGridTextColumn Header="LEITOR" Width="*" Binding="{Binding Path=Lector.Name}" ElementStyle="{StaticResource ColumnText}"/>
+                            <DataGridTextColumn Header="EXEMPLAR" Width="100" Binding="{Binding Path=id_index, StringFormat=D2}"/>
+                            <DataGridTextColumn Header="TÍTULO" Width="*" Binding="{Binding Path=title}" ElementStyle="{StaticResource ColumnText}"/>
+                            <DataGridTextColumn Header="SUBTÍTULO" Width="*" Binding="{Binding Path=subtitle}" ElementStyle="{StaticResource ColumnText}"/>
+                            <DataGridTextColumn Header="REGISTRO DE LEITOR" Width="175" Binding="{Binding Path=id_lector, StringFormat=D6}"/>
+                            <DataGridTextColumn Header="LEITOR" Width="*" Binding="{Binding Path=name}" ElementStyle="{StaticResource ColumnText}"/>
                             <DataGridTextColumn Width="50">
                                 <DataGridTextColumn.CellStyle>
                                     <Style TargetType="DataGridCell">

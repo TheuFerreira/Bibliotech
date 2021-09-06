@@ -82,6 +82,7 @@
     <Compile Include="Menu.cs" />
     <Compile Include="Model\DAO\DAOAuthor.cs" />
     <Compile Include="Model\DAO\DAOBook.cs" />
+    <Compile Include="Model\DAO\DAOBranch.cs" />
     <Compile Include="Model\DAO\DAOExemplary.cs" />
     <Compile Include="Model\Entities\Author.cs" />
     <Compile Include="Model\Entities\Book.cs" />
