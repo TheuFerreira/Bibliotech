@@ -12,7 +12,6 @@ using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,8 +29,6 @@ namespace Bibliotech.View.Reports
     /// </summary>
     public partial class ReportsWindow : Window
     {
-        private List<Lending> lendings;
-
         public Branch SelectedBranch { get; set; }
         private Tabs tabs;
         private Period period;
@@ -217,7 +214,7 @@ namespace Bibliotech.View.Reports
             {
                 StreamWriter sw = new StreamWriter(saveFile.FileName);
                 sw.WriteLine(result);
-                
+
                 sw.Close();
                 if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
                 {
@@ -286,8 +283,8 @@ namespace Bibliotech.View.Reports
 
             foreach (DataGridColumn item in datagrid.Columns)
             {
-                if(item.Header!=null)
-                matriz[0, j] = item.Header.ToString();
+                if (item.Header != null)
+                    matriz[0, j] = item.Header.ToString();
                 j++;
                 if (j >= y)
                     break;
@@ -313,9 +310,9 @@ namespace Bibliotech.View.Reports
                         catch (Exception)
                         {
 
-                           
+
                         }
-                        
+
 
                     }
                     j++;
@@ -362,7 +359,7 @@ namespace Bibliotech.View.Reports
 
             string[] vetor = new string[y];
 
-            string[,] matriz = new string[x+1, y];
+            string[,] matriz = new string[x + 1, y];
 
             /*foreach (DataRowView row in dataGrid.Items)
             {
@@ -400,26 +397,26 @@ namespace Bibliotech.View.Reports
                 i++;
             }
 
-           /* foreach (string item in matriz)
-            {
-                MessageBox.Show(item);
-            }*/
+            /* foreach (string item in matriz)
+             {
+                 MessageBox.Show(item);
+             }*/
 
             return matriz;
 
-            
+
         }
         //exporta grid pdf
         private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
-           /* aa(datagrid);
-            return;*/
-            
+            /* aa(datagrid);
+             return;*/
+
             if (datagrid.Items.Count < 1)
             {
                 return;
             }
-            
+
 
             string data = DateTime.Now.ToString();
             data = data.Replace("/", "_");
@@ -440,7 +437,7 @@ namespace Bibliotech.View.Reports
                 y--;
             }
 
-            string[,] matriz = new string[x+1, y];
+            string[,] matriz = new string[x + 1, y];
             matriz = aa(datagrid); //ToArray(datagrid, haveImage);
 
 
@@ -549,7 +546,7 @@ namespace Bibliotech.View.Reports
                         break;
                 }
             }
-            else if(typeReport.ExportType == ExportType.PDF)
+            else if (typeReport.ExportType == ExportType.PDF)
             {
                 switch (tabs)
                 {
@@ -585,7 +582,7 @@ namespace Bibliotech.View.Reports
             {
                 return;
             }
-            
+
         }
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
@@ -609,8 +606,8 @@ namespace Bibliotech.View.Reports
                     {
                         case Period.Day:
                             DateTime? selectedDate = dpDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByDay(selectedDate.Value, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Mount:
                             selectedItem = cbYear.SelectedItem.ToString();
@@ -620,21 +617,19 @@ namespace Bibliotech.View.Reports
                             DateTime dateMonth = DateTime.ParseExact(selectedItem, "MMMM", CultureInfo.CurrentCulture);
                             month = dateMonth.Month;
 
-                            lendings = await daoLending.SearchLendingsByMonth(year, month, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByMonth(year, month, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Year:
                             selectedItem = cbYear.SelectedItem.ToString();
                             year = int.Parse(selectedItem);
 
-                            lendings = await daoLending.SearchLendingsByYear(year, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByYear(year, typeLending, filter, SelectedBranch);
                             break;
                         case Period.Custom:
                             DateTime? start = dpStartDate.SelectedDate;
                             DateTime? end = dpEndDate.SelectedDate;
-                            lendings = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, filter, SelectedBranch);
-                            lendingDataGrid.ItemsSource = lendings;
+
+                            lendingDataGrid.ItemsSource = await daoLending.SearchLendingsByCustomTime(start.Value, end.Value, typeLending, filter, SelectedBranch);
                             break;
                         default:
                             break;
@@ -709,9 +704,10 @@ namespace Bibliotech.View.Reports
             loading.Awaiting = true;
 
             int selectedIndex = lendingDataGrid.SelectedIndex;
-            Lending lending = lendings[selectedIndex];
+            DataRowView row = lendingDataGrid.Items[selectedIndex] as DataRowView;
+            int idBook = int.Parse(row.Row.ItemArray[0].ToString());
 
-            Book book = await new DAOBook().GetById(lending.Exemplary.Book.IdBook);
+            Book book = await new DAOBook().GetById(idBook);
 
             loading.Awaiting = false;
             btnSearch.IsEnabled = true;

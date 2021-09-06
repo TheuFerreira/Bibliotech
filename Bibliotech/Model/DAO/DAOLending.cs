@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -86,50 +85,16 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        private async Task<List<Lending>> ReportReader(MySqlCommand command)
+        private DataView ReportReader(MySqlCommand command)
         {
-            List<Lending> lendings = new List<Lending>();
-            MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
-            while (await reader.ReadAsync())
-            {
-                int idIndex = await reader.GetFieldValueAsync<int>(0);
-                string titleBook = await reader.GetFieldValueAsync<string>(1);
-                string subtitleBook = await reader.GetFieldValueAsync<string>(2);
-                int idLector = await reader.GetFieldValueAsync<int>(3);
-                string nameLector = await reader.GetFieldValueAsync<string>(4);
-                int idBook = await reader.GetFieldValueAsync<int>(5);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+            _ = adapter.Fill(dt);
 
-                Book book = new Book
-                {
-                    IdBook = idBook,
-                    Title = titleBook,
-                    Subtitle = subtitleBook,
-                };
-
-                Exemplary exemplary = new Exemplary
-                {
-                    IdIndex = idIndex,
-                    Book = book,
-                };
-
-                Lector lector = new Lector
-                {
-                    IdLector = idLector,
-                    Name = nameLector,
-                };
-
-                Lending lending = new Lending
-                {
-                    Lector = lector,
-                    Exemplary = exemplary,
-                };
-                lendings.Add(lending);
-            }
-
-            return lendings;
+            return dt.DefaultView;
         }
 
-        public async Task<List<Lending>> SearchLendingsByDay(DateTime day, TypeLending typeLending, Filter filter, Branch branch)
+        public async Task<DataView> SearchLendingsByDay(DateTime day, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -149,7 +114,7 @@ namespace Bibliotech.Model.DAO
 
                 AddTypeLending(command, typeLending);
 
-                return await ReportReader(command);
+                return ReportReader(command);
             }
             catch (MySqlException ex)
             {
@@ -161,7 +126,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByMonth(int year, int month, TypeLending typeLending, Filter filter, Branch branch)
+        public async Task<DataView> SearchLendingsByMonth(int year, int month, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -182,7 +147,7 @@ namespace Bibliotech.Model.DAO
 
                 AddTypeLending(command, typeLending);
 
-                return await ReportReader(command);
+                return ReportReader(command);
             }
             catch (MySqlException ex)
             {
@@ -194,7 +159,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByYear(int year, TypeLending typeLending, Filter filter, Branch branch)
+        public async Task<DataView> SearchLendingsByYear(int year, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -214,7 +179,7 @@ namespace Bibliotech.Model.DAO
 
                 AddTypeLending(command, typeLending);
 
-                return await ReportReader(command);
+                return ReportReader(command);
             }
             catch (MySqlException ex)
             {
@@ -226,7 +191,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task<List<Lending>> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending, Filter filter, Branch branch)
+        public async Task<DataView> SearchLendingsByCustomTime(DateTime start, DateTime end, TypeLending typeLending, Filter filter, Branch branch)
         {
             try
             {
@@ -247,7 +212,7 @@ namespace Bibliotech.Model.DAO
 
                 AddTypeLending(command, typeLending);
 
-                return await ReportReader(command);
+                return ReportReader(command);
             }
             catch (MySqlException ex)
             {
@@ -274,7 +239,7 @@ namespace Bibliotech.Model.DAO
             {
                 for (int i = 0; i < exemplary.Count; i++)
                 {
-                    
+
                     MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
                     cmd.Parameters.AddWithValue("@id_exemplary", exemplary[i].IdExemplary);
                     cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
