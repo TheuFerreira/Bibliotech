@@ -12,6 +12,7 @@
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen" 
         WindowStyle="None"
+        AllowsTransparency="True"
         Background="Transparent">
     <Border 
         Background="White"
