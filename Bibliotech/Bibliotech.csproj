@@ -160,6 +160,7 @@
     <Compile Include="Model\Entities\Branch.cs" />
     <Compile Include="Model\Entities\User.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\FileService.cs" />
     <Compile Include="Singletons\Server.cs" />
     <Compile Include="Singletons\Session.cs" />
     <Compile Include="UserControls\Alert.xaml.cs">

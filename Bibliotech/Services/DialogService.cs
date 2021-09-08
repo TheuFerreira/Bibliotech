@@ -1,5 +1,7 @@
 ﻿using Bibliotech.UserControls.CustomDialog;
 using Bibliotech.UserControls.CustomEnums;
+using Microsoft.Win32;
+using System;
 
 namespace Bibliotech.Services
 {
@@ -50,6 +52,23 @@ namespace Bibliotech.Services
             bool? result = fieldDialog.ShowDialog();
 
             return result == false ? string.Empty : fieldDialog.Text;
+        }
+
+        public string SaveFileDialg()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                AddExtension = true,
+                RestoreDirectory = true,
+                Title = "Salvar",
+                Filter = "PDF Files|*.pdf",
+                DefaultExt = "pdf",
+                FileName = "Código de Barras"
+            };
+
+            saveFileDialog.ShowDialog();
+            return saveFileDialog.FileName;
         }
     }
 }

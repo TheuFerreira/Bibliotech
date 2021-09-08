@@ -13,6 +13,7 @@ namespace Bibliotech.View.Schools
     public partial class AddEditSchoolWindow : Window
     {
         private readonly DialogService dialogService = new DialogService();
+        private FileService fileService = new FileService();
         private readonly DAOBranch daoSchool = new DAOBranch();
         private readonly bool isFirstBranch;
         private readonly Branch branch;
@@ -172,8 +173,14 @@ namespace Bibliotech.View.Schools
             SetButtons(false);
 
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
-            new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch);
-
+            string path = dialogService.SaveFileDialg();
+            if (fileService.IsFileOpen(path))
+            {
+                dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+            }
+            
+            new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch, path);
+            dialogService.ShowInformation("PDF gerado com sucesso!!!");
             SetButtons(true);
         }
     }

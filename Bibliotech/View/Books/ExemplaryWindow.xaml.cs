@@ -29,6 +29,7 @@ namespace Bibliotech.View.Books
         private TypeSearch typeSearch;
         private Status filterStatus;
         private readonly DialogService dialogService;
+        private FileService fileService;
         private readonly Book Book;
         private readonly Branch currentBranch;
         private  GenerateAndPrintBarCorde generateAndPrintBarCorde;
@@ -39,6 +40,7 @@ namespace Bibliotech.View.Books
 
             daoExemplary = new DAOExamplary();
             dialogService = new DialogService();
+            fileService = new FileService();
             generateAndPrintBarCorde = new GenerateAndPrintBarCorde();
             Book = book;
 
@@ -115,8 +117,14 @@ namespace Bibliotech.View.Books
             List<Exemplary> exemplarySelected = new List<Exemplary>();
             exemplarySelected.Add(GetExemplaryInGrid());
             SetButtons(true);
-            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch);
-           
+            string path = dialogService.SaveFileDialg();
+            if (fileService.IsFileOpen(path))
+            {
+                dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+            }
+            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch, path);
+            dialogService.ShowInformation("PDF gerado com sucesso!!!");
+
         }
 
         private Exemplary GetExemplaryInGrid()
@@ -222,7 +230,13 @@ namespace Bibliotech.View.Books
         private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
             SetButtons(false);
-            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch);
+            string path = dialogService.SaveFileDialg();
+            if (fileService.IsFileOpen(path))
+            {
+                dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+            }
+            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch, path);
+            dialogService.ShowInformation("PDF gerado com sucesso!!!");
             SetButtons(true);
         }
     }
