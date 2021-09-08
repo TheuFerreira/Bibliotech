@@ -58,8 +58,8 @@ namespace Bibliotech.BarCode
 
             foreach (Exemplary e in exemplary)
             {
-                string idBranch = currentBranch.IdBranch.ToString().PadLeft(4, '0');
-                string idBook = e.Book.IdBook.ToString().PadLeft(4, '0');
+                string idBranch = currentBranch.IdBranch.ToString().PadLeft(2, '0');
+                string idBook = e.Book.IdBook.ToString().PadLeft(6, '0');
                 string idIndex = e.IdIndex.ToString().PadLeft(5, '0');
 
                 string concat = $"" + idBranch + "" + idBook + "" + idIndex;
