@@ -1,6 +1,7 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
+using Bibliotech.Singletons;
 using Bibliotech.UserControls.CustomDialog;
 using Bibliotech.View.Authors;
 using System;
@@ -15,6 +16,7 @@ namespace Bibliotech.View.Books
     {
         private readonly Book book;
         private readonly DAOBook daoBook;
+        private readonly Branch currentBranch = Session.Instance.User.Branch;
 
         public AddEditBookWindow(Book book)
         {
@@ -39,7 +41,7 @@ namespace Bibliotech.View.Books
         {
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
-            tfBarCode.Text = $"SME-VGP-{book.IdBook:D8}";
+            tfBarCode.Text = $"" + currentBranch.IdBranch.ToString().PadLeft(2, '0') + "" + book.IdBook.ToString().PadLeft(6, '0');
             tfTitle.Text = book.Title;
             tfSubtitle.Text = book.Subtitle;
             tfPublishingCompany.Text = book.PublishingCompany;

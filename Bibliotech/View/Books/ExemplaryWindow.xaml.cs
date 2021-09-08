@@ -114,8 +114,9 @@ namespace Bibliotech.View.Books
             SetButtons(false);
             List<Exemplary> exemplarySelected = new List<Exemplary>();
             exemplarySelected.Add(GetExemplaryInGrid());
-            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch);
             SetButtons(true);
+            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch);
+           
         }
 
         private Exemplary GetExemplaryInGrid()
