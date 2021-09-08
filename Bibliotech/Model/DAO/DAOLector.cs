@@ -354,7 +354,8 @@ namespace Bibliotech.Model.DAO
                      "INNER JOIN exemplary as exe on exe.id_exemplary = len.id_exemplary " +
                      "inner join book as bk on bk.id_book = exe.id_book " +
                      "where lec.id_lector = " + idlector + " " +
-                        "AND (bk.title like '%" + query + "%' OR CONCAT(LPAD(exe.id_branch, 2, '0'), LPAD(bk.id_book, 6, '0'), LPAD(exe.id_index, 5, '0')) = '" + query + "');";
+                        "AND (bk.title like '%" + query + "%' OR CONCAT(LPAD(exe.id_branch, 2, '0'), LPAD(bk.id_book, 6, '0'), LPAD(exe.id_index, 5, '0')) = '" + query + "') " +
+                    "ORDER BY len.loan_date DESC;";
 
             try
             {
