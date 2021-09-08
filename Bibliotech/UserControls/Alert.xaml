@@ -1,4 +1,37 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
-</ResourceDictionary>
+﻿<UserControl x:Class="Bibliotech.UserControls.Alert"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bibliotech.UserControls"
+             mc:Ignorable="d"
+             Height="50">
+    <Border
+        Background="White"
+        CornerRadius="8">
+
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity=".75"/>
+        </Border.Effect>
+
+        <WrapPanel>
+            <Border
+                HorizontalAlignment="Left"
+                Width="8"
+                Background="#FFD400"
+                CornerRadius="8,0,0,8"/>
+
+            <Image
+                Source="/Resources/img_warning.png"
+                Margin="10"
+                HorizontalAlignment="Left"/>
+
+            <TextBlock
+                Text="Leitor com livro pendente!!!"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="{StaticResource NormalSolidColor}"/>
+        </WrapPanel>
+    </Border>
+</UserControl>

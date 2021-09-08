@@ -69,10 +69,6 @@ namespace Bibliotech.Model.DAO
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
 
-            //mudar formato de data
-            /* DateTime.TryParseExact(lector.BirthDate.ToString(), "yyyy/MM/dd hh:mm:ss tt", CultureInfo.InvariantCulture,
-            DateTimeStyles.None, out DateTime date2);*/
-
             try
             {
                 string strSql = "insert into address (city, neighborhood, street, number, complement) " +
@@ -304,13 +300,11 @@ namespace Bibliotech.Model.DAO
                      "LEFT JOIN ( " +
                         "SELECT len.*, exe.status " +
                         "FROM lending AS len " +
-                        //"INNER JOIN lending_has_exemplary as lhe on lhe.id_lending = len.id_lending " +
                         "INNER JOIN exemplary as exe on exe.id_exemplary = len.id_exemplary " +
                         "WHERE len.return_date IS NULL" +
                         ") AS len ON len.id_lector = l.id_lector " +
                      "WHERE l.name like '%" + query + "%' and IF ( " + (int)typeSearch + " = 1, TRUE, b.id_branch = " + branch + ") and l.status = " + ((int)Status.Active) +
-                     " GROUP BY l.id_lector " +
-                     "LIMIT 30";
+                     " GROUP BY l.id_lector;";
 
             try
             {
@@ -732,5 +726,40 @@ namespace Bibliotech.Model.DAO
             }
         }
 
+        public async Task<bool> HasBookPending(Lector lector)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT IF(len.status IS NULL, 0, 1) AS icon " +
+                    "FROM lector AS l " +
+                    "LEFT JOIN( " +
+                        "SELECT len.*, exe.status " +
+                        "FROM lending AS len " +
+                        "INNER JOIN exemplary as exe on exe.id_exemplary = len.id_exemplary " +
+                        "WHERE len.return_date IS NULL " +
+                        ") AS len ON len.id_lector = l.id_lector " +
+                    "WHERE l.id_lector = ? " +
+                    "GROUP BY l.id_lector; ";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = lector.IdLector;
+
+                object result = await command.ExecuteScalarAsync();
+                int value = int.Parse(result.ToString());
+
+                return value > 0;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
     }
 }

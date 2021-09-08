@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="/Bibliotech;component/Resources/ico_bibliotech.ico"
-        Title="AddEditLectorWindow" Height="469" Width="890" ResizeMode="NoResize" SizeToContent="Width">
+        Title="AddEditLectorWindow" Height="469" Width="890" ResizeMode="NoResize" SizeToContent="Width"
+        Loaded="Window_Loaded">
     <Grid>
 
         <TextBlock 
@@ -152,6 +153,15 @@
                 Text="HISTÓRICO" Click="HistoryButton_Click"/>
         </Grid>
 
+        <uc:Alert
+            x:Name="alert"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="0,0,0,30"
+            Height="50"
+            Width="270"
+            Visibility="Collapsed"/>
+        
         <uc:ButtonImage 
             x:Name="btnSave"
             Text="SALVAR"

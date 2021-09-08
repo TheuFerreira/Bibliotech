@@ -199,5 +199,11 @@ namespace Bibliotech.View.Lectors
 
             _ = new LectorHistoryWindow(lector.IdLector).ShowDialog();
         }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            bool hasBookPending = await daoLector.HasBookPending(lector);
+            alert.Visibility = hasBookPending ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
 }

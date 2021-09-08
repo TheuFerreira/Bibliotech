@@ -162,6 +162,9 @@
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Singletons\Server.cs" />
     <Compile Include="Singletons\Session.cs" />
+    <Compile Include="UserControls\Alert.xaml.cs">
+      <DependentUpon>Alert.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
