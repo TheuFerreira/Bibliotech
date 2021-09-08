@@ -123,6 +123,8 @@ namespace Bibliotech.BarCode
                 }
 
                 doc.Close();
+                fileStream.Close();
+                writer.Close();
                 
             }
             catch (Exception ex)
