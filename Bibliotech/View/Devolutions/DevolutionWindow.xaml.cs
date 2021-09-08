@@ -81,12 +81,6 @@ namespace Bibliotech.View.Devolutions
             return true;
         }
 
-        private void ClearFields()
-        {
-            tfLectorRegister.Text = string.Empty;
-            tfNameLector.Text = string.Empty;
-        }
-
         private void BtnSearhLector_Click(object sender, RoutedEventArgs e)
         {
             SearchLectorWindow lectorWindow = new SearchLectorWindow();
@@ -102,7 +96,7 @@ namespace Bibliotech.View.Devolutions
             }
             else
             {
-                tfLectorRegister.Text = lector.IdLector.ToString();
+                tfLectorRegister.Text = lector.IdLector.ToString("D6");
                 tfNameLector.Text = lector.Name;
             }
 

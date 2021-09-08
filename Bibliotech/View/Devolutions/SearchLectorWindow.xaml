@@ -57,7 +57,7 @@
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="REGISTRO DE LEITOR" Binding="{Binding Path=IdLector}" Width="200" ElementStyle="{StaticResource ColumnText}"/>
+                    <DataGridTextColumn Header="REGISTRO DE LEITOR" Binding="{Binding Path=IdLector, StringFormat=D6}" Width="200" ElementStyle="{StaticResource ColumnText}"/>
                 <DataGridTextColumn Header="NOME" Binding="{Binding Path=Name}" Width="*" ElementStyle="{StaticResource ColumnText}"/>
             </DataGrid.Columns>
         </DataGrid>
