@@ -1,9 +1,9 @@
 ﻿using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
-using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
@@ -156,6 +156,72 @@ namespace Bibliotech.Model.DAO
                 await transaction.CommitAsync();
 
                 return true;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<List<Exemplary>> GetAllExemplariesByBranch(Branch branch)
+        {
+            try
+            {
+                await Connect();
+
+                string sql = "" +
+                    "SELECT b.id_book, b.title, b.subtitle, b.publishing_company, GROUP_CONCAT(a.name) as authors, e.id_index " +
+                    "FROM exemplary AS e " +
+                    "INNER JOIN book AS b ON b.id_book = e.id_book " +
+                    "INNER JOIN book_has_author AS ba ON ba.id_book = b.id_book " +
+                    "INNER JOIN author AS a ON a.id_author = ba.id_author " +
+                    "WHERE e.id_branch = ? " +
+                    "GROUP BY e.id_exemplary " +
+                    "ORDER BY b.title, e.id_index; ";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection);
+                command.Parameters.Add("?", DbType.Int32).Value = branch.IdBranch;
+
+                List<Exemplary> exemplaries = new List<Exemplary>();
+                MySqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+                while (await reader.ReadAsync())
+                {
+                    int idBook = await reader.GetFieldValueAsync<int>(0);
+                    string title = await reader.GetFieldValueAsync<string>(1);
+                    string subtitle = await reader.GetFieldValueAsync<string>(2);
+                    string publishingCompany = await reader.GetFieldValueAsync<string>(3);
+                    string concatenedAuthors = await reader.GetFieldValueAsync<string>(4);
+                    int idIndex = await reader.GetFieldValueAsync<int>(5);
+
+                    List<Author> authors = concatenedAuthors.Split(',').Select(x => new Author
+                    {
+                        Name = x,
+                    }).ToList();
+
+                    Book book = new Book
+                    {
+                        IdBook = idBook,
+                        Title = title,
+                        Subtitle = subtitle,
+                        PublishingCompany = publishingCompany,
+                        Authors = authors,
+                    };
+
+                    Exemplary exemplary = new Exemplary
+                    {
+                        Branch = branch,
+                        Book = book,
+                        IdIndex = idIndex,
+                    };
+
+                    exemplaries.Add(exemplary);
+                }
+
+                return exemplaries;
             }
             catch (MySqlException ex)
             {

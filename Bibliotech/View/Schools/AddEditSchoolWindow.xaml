@@ -97,6 +97,20 @@
                 IsEnabled="False"/>
         </Grid>
 
+        <uc:Button
+            x:Name="btnGeneratePDF"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="10"
+            Height="30"
+            FontSize="16"
+            MarginImage="10,5"
+            CornerRadius="15"
+            Width="400"
+            Source="/Resources/img_book.png"
+            Text="Gerar PDF com Códigos de Barras dos livros"
+            Click="ButtonGeneratePDF_Click"/>
+
         <uc:ButtonImage 
             x:Name="btnSave"
             Text="SALVAR"

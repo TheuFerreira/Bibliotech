@@ -1,6 +1,8 @@
-﻿using Bibliotech.Model.DAO;
+﻿using Bibliotech.BarCode;
+using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace Bibliotech.View.Schools
@@ -111,6 +113,12 @@ namespace Bibliotech.View.Schools
             tfNumber.Text = "";
         }
 
+        private void SetButtons(bool value)
+        {
+            btnSave.IsEnabled = value;
+            btnGeneratePDF.IsEnabled = value;
+        }
+
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields())
@@ -131,13 +139,13 @@ namespace Bibliotech.View.Schools
             branch.Telephone = phone;
             branch.Address = address;
 
-            btnSave.IsEnabled = false;
+            SetButtons(false);
             bool result = await daoSchool.Save(branch);
+            SetButtons(true);
+
             if (result == false)
             {
                 dialogService.ShowError("Algo deu errado\nTente novamente");
-                btnSave.IsEnabled = true;
-
                 return;
             }
 
@@ -148,18 +156,25 @@ namespace Bibliotech.View.Schools
             {
                 dialogService.ShowInformation("Agora você será redicionado para a tela de usuários, para cadastrar o primeiro usuário!!!");
                 DialogResult = true;
-                Close();
             }
-            else if (branch.IdBranch != -1)
-            {
-                Close();
-            }
+
+            Close();
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             int aux = await daoSchool.UsersCount(branch);
             tfUsers.Text = aux.ToString();
+        }
+
+        private async void ButtonGeneratePDF_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtons(false);
+
+            List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
+            new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch);
+
+            SetButtons(true);
         }
     }
 }
