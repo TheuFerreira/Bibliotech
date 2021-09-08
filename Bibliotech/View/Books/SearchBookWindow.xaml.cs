@@ -2,21 +2,11 @@
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
 using Bibliotech.Singletons;
-using Bibliotech.View.Lendings;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Bibliotech.View.Books
 {
@@ -25,11 +15,11 @@ namespace Bibliotech.View.Books
     /// </summary>
     public partial class SearchBookWindow : Window
     {
-        private DAOBook daoBook = new DAOBook();
+        private readonly DAOBook daoBook = new DAOBook();
 
         public Book book = new Book();
 
-        DialogService dialogService = new DialogService();
+        private readonly DialogService dialogService = new DialogService();
 
         public Exemplary exemplary = new Exemplary();
         //trocar pro krai do session
@@ -107,12 +97,12 @@ namespace Bibliotech.View.Books
                 return;
             }
 
-            if(VerifyDuplicate())
+            if (VerifyDuplicate())
             {
                 isConfirmed = true;
                 Close();
             }
-            
+
         }
 
         private void searchField_Click(object sender, RoutedEventArgs e)

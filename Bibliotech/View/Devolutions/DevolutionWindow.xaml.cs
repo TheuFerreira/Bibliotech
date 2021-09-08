@@ -1,10 +1,9 @@
-﻿using Bibliotech.Model.Entities;
+﻿using Bibliotech.Model.DAO;
+using Bibliotech.Model.Entities;
+using Bibliotech.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using Bibliotech.Model.DAO;
-using Bibliotech.Services;
-using Bibliotech.Converters;
 
 namespace Bibliotech.View.Devolutions
 {
@@ -26,7 +25,7 @@ namespace Bibliotech.View.Devolutions
 
             exemplary = new Exemplary();
             dateDevolution.date.Text = DateTime.Now.Date.ToShortDateString();
-            
+
         }
 
         private void IsEnabledControls(bool result)
@@ -36,7 +35,7 @@ namespace Bibliotech.View.Devolutions
             btnMisplaced.IsEnabled = !result;
             btnExtend.IsEnabled = !result;
             btnDevolution.IsEnabled = !result;
-            if(dataGrid.Items.Count == 0)
+            if (dataGrid.Items.Count == 0)
             {
                 btnMisplaced.IsEnabled = false;
                 btnExtend.IsEnabled = false;
@@ -73,7 +72,7 @@ namespace Bibliotech.View.Devolutions
                 return false;
             }
 
-            if(dateDevolution.date.SelectedDate < DateTime.Now.Date)
+            if (dateDevolution.date.SelectedDate < DateTime.Now.Date)
             {
                 dialogService.ShowError("Escolha uma data de devolução maior que a atual.");
                 return false;
@@ -96,7 +95,7 @@ namespace Bibliotech.View.Devolutions
             lector = new Lector();
             lector = lectorWindow.Selectedlectors;
 
-            if(lector.IdLector == -1)
+            if (lector.IdLector == -1)
             {
                 tfLectorRegister.Text = " ";
                 tfNameLector.Text = " ";
@@ -106,11 +105,11 @@ namespace Bibliotech.View.Devolutions
                 tfLectorRegister.Text = lector.IdLector.ToString();
                 tfNameLector.Text = lector.Name;
             }
-             
+
             SearchExemplaries();
 
         }
-       
+
         private Exemplary Exemplary()
         {
             int index = dataGrid.SelectedIndex;
@@ -167,7 +166,7 @@ namespace Bibliotech.View.Devolutions
 
         private async void BtnExtend_OnClick(object sender, RoutedEventArgs e)
         {
-            if(!ValidateFields())
+            if (!ValidateFields())
             {
                 return;
             }
