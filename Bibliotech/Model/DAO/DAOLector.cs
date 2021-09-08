@@ -353,7 +353,8 @@ namespace Bibliotech.Model.DAO
                      "inner join lector as lec on lec.id_lector = len.id_lector " +
                      "INNER JOIN exemplary as exe on exe.id_exemplary = len.id_exemplary " +
                      "inner join book as bk on bk.id_book = exe.id_book " +
-                     "where lec.id_lector = " + idlector + " and bk.title like '%" + query + "%';";
+                     "where lec.id_lector = " + idlector + " " +
+                        "AND (bk.title like '%" + query + "%' OR CONCAT(LPAD(exe.id_branch, 2, '0'), LPAD(bk.id_book, 6, '0'), LPAD(exe.id_index, 5, '0')) = '" + query + "');";
 
             try
             {
@@ -607,8 +608,8 @@ namespace Bibliotech.Model.DAO
                     string publishingCompany = await reader.GetFieldValueAsync<string>(6);
                     DateTime expectedDate = await reader.GetFieldValueAsync<DateTime>(7);
                     DateTime? returnDate = null;
-                        
-                   if(await reader.IsDBNullAsync(8) == false)
+
+                    if (await reader.IsDBNullAsync(8) == false)
                     {
                         returnDate = await reader.GetFieldValueAsync<DateTime>(8);
                     }

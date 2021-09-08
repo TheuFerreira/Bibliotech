@@ -255,13 +255,14 @@ namespace Bibliotech.Model.DAO
         {
             await Connect();
 
-            string strSql = "select exe.id_index, bk.title, bk.subtitle, group_concat(distinct name separator ', ') as autores, bk.publishing_company, bk.id_book, exe.id_exemplary " +
-                            "from book as bk " +
-                            "inner join book_has_author as bha on bha.id_book = bk.id_book " +
-                            "inner join author as aut on aut.id_author = bha.id_author " +
-                            "inner join exemplary as exe on exe.id_book = bk.id_book " +
-                            "where bk.title like '%" + query + "%' and exe.status = 3 and exe.id_branch = " + idBranch +
-                            " group by bk.id_book, exe.id_index;";
+            string strSql = "" +
+                "select exe.id_index, bk.title, bk.subtitle, group_concat(distinct name separator ', ') as autores, bk.publishing_company, bk.id_book, exe.id_exemplary " +
+                "from book as bk " +
+                "inner join book_has_author as bha on bha.id_book = bk.id_book " +
+                "inner join author as aut on aut.id_author = bha.id_author " +
+                "inner join exemplary as exe on exe.id_book = bk.id_book " +
+                "where (bk.title like '%" + query + "%' OR CONCAT(LPAD(exe.id_branch, 2, '0'), LPAD(bha.id_book, 6, '0'), LPAD(exe.id_index, 5, '0')) = '" + query + "') and exe.status = 3 and exe.id_branch = " + idBranch +
+                " group by bk.id_book, exe.id_index;";
 
             try
             {
@@ -274,8 +275,6 @@ namespace Bibliotech.Model.DAO
 
                 _ = adapter.Fill(dt);
                 return dt;
-
-
             }
             catch (Exception)
             {
