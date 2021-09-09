@@ -1,5 +1,6 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Singletons;
 using System;
 using System.Data;
@@ -41,7 +42,7 @@ namespace Bibliotech.View.Lectors
         {
             loading.Awaiting = true;
             OnOffControls(false);
-            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch, Model.Entities.Enums.TypeSearch.Current);
+            DataTable dataTable = await daoLector.FillDataGrid(searchField.Text, idBranch, TypeSearch.Current);
             if (dataTable != null)
             {
                 dataGrid.ItemsSource = dataTable.DefaultView;

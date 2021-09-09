@@ -158,7 +158,7 @@ namespace Bibliotech.View.Lectors
 
             if (lector.IdLector == -1)
             {
-                if (!dialogService.ShowQuestion("Tem certeza que deseja adicionar este usuário?", ""))
+                if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja adicionar este usuário?"))
                 {
                     return;
                 }
