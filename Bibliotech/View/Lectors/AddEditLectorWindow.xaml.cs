@@ -202,7 +202,13 @@ namespace Bibliotech.View.Lectors
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            bool hasBookPending = await daoLector.HasBookPending(lector);
+            bool hasBookPending = false;
+
+            if (lector.IdLector != -1)
+            {
+                hasBookPending = await daoLector.HasBookPending(lector);
+            }
+
             alert.Visibility = hasBookPending ? Visibility.Visible : Visibility.Collapsed;
         }
     }

@@ -125,6 +125,10 @@ namespace Bibliotech.View.Users
                 {
                     (element as ComboBox).SelectedIndex = 0;
                 }
+                else if (element is PasswordField)
+                {
+                    (element as PasswordField).Text = string.Empty;
+                }
                 else if (element is Grid)
                 {
                     Grid grid = element as Grid;

@@ -13,7 +13,7 @@ namespace Bibliotech.View.Schools
     public partial class AddEditSchoolWindow : Window
     {
         private readonly DialogService dialogService = new DialogService();
-        private FileService fileService = new FileService();
+        private readonly FileService fileService = new FileService();
         private readonly DAOBranch daoSchool = new DAOBranch();
         private readonly bool isFirstBranch;
         private readonly Branch branch;
@@ -132,7 +132,7 @@ namespace Bibliotech.View.Schools
             Address address = branch.Address;
             address.City = tfCity.Text;
             address.Neighborhood = tfDistrict.Text;
-            address.Neighborhood = tfDistrict.Text;
+            address.Street = tfStreet.Text;
             address.Number = tfNumber.Text;
 
             branch.Address = address;
@@ -166,6 +166,8 @@ namespace Bibliotech.View.Schools
         {
             int aux = await daoSchool.UsersCount(branch);
             tfUsers.Text = aux.ToString();
+
+            btnGeneratePDF.Visibility = branch.IsNew() ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private async void ButtonGeneratePDF_Click(object sender, RoutedEventArgs e)
@@ -178,9 +180,10 @@ namespace Bibliotech.View.Schools
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
             }
-            
+
             new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
+
             SetButtons(true);
         }
     }
