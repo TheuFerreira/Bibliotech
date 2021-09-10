@@ -60,7 +60,14 @@ namespace Bibliotech.BarCode
 
                 foreach (Author author in e.Book.Authors)
                 {
-                    name = name + author.Name.ToString() + "; ";
+                   if(e.Book.Authors.Count > 1)
+                   {
+                        name = name + author.Name + "; ";
+                   }
+                    else
+                    {
+                        name = author.Name;
+                    }
                 }
 
                 PdfPTable pdfPTable = new PdfPTable(6);
