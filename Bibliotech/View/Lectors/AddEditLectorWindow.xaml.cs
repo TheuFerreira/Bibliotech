@@ -2,6 +2,7 @@
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
 using Bibliotech.Singletons;
+using Bibliotech.UserControls;
 using System;
 using System.Windows;
 
@@ -17,6 +18,7 @@ namespace Bibliotech.View.Lectors
         private readonly Lector lector;
         private readonly Address address;
         private readonly int idBranch;
+        private readonly Loading loading = new Loading();
 
         public AddEditLectorWindow(Lector lector)
         {
@@ -147,6 +149,13 @@ namespace Bibliotech.View.Lectors
             tfNumber.Text = "";
         }
 
+        private void OnOffButtons(bool value)
+        {
+            btnSave.IsEnabled = value;
+            HistoryButton.IsEnabled = value;
+            loading.Awaiting = !value;
+        }
+
         private async void Save_OnClick(object sender, RoutedEventArgs e)
         {
             if (!ValidateFields())
@@ -158,11 +167,11 @@ namespace Bibliotech.View.Lectors
 
             if (lector.IdLector == -1)
             {
-                if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja adicionar este usuário?"))
+                if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja adicionar este leitor?"))
                 {
                     return;
                 }
-
+                OnOffButtons(false);
                 btnSave.IsEnabled = false;
                 if (!await daoLector.Insert(idBranch, lector, address))
                 {
@@ -171,16 +180,19 @@ namespace Bibliotech.View.Lectors
                 }
 
                 dialogService.ShowSuccess("Leitor adicionado com sucesso!");
-                btnSave.IsEnabled = true;
+                
                 ClearFields();
+                OnOffButtons(true);
 
                 return;
             }
+            OnOffButtons(false);
 
             if (await daoLector.Update(lector, address))
             {
                 if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja alterar este leitor?"))
                 {
+                    OnOffButtons(true);
                     return;
                 }
 

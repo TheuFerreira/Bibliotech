@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -232,15 +233,17 @@ namespace Bibliotech.Model.DAO
 
             int idUser = Session.Instance.User.IdUser;
 
-            string strSql = "insert into lending (id_exemplary, id_lector, id_user, loan_date, expected_date) " +
-                                "values(@id_exemplary, @id_lector, @id_user, @loan_date, @expected_date);";
+           
 
             try
             {
                 for (int i = 0; i < exemplary.Count; i++)
                 {
+                    string strSql = "insert into lending (id_exemplary, id_lector, id_user, loan_date, expected_date) " +
+                               "values(@id_exemplary, @id_lector, @id_user, @loan_date, @expected_date);";
 
                     MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
+
                     cmd.Parameters.AddWithValue("@id_exemplary", exemplary[i].IdExemplary);
                     cmd.Parameters.AddWithValue("@id_lector", lector.IdLector);
                     cmd.Parameters.AddWithValue("@id_user", idUser);
@@ -248,7 +251,7 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.AddWithValue("@expected_date", end);
 
                     object o = await cmd.ExecuteNonQueryAsync();
-                    //MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString());
+                    MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString() + " i: " + i);
 
                     strSql = "update exemplary set status = 2 where exemplary.id_exemplary = " + exemplary[i].IdExemplary;
                     cmd.CommandText = strSql;
