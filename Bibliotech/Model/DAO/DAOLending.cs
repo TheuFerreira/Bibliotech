@@ -251,7 +251,7 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.AddWithValue("@expected_date", end);
 
                     object o = await cmd.ExecuteNonQueryAsync();
-                    MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString() + " i: " + i);
+                    //MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString() + " i: " + i);
 
                     strSql = "update exemplary set status = 2 where exemplary.id_exemplary = " + exemplary[i].IdExemplary;
                     cmd.CommandText = strSql;

@@ -262,7 +262,7 @@ namespace Bibliotech.Model.DAO
                 "inner join author as aut on aut.id_author = bha.id_author " +
                 "inner join exemplary as exe on exe.id_book = bk.id_book " +
                 "where (bk.title like '%" + query + "%' OR CONCAT(LPAD(exe.id_branch, 2, '0'), LPAD(bha.id_book, 6, '0'), LPAD(exe.id_index, 5, '0')) = '" + query + "') and exe.status = 3 and exe.id_branch = " + idBranch +
-                " group by bk.id_book, exe.id_index;";
+                " group by bk.id_book, exe.id_index order by bk.title limit 200;";
 
             try
             {

@@ -677,7 +677,8 @@ namespace Bibliotech.Model.DAO
 
                 cmd.CommandText = update;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add("?", DbType.Date).Value = devolution;
+                //cmd.Parameters.Add("?", DbType.Date).Value = devolution;
+                cmd.Parameters.Add("?", DbType.Date).Value = null;
                 cmd.Parameters.Add("?", DbType.Int32).Value = idLending;
 
                 await cmd.ExecuteNonQueryAsync();
