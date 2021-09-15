@@ -37,5 +37,10 @@ namespace Bibliotech.Singletons
             key.SetValue("Server", value);
             key.Close();
         }
+
+        public override string ToString()
+        {
+            return $"Server={ServerName};Port={Port};Database={Database};Username={UserName};Password={Password};AllowZeroDateTime=true;Allow User Variables=true;";
+        }
     }
 }
