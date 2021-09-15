@@ -1,4 +1,4 @@
-﻿using Bibliotech.BarCode;
+﻿using Bibliotech.Export.PDF;
 using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
@@ -21,7 +21,7 @@ namespace Bibliotech.View.Books
     {
         private List<Exemplary> exemplaries;
 
-        private readonly GenerateAndPrintBarCorde generateAndPrintBarCorde;
+        private readonly BarCode barCode;
         private readonly DAOExamplary daoExemplary;
         private readonly DialogService dialogService;
         private readonly FileService fileService;
@@ -37,7 +37,7 @@ namespace Bibliotech.View.Books
             daoExemplary = new DAOExamplary();
             dialogService = new DialogService();
             fileService = new FileService();
-            generateAndPrintBarCorde = new GenerateAndPrintBarCorde();
+            barCode = new BarCode();
             Book = book;
 
             filter.ItemsSource = Enum.GetValues(typeof(Status))
@@ -102,7 +102,7 @@ namespace Bibliotech.View.Books
             SearchExemplaries();
         }
 
-        private void CellPrint_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private async void CellPrint_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SetButtons(false);
             Exemplary exemplary = GetExemplaryInGrid();
@@ -125,7 +125,7 @@ namespace Bibliotech.View.Books
                 return;
             }
 
-            generateAndPrintBarCorde.BaseDocument(exemplariesSelected, currentBranch, path);
+            await barCode.BuildAsync(exemplariesSelected, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
         }
 
@@ -228,7 +228,7 @@ namespace Bibliotech.View.Books
             SearchExemplaries();
         }
 
-        private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
             SetButtons(false);
 
@@ -245,7 +245,7 @@ namespace Bibliotech.View.Books
                 return;
             }
 
-            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch, path);
+            await barCode.BuildAsync(exemplaries, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);

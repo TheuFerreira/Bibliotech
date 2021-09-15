@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Bibliotech.BarCode
+namespace Bibliotech.Export.PDF
 {
-    public class GenerateAndPrintBarCorde
+    public class BarCode
     {
         protected Document doc;
 
@@ -27,7 +27,7 @@ namespace Bibliotech.BarCode
             };
         }
 
-        public void BaseDocument(List<Exemplary> exemplaries, Branch currentBranch, string path)
+        public void Build(List<Exemplary> exemplaries, Branch currentBranch, string path)
         {
             doc = new Document(PageSize.A4);
             Font font = FontFactory.GetFont(BaseFont.HELVETICA, 10);
@@ -90,10 +90,10 @@ namespace Bibliotech.BarCode
             fileStream.Close();
             writer.Close();
         }
-   
-        public async Task BaseDocumentAsync(List<Exemplary> exemplaries, Branch currentBranch, string path)
+
+        public async Task BuildAsync(List<Exemplary> exemplaries, Branch currentBranch, string path)
         {
-            await Task.Run(() => BaseDocument(exemplaries, currentBranch, path));
+            await Task.Run(() => Build(exemplaries, currentBranch, path));
         }
     }
 }

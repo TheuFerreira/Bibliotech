@@ -1,4 +1,4 @@
-﻿using Bibliotech.BarCode;
+﻿using Bibliotech.Export.PDF;
 using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
@@ -188,7 +188,7 @@ namespace Bibliotech.View.Schools
                 return;
             }
 
-            await new GenerateAndPrintBarCorde().BaseDocumentAsync(exemplaries, branch, path);
+            await new BarCode().BuildAsync(exemplaries, branch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);
