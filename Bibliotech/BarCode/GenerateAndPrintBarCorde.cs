@@ -10,25 +10,24 @@ namespace Bibliotech.BarCode
     {
         protected Document doc;
 
-        protected PdfPCell GetNewCell(string text, Font font, int alignment, float padding, int borda, BaseColor borderColor, BaseColor backgroundColor)
-        {
-            var cell = new PdfPCell(new Phrase(text, font));
-            cell.HorizontalAlignment = alignment;
-            cell.Padding = padding;
-            cell.Border = borda;
-            cell.BorderColor = borderColor;
-            cell.BackgroundColor = backgroundColor;
+        private const int ALIGNMENT = Element.ALIGN_LEFT;
+        private const int BORDER = Rectangle.BOTTOM_BORDER;
 
-            return cell;
+        protected PdfPCell GetNewCell(string text, Font font, int alignment = 0, float padding = 5, int border = 0)
+        {
+            Phrase phrase = new Phrase(text, font);
+            return new PdfPCell(phrase)
+            {
+                HorizontalAlignment = alignment,
+                Padding = padding,
+                Border = border,
+                BorderColor = new BaseColor(0, 0, 0),
+                BackgroundColor = new BaseColor(255, 255, 255)
+            };
         }
 
-        protected PdfPCell getNewCell(string Text, Font Font, int Alignment = 0, float Spacing = 5, int Border = 0)
+        public void BaseDocument(List<Exemplary> exemplaries, Branch currentBranch, string path)
         {
-            return GetNewCell(Text, Font, Alignment, Spacing, Border, new BaseColor(0, 0, 0), new BaseColor(255, 255, 255));
-        }
-        public void BaseDocument(List<Exemplary> exemplary, Branch currentBranch, string path)
-        {
-
             doc = new Document(PageSize.A4);
             Font font = FontFactory.GetFont(BaseFont.HELVETICA, 10);
 
@@ -41,30 +40,28 @@ namespace Bibliotech.BarCode
 
             doc.Open();
 
-            foreach (Exemplary e in exemplary)
+            foreach (Exemplary e in exemplaries)
             {
                 string idBranch = currentBranch.IdBranch.ToString().PadLeft(2, '0');
                 string idBook = e.Book.IdBook.ToString().PadLeft(6, '0');
                 string idIndex = e.IdIndex.ToString().PadLeft(5, '0');
 
-                string concat = $"" + idBranch + "" + idBook + "" + idIndex;
-                BarcodeEan barcodeEAN = new BarcodeEan();
-                barcodeEAN.Code = concat;
+                string concat = $"{idBranch}{idBook}{idIndex}";
+                BarcodeEan barcodeEAN = new BarcodeEan
+                {
+                    Code = concat
+                };
                 Image image = barcodeEAN.CreateImageWithBarcode(cb, null, null);
 
                 _ = doc.AddAuthor(currentBranch.Name.ToString());
 
                 string name = string.Empty;
-
                 foreach (Author author in e.Book.Authors)
                 {
-                    if (e.Book.Authors.Count > 1)
+                    name += author.Name;
+                    if (e.Book.Authors.IndexOf(author) < e.Book.Authors.Count - 1)
                     {
-                        name += author.Name + "; ";
-                    }
-                    else
-                    {
-                        name = author.Name;
+                        name += "; ";
                     }
                 }
 
@@ -72,17 +69,17 @@ namespace Bibliotech.BarCode
                 float[] cols = { 10, 30, 30, 30, 30, 40 };
                 pdfPTable.SetWidths(cols);
 
-                pdfPTable.DefaultCell.Border = PdfPCell.BOTTOM_BORDER;
+                pdfPTable.DefaultCell.Border = Rectangle.BOTTOM_BORDER;
                 pdfPTable.DefaultCell.BorderColor = BaseColor.Black;
                 pdfPTable.DefaultCell.BorderColorBottom = BaseColor.White;
                 pdfPTable.DefaultCell.Padding = 10;
 
                 pdfPTable.CompleteRow();
-                pdfPTable.AddCell(getNewCell(e.IdIndex.ToString(), font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER));
-                pdfPTable.AddCell(getNewCell(e.Book.Title, font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER));
-                pdfPTable.AddCell(getNewCell(e.Book.Subtitle, font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER));
-                pdfPTable.AddCell(getNewCell(name, font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER)); ;
-                pdfPTable.AddCell(getNewCell(e.Book.PublishingCompany, font, Element.ALIGN_LEFT, 5, PdfPCell.BOTTOM_BORDER));
+                pdfPTable.AddCell(GetNewCell(e.IdIndex.ToString(), font, ALIGNMENT, 5, BORDER));
+                pdfPTable.AddCell(GetNewCell(e.Book.Title, font, ALIGNMENT, 5, BORDER));
+                pdfPTable.AddCell(GetNewCell(e.Book.Subtitle, font, ALIGNMENT, 5, BORDER));
+                pdfPTable.AddCell(GetNewCell(name, font, ALIGNMENT, 5, BORDER)); ;
+                pdfPTable.AddCell(GetNewCell(e.Book.PublishingCompany, font, ALIGNMENT, 5, BORDER));
                 pdfPTable.AddCell(image);
 
                 _ = doc.Add(pdfPTable);

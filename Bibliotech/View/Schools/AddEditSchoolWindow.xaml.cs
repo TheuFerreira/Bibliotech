@@ -176,9 +176,15 @@ namespace Bibliotech.View.Schools
 
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
             string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", "Código de Barras");
+            if (path == string.Empty)
+            {
+                return;
+            }
+
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+                return;
             }
 
             new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch, path);

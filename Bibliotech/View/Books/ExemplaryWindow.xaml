@@ -52,7 +52,7 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="DataGridCell">
                                         <Grid 
-                                            MouseLeftButtonDown="CellPrint_MouseLeftButtonDown"
+                                            MouseLeftButtonUp="CellPrint_MouseLeftButtonUp"
                                             x:Name="grid">
                                             
                                             <Image

@@ -67,7 +67,10 @@ namespace Bibliotech.Services
                 FileName = fileName
             };
 
-            saveFileDialog.ShowDialog();
+            if (saveFileDialog.ShowDialog() != true)
+            {
+                return string.Empty;
+            }
             return saveFileDialog.FileName;
         }
     }
