@@ -183,9 +183,23 @@ namespace Bibliotech.View.Reports
             }
         }
 
-        private async void ExportToExcel(DataGrid dataGrid, string type)
+        private void OnOffControls(bool value)
+        {
+            tabControl.IsEnabled = value;
+            btnSearch.IsEnabled = value;
+            loading.Awaiting = !value;
+        }
+
+        private async void ExportToExcel(bool haveImage, DataGrid dataGrid, string type)
         {
             btnExport.IsEnabled = false;
+            OnOffControls(false);
+            if (dataGrid.Items.Count < 1)
+            {
+                return;
+            }
+
+            
             string data = DateTime.Now.ToString();
             data = data.Replace("/", "_");
             data = data.Replace(":", "-");
@@ -199,17 +213,20 @@ namespace Bibliotech.View.Reports
             if (saveFile.ShowDialog() != true)
             {
                 btnExport.IsEnabled = true;
+                OnOffControls(true);
                 return;
             }
 
             try
             {
-                bool result = new ReportsExcel().GenerateByGrid(saveFile.FileName, dataGrid);
+                ReportsExcel reportsExcel = new ReportsExcel();
 
-                if (result && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                if (await reportsExcel.ExportToExcel(haveImage, dataGrid, saveFile.FileName) && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
                 {
                     _ = Process.Start(saveFile.FileName);
                 }
+
+                OnOffControls(true);
             }
             catch (Exception)
             {
@@ -217,13 +234,18 @@ namespace Bibliotech.View.Reports
             }
             finally
             {
+                OnOffControls(true);
                 await Task.Delay(3000);
                 btnExport.IsEnabled = true;
+                
             }
         }
 
+
         private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
+            btnExport.IsEnabled = false;
+            OnOffControls(false);
             if (datagrid.Items.Count < 1)
             {
                 return;
@@ -235,7 +257,6 @@ namespace Bibliotech.View.Reports
 
             string nome = type + "Export" + data + ".pdf";
 
-            btnExport.IsEnabled = false;
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "PDF (*.pdf) |*.pdf";
             saveFile.FileName = nome;
@@ -243,11 +264,13 @@ namespace Bibliotech.View.Reports
             if (saveFile.ShowDialog() != true)
             {
                 btnExport.IsEnabled = true;
+                OnOffControls(true);
                 return;
             }
 
             try
             {
+                
                 bool result = new ReportsPDF().GenerateByGrid(saveFile.FileName, datagrid, haveImage);
 
                 if (result && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
@@ -257,12 +280,14 @@ namespace Bibliotech.View.Reports
             }
             catch (Exception)
             {
-                dialogService.ShowError("Não foi pssível exportar o relatório!\nTente novamente.");
+                dialogService.ShowError("Não foi possível exportar o relatório!\nTente novamente.");
             }
             finally
             {
+                OnOffControls(true);
                 await Task.Delay(3000);
                 btnExport.IsEnabled = true;
+                
             }
         }
 
@@ -281,7 +306,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(lendingDataGrid, "Lending");
+                        ExportToExcel(true, lendingDataGrid, "Lending");
                         break;
 
                     case Tabs.Lectors:
@@ -290,7 +315,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(lectorDataGrid, "Lector");
+                        ExportToExcel(true, lectorDataGrid, "Lector");
                         break;
 
                     case Tabs.Books:
@@ -299,7 +324,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(bookDataGrid, "Book");
+                        ExportToExcel(false, bookDataGrid, "Book");
                         break;
                 }
             }
