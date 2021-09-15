@@ -213,7 +213,7 @@ namespace Bibliotech.View.Reports
             }
             catch (Exception)
             {
-                throw;
+                dialogService.ShowError("Não foi pssível exportar o relatório!\nTente novamente.");
             }
             finally
             {
