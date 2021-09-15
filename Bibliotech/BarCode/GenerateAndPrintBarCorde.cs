@@ -3,6 +3,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Bibliotech.BarCode
 {
@@ -88,6 +89,11 @@ namespace Bibliotech.BarCode
             doc.Close();
             fileStream.Close();
             writer.Close();
+        }
+   
+        public async Task BaseDocumentAsync(List<Exemplary> exemplaries, Branch currentBranch, string path)
+        {
+            await Task.Run(() => BaseDocument(exemplaries, currentBranch, path));
         }
     }
 }

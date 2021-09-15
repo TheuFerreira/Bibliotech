@@ -188,7 +188,7 @@ namespace Bibliotech.View.Schools
                 return;
             }
 
-            new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch, path);
+            await new GenerateAndPrintBarCorde().BaseDocumentAsync(exemplaries, branch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);
