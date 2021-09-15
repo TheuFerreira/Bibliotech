@@ -54,7 +54,7 @@ namespace Bibliotech.Services
             return result == false ? string.Empty : fieldDialog.Text;
         }
 
-        public string SaveFileDialg()
+        public string SaveFileDialg(string filter, string defaultExt, string fileName)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
@@ -62,9 +62,9 @@ namespace Bibliotech.Services
                 AddExtension = true,
                 RestoreDirectory = true,
                 Title = "Salvar",
-                Filter = "PDF Files|*.pdf",
-                DefaultExt = "pdf",
-                FileName = "Código de Barras"
+                Filter = filter,
+                DefaultExt = defaultExt,
+                FileName = fileName
             };
 
             saveFileDialog.ShowDialog();

@@ -1,17 +1,15 @@
 ﻿using Bibliotech.Model.Entities;
-using Bibliotech.Services;
-using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Bibliotech.BarCode
 {
     public class GenerateAndPrintBarCorde
     {
         protected Document doc;
-        private DialogService dialogService = new DialogService();
-        
+
         protected PdfPCell GetNewCell(string text, Font font, int alignment, float padding, int borda, BaseColor borderColor, BaseColor backgroundColor)
         {
             var cell = new PdfPCell(new Phrase(text, font));
@@ -30,7 +28,7 @@ namespace Bibliotech.BarCode
         }
         public void BaseDocument(List<Exemplary> exemplary, Branch currentBranch, string path)
         {
-            
+
             doc = new Document(PageSize.A4);
             Font font = FontFactory.GetFont(BaseFont.HELVETICA, 10);
 
@@ -60,10 +58,10 @@ namespace Bibliotech.BarCode
 
                 foreach (Author author in e.Book.Authors)
                 {
-                   if(e.Book.Authors.Count > 1)
-                   {
-                        name = name + author.Name + "; ";
-                   }
+                    if (e.Book.Authors.Count > 1)
+                    {
+                        name += author.Name + "; ";
+                    }
                     else
                     {
                         name = author.Name;
@@ -94,6 +92,5 @@ namespace Bibliotech.BarCode
             fileStream.Close();
             writer.Close();
         }
-
     }
 }

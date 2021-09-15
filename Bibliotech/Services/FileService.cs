@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Bibliotech.Services
 {
@@ -10,18 +6,16 @@ namespace Bibliotech.Services
     {
         public bool IsFileOpen(string filePath)
         {
-            bool fileOpened = false;
             try
             {
-                System.IO.FileStream fs = System.IO.File.OpenWrite(filePath);
-                fs.Close();
-            }
-            catch (System.IO.IOException ex)
-            {
-                fileOpened = true;
-            }
+                File.OpenWrite(filePath).Close();
 
-            return fileOpened;
+                return false;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
         }
     }
 }
