@@ -222,7 +222,7 @@ namespace Bibliotech.View.Reports
                 }
             }
             catch (Exception)
-            { throw new Exception("Deu Merda"); }
+            { dialogService.ShowError("Não foi pssível exportar o relatório!\nTente novamente."); }
             finally
             {
                 await Task.Delay(3000);
@@ -358,7 +358,7 @@ namespace Bibliotech.View.Reports
             }
             catch (Exception)
             {
-                throw;
+                dialogService.ShowError("Não foi pssível exportar o relatório!\nTente novamente.");
             }
             finally
             {
