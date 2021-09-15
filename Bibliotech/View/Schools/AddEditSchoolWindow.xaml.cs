@@ -175,7 +175,8 @@ namespace Bibliotech.View.Schools
             SetButtons(false);
 
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
-            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", "Código de Barras");
+            string fileName = $"Código de Barras - {branch.Name}";
+            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
             if (path == string.Empty)
             {
                 return;
