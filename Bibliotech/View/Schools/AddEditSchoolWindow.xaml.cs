@@ -175,7 +175,7 @@ namespace Bibliotech.View.Schools
             SetButtons(false);
 
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
-            string path = dialogService.SaveFileDialg();
+            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", "Código de Barras");
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
