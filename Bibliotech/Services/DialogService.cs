@@ -1,10 +1,8 @@
 ﻿using Bibliotech.UserControls.CustomDialog;
 using Bibliotech.UserControls.CustomEnums;
-using Microsoft.Win32;
 using System;
-using System.Windows;
 using System.Windows.Forms;
-using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
+
 
 namespace Bibliotech.Services
 {
@@ -70,11 +68,11 @@ namespace Bibliotech.Services
                 FileName = fileName
             };
            
-
-            if (saveFileDialog.ShowDialog() != true)
+            if (saveFileDialog.ShowDialog() != DialogResult.OK)
             {
                 return string.Empty;
             }
+           
             return saveFileDialog.FileName;
         }
     }

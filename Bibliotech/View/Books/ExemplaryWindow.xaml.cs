@@ -119,22 +119,16 @@ namespace Bibliotech.View.Books
                 return;
             }
 
-            SetButtons(false);
-            List<Exemplary> exemplarySelected = new List<Exemplary>();
-            exemplarySelected.Add(GetExemplaryInGrid());
-            SetButtons(true);
-
-            string path = dialogService.SaveFileDialg();
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
                 return;
             }
-           // if (dialogService.SaveFileDialg())
-            {
 
-            }
-            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch, path);
+            SetButtons(false);
+            List<Exemplary> exemplarySelected = new List<Exemplary>();
+            exemplarySelected.Add(GetExemplaryInGrid());
+            SetButtons(true);
 
             await barCode.BuildAsync(exemplariesSelected, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
