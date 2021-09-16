@@ -172,8 +172,6 @@ namespace Bibliotech.View.Schools
 
         private async void ButtonGeneratePDF_Click(object sender, RoutedEventArgs e)
         {
-            SetButtons(false);
-
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
             string fileName = $"Código de Barras - {branch.Name}";
             string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
@@ -187,6 +185,8 @@ namespace Bibliotech.View.Schools
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
                 return;
             }
+
+            SetButtons(false);
 
             await new BarCode().BuildAsync(exemplaries, branch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
