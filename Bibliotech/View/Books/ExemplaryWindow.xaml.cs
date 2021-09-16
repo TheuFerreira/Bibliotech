@@ -113,18 +113,23 @@ namespace Bibliotech.View.Books
                 dialogService.ShowError("Você deve selecionar um exemplar!!!");
                 return;
             }
+
             SetButtons(false);
             List<Exemplary> exemplarySelected = new List<Exemplary>();
             exemplarySelected.Add(GetExemplaryInGrid());
             SetButtons(true);
+
             string path = dialogService.SaveFileDialg();
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
             }
-            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch, path);
-            dialogService.ShowInformation("PDF gerado com sucesso!!!");
+           // if (dialogService.SaveFileDialg())
+            {
 
+            }
+            generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch, path);
+            dialogService.ShowInformation("PDF gerado com sucesso!!!");
         }
 
         private Exemplary GetExemplaryInGrid()

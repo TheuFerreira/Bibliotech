@@ -2,6 +2,9 @@
 using Bibliotech.UserControls.CustomEnums;
 using Microsoft.Win32;
 using System;
+using System.Windows;
+using System.Windows.Forms;
+using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
 namespace Bibliotech.Services
 {
@@ -66,8 +69,7 @@ namespace Bibliotech.Services
                 DefaultExt = "pdf",
                 FileName = "Código de Barras"
             };
-
-            saveFileDialog.ShowDialog();
+           
             return saveFileDialog.FileName;
         }
     }
