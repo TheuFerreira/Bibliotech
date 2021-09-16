@@ -1,4 +1,4 @@
-﻿using Bibliotech.BarCode;
+﻿using Bibliotech.Export.PDF;
 using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
@@ -172,16 +172,23 @@ namespace Bibliotech.View.Schools
 
         private async void ButtonGeneratePDF_Click(object sender, RoutedEventArgs e)
         {
-            SetButtons(false);
-
             List<Exemplary> exemplaries = await new DAOExamplary().GetAllExemplariesByBranch(branch);
-            string path = dialogService.SaveFileDialg();
+            string fileName = $"Código de Barras - {branch.Name}";
+            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
+            if (path == string.Empty)
+            {
+                return;
+            }
+
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+                return;
             }
 
-            new GenerateAndPrintBarCorde().BaseDocument(exemplaries, branch, path);
+            SetButtons(false);
+
+            await new BarCode().BuildAsync(exemplaries, branch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);

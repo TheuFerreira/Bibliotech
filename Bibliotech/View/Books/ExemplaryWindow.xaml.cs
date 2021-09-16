@@ -1,4 +1,5 @@
-﻿using Bibliotech.Model.DAO;
+﻿using Bibliotech.Export.PDF;
+using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using Bibliotech.Services;
@@ -10,11 +11,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.IO;
-using iTextSharp;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Bibliotech.BarCode;
 
 namespace Bibliotech.View.Books
 {
@@ -25,14 +21,14 @@ namespace Bibliotech.View.Books
     {
         private List<Exemplary> exemplaries;
 
+        private readonly BarCode barCode;
         private readonly DAOExamplary daoExemplary;
-        private TypeSearch typeSearch;
-        private Status filterStatus;
         private readonly DialogService dialogService;
-        private FileService fileService;
+        private readonly FileService fileService;
         private readonly Book Book;
         private readonly Branch currentBranch;
-        private  GenerateAndPrintBarCorde generateAndPrintBarCorde;
+        private TypeSearch typeSearch;
+        private Status filterStatus;
 
         public ExemplaryWindow(Book book)
         {
@@ -41,7 +37,7 @@ namespace Bibliotech.View.Books
             daoExemplary = new DAOExamplary();
             dialogService = new DialogService();
             fileService = new FileService();
-            generateAndPrintBarCorde = new GenerateAndPrintBarCorde();
+            barCode = new BarCode();
             Book = book;
 
             filter.ItemsSource = Enum.GetValues(typeof(Status))
@@ -78,8 +74,8 @@ namespace Bibliotech.View.Books
 
             loading.Awaiting = !value;
         }
-        
-        private async void SearchEemplaries()
+
+        private async void SearchExemplaries()
         {
             string text = searchField.Text;
 
@@ -98,19 +94,28 @@ namespace Bibliotech.View.Books
 
         private void SearchField_Click(object sender, RoutedEventArgs e)
         {
-            SearchEemplaries();
+            SearchExemplaries();
         }
 
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SearchEemplaries();
+            SearchExemplaries();
         }
 
-        private void CellPrint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private async void CellPrint_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (dataGrid.SelectedItem == null)
+            SetButtons(false);
+            Exemplary exemplary = GetExemplaryInGrid();
+            List<Exemplary> exemplariesSelected = new List<Exemplary>
             {
-                dialogService.ShowError("Você deve selecionar um exemplar!!!");
+                exemplary
+            };
+            SetButtons(true);
+
+            string fileName = $"Código de Barras - {exemplary.Book.Title}, Nº {exemplary.IdIndex}";
+            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
+            if (path == string.Empty)
+            {
                 return;
             }
 
@@ -123,34 +128,48 @@ namespace Bibliotech.View.Books
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+                return;
             }
            // if (dialogService.SaveFileDialg())
             {
 
             }
             generateAndPrintBarCorde.BaseDocument(exemplarySelected, currentBranch, path);
+
+            await barCode.BuildAsync(exemplariesSelected, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
         }
 
         private Exemplary GetExemplaryInGrid()
-        { 
+        {
             int selectedExemplary = dataGrid.SelectedIndex;
             return exemplaries[selectedExemplary];
         }
 
-        private async void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        private async void SetExemplaryToStock(Exemplary exemplary)
         {
-            if (dataGrid.SelectedIndex < 0)
+            int idIndex = exemplary.IdIndex;
+            bool result = dialogService.ShowQuestion("RECUPERAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como RECUPERADO???");
+            if (result == false)
             {
                 return;
             }
 
-            Exemplary exemplary = GetExemplaryInGrid();
-            if (exemplary.IsLost())
+            SetButtons(false);
+            result = await daoExemplary.SetStatus(exemplary, Status.Stock);
+            SetButtons(true);
+
+            if (result == false)
             {
                 return;
             }
 
+            exemplary.Status = Status.Stock;
+            dialogService.ShowInformation("Livro Recuperado!!!");
+        }
+
+        private async void SetExemplaryToLost(Exemplary exemplary)
+        {
             int idIndex = exemplary.IdIndex;
             bool result = dialogService.ShowQuestion("EXTRAVIAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como EXTRAVIADO???");
             if (result == false)
@@ -169,7 +188,24 @@ namespace Bibliotech.View.Books
 
             exemplary.Status = Status.Lost;
             dialogService.ShowInformation("Livro Extraviado!!!");
+        }
 
+        private void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            if (exemplary.IsLost())
+            {
+                SetExemplaryToStock(exemplary);
+            }
+            else
+            {
+                SetExemplaryToLost(exemplary);
+            }
         }
 
         private async void BtnInactive_OnClick(object sender, RoutedEventArgs e)
@@ -229,20 +265,41 @@ namespace Bibliotech.View.Books
             }
 
             dialogService.ShowSuccess($"{numberExemplaries} Exemplares adicionados!");
-            SearchEemplaries();
+            SearchExemplaries();
         }
 
-        private void BtnPrint_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
             SetButtons(false);
-            string path = dialogService.SaveFileDialg();
+
+            string fileName = $"Código de Barras - {Book.Title}";
+            string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
+            if (path == string.Empty)
+            {
+                return;
+            }
+
             if (fileService.IsFileOpen(path))
             {
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
+                return;
             }
-            generateAndPrintBarCorde.BaseDocument(exemplaries, currentBranch, path);
+
+            await barCode.BuildAsync(exemplaries, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
+
             SetButtons(true);
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            btnLost.Text = exemplary.IsLost() ? "RECUPEROU" : "EXTRAVIOU";
         }
     }
 }

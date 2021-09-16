@@ -3,7 +3,7 @@
 
 #define MyAppName "Bibliotech"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "Ferreira"
+#define MyAppPublisher "Bibliotech"
 #define MyAppURL "https://github.com/TheuFerreira/Bibliotech"
 #define MyAppExeName "Bibliotech.exe"
 

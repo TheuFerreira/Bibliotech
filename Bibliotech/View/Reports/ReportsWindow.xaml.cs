@@ -1,4 +1,6 @@
-﻿using Bibliotech.Model.DAO;
+﻿using Bibliotech.Export.Excel;
+using Bibliotech.Export.PDF;
+using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
 using Bibliotech.Services;
 using Bibliotech.Singletons;
@@ -7,15 +9,12 @@ using Bibliotech.View.Lectors;
 using Bibliotech.View.Reports.CustomEnums;
 using Bibliotech.View.Schools;
 using EnumsNET;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -184,10 +183,23 @@ namespace Bibliotech.View.Reports
             }
         }
 
-        //Exporta para excel
-        private async void ExportToExcel(DataGrid dataGrid, string type)
+        private void OnOffControls(bool value)
+        {
+            tabControl.IsEnabled = value;
+            btnSearch.IsEnabled = value;
+            loading.Awaiting = !value;
+        }
+
+        private async void ExportToExcel(bool haveImage, DataGrid dataGrid, string type)
         {
             btnExport.IsEnabled = false;
+            OnOffControls(false);
+            if (dataGrid.Items.Count < 1)
+            {
+                return;
+            }
+
+            
             string data = DateTime.Now.ToString();
             data = data.Replace("/", "_");
             data = data.Replace(":", "-");
@@ -201,81 +213,39 @@ namespace Bibliotech.View.Reports
             if (saveFile.ShowDialog() != true)
             {
                 btnExport.IsEnabled = true;
+                OnOffControls(true);
                 return;
             }
 
-            dataGrid.SelectAllCells();
-            dataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, dataGrid);
-            dataGrid.UnselectAllCells();
-            string result = (string)Clipboard.GetData(DataFormats.Text);
-
             try
             {
-                StreamWriter sw = new StreamWriter(saveFile.FileName);
-                sw.WriteLine(result);
+                ReportsExcel reportsExcel = new ReportsExcel();
 
-                sw.Close();
-                if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                if (await reportsExcel.ExportToExcel(haveImage, dataGrid, saveFile.FileName) && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
                 {
                     _ = Process.Start(saveFile.FileName);
                 }
+
+                OnOffControls(true);
             }
             catch (Exception)
-            { throw new Exception("Deu Merda"); }
+            {
+                dialogService.ShowError("Não foi pssível exportar o relatório!\nTente novamente.");
+            }
             finally
             {
+                OnOffControls(true);
                 await Task.Delay(3000);
                 btnExport.IsEnabled = true;
+                
             }
         }
 
-        //cria a matriz 
-        private string[,] ToArray2(DataGrid dataGrid, bool haveImage)
-        {
-            int x = dataGrid.Items.Count;
-            int y = dataGrid.Columns.Count;
-            if (haveImage)
-            {
-                y--;
-            }
 
-            string[,] matriz = new string[x + 1, y];
-
-            int i = 0;
-            int j = 0;
-
-            foreach (DataGridColumn item in dataGrid.Columns)
-            {
-                if (item.Header != null)
-                {
-                    matriz[0, j] = item.Header.ToString();
-                }
-
-                j++;
-                if (j >= y)
-                {
-                    break;
-                }
-            }
-
-            i = 1;
-
-            foreach (DataRowView row in dataGrid.Items)
-            {
-                for (j = 0; j < y; j++)
-                {
-                    matriz[i, j] = row.Row.ItemArray[j].ToString();
-                }
-                i++;
-            }
-
-            return matriz;
-        }
-        //exporta grid pdf
         private async void ExportToPdf(DataGrid datagrid, string type, bool haveImage)
         {
-
+            btnExport.IsEnabled = false;
+            OnOffControls(false);
             if (datagrid.Items.Count < 1)
             {
                 return;
@@ -287,89 +257,42 @@ namespace Bibliotech.View.Reports
 
             string nome = type + "Export" + data + ".pdf";
 
-            btnExport.IsEnabled = false;
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "PDF (*.pdf) |*.pdf";
             saveFile.FileName = nome;
 
-
-            int x = datagrid.Items.Count;
-            int y = datagrid.Columns.Count;
-            if (haveImage)
-            {
-                y--;
-            }
-
-            string[,] matriz = new string[x + 1, y];
-            matriz = ToArray2(datagrid, haveImage);
-
-
             if (saveFile.ShowDialog() != true)
             {
                 btnExport.IsEnabled = true;
+                OnOffControls(true);
                 return;
             }
 
             try
             {
-                PdfPTable pTable = new PdfPTable(y);
-                pTable.DefaultCell.Padding = 2;
-                pTable.WidthPercentage = 100;
-                pTable.HorizontalAlignment = Element.ALIGN_LEFT;
+                
+                bool result = new ReportsPDF().GenerateByGrid(saveFile.FileName, datagrid, haveImage);
 
-                for (int i = 0; i < y; i++)
-                {
-                    PdfPCell pCell = new PdfPCell(new Phrase(matriz[0, i]));
-                    pCell.BackgroundColor = BaseColor.Gray;
-                    pCell.Border = 0;
-                    pCell.PaddingLeft = 5;
-                    pCell.PaddingRight = 5;
-                    pCell.PaddingBottom = 10;
-                    pCell.PaddingTop = 10;
-                    pTable.AddCell(pCell);
-                }
-
-                for (int i = 1; i <= x; i++)
-                {
-                    for (int j = 0; j < y; j++)
-                    {
-                        PdfPCell pCell = new PdfPCell(new Phrase(matriz[i, j]));
-                        pCell.Border = 0;
-                        pCell.Padding = 5;
-                        if (i % 2 == 0 && i > 0)
-                            pCell.BackgroundColor = BaseColor.LightGray;
-                        else
-                            pCell.BackgroundColor = BaseColor.White;
-                        pTable.AddCell(pCell);
-                    }
-                }
-
-                Document document = new Document(PageSize.A4, 8f, 16f, 16f, 8f);
-                PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(saveFile.FileName, FileMode.Append));
-
-                document.Open();
-                document.Add(pTable);
-                document.Close();
-
-                if (dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                if (result && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
                 {
                     _ = Process.Start(saveFile.FileName);
                 }
             }
             catch (Exception)
             {
-                throw;
+                dialogService.ShowError("Não foi possível exportar o relatório!\nTente novamente.");
             }
             finally
             {
+                OnOffControls(true);
                 await Task.Delay(3000);
                 btnExport.IsEnabled = true;
+                
             }
         }
 
         private void BtnLendingExport_Click(object sender, RoutedEventArgs e)
         {
-
             TypeReportWindow typeReport = new TypeReportWindow();
             _ = typeReport.ShowDialog();
 
@@ -383,7 +306,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(lendingDataGrid, "Lending");
+                        ExportToExcel(true, lendingDataGrid, "Lending");
                         break;
 
                     case Tabs.Lectors:
@@ -392,7 +315,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(lectorDataGrid, "Lector");
+                        ExportToExcel(true, lectorDataGrid, "Lector");
                         break;
 
                     case Tabs.Books:
@@ -401,7 +324,7 @@ namespace Bibliotech.View.Reports
                             dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
                             return;
                         }
-                        ExportToExcel(bookDataGrid, "Book");
+                        ExportToExcel(false, bookDataGrid, "Book");
                         break;
                 }
             }
@@ -441,7 +364,6 @@ namespace Bibliotech.View.Reports
             {
                 return;
             }
-
         }
 
         private async void BtnSearch_Click(object sender, RoutedEventArgs e)
