@@ -1,6 +1,7 @@
 ﻿using Bibliotech.Model.Entities;
 using Bibliotech.Model.Entities.Enums;
 using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -68,6 +69,47 @@ namespace Bibliotech.Model.DAO
                 }
 
                 return exemplaries;
+            }
+            catch (MySqlException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                await Disconnect();
+            }
+        }
+
+        public async Task<bool> SetGiveBack(Exemplary exemplary, DateTime date)
+        {
+            await Connect();
+            MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
+
+            try
+            {
+                string sql = "" +
+                    "UPDATE exemplary " +
+                    "SET status = ? " +
+                    "WHERE id_exemplary = ?;";
+
+                MySqlCommand command = new MySqlCommand(sql, SqlConnection, transaction);
+                command.Parameters.Add("?", DbType.Int32).Value = Status.Stock;
+                command.Parameters.Add("?", DbType.Int32).Value = exemplary.IdExemplary;
+                await command.ExecuteNonQueryAsync();
+
+                sql = "" +
+                    "UPDATE lending " +
+                    "SET return_date = ? " +
+                    "WHERE id_exemplary = ?;";
+                command.Parameters.Clear();
+                command.CommandText = sql;
+                command.Parameters.Add("?", DbType.DateTime).Value = date;
+                command.Parameters.Add("?", DbType.Int32).Value = exemplary.IdExemplary;
+
+                await command.ExecuteNonQueryAsync();
+                await transaction.CommitAsync();
+
+                return true;
             }
             catch (MySqlException ex)
             {

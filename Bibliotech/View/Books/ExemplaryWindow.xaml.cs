@@ -142,7 +142,7 @@ namespace Bibliotech.View.Books
             return exemplaries[selectedExemplary];
         }
 
-        private async Task SetExemplaryToStock(Exemplary exemplary)
+        private async Task SetExemplaryToGiveBack(Exemplary exemplary)
         {
             int idIndex = exemplary.IdIndex;
             bool result = dialogService.ShowQuestion("RECUPERAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como RECUPERADO???");
@@ -152,7 +152,7 @@ namespace Bibliotech.View.Books
             }
 
             SetButtons(false);
-            result = await daoExemplary.SetStatus(exemplary, Status.Stock);
+            result = await daoExemplary.SetGiveBack(exemplary, DateTime.Now);
             SetButtons(true);
 
             if (result == false)
@@ -209,7 +209,7 @@ namespace Bibliotech.View.Books
             Exemplary exemplary = GetExemplaryInGrid();
             if (exemplary.IsLost())
             {
-                await SetExemplaryToStock(exemplary);
+                await SetExemplaryToGiveBack(exemplary);
             }
             else
             {

@@ -655,7 +655,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
-        public async Task GetStatusDevolution(int status, int idExemplary, int idLending, DateTime devolution)
+        public async Task GetStatusDevolution(Status status, int idExemplary, int idLending, DateTime devolution)
         {
             await Connect();
             MySqlTransaction transaction = await SqlConnection.BeginTransactionAsync();
