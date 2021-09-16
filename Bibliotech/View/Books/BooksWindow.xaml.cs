@@ -46,7 +46,7 @@ namespace Bibliotech.View.Books
             }
         }
 
-        private void IsEnabled(bool result)
+        private void SetIsEnabled(bool result)
         {
             loading.Awaiting = result;
             searchField.IsEnabled = !result;
@@ -55,13 +55,13 @@ namespace Bibliotech.View.Books
         private async Task SearchBooks()
         {
             DisableControls(gridPanel.Children);
-            IsEnabled(true);
+            SetIsEnabled(true);
 
             string text = searchField.Text;
             books = await DAOBook.GetAll(text);
             dataGrid.ItemsSource = books;
 
-            IsEnabled(false);
+            SetIsEnabled(false);
             EnableControls(gridPanel.Children);
         }
 

@@ -1,10 +1,9 @@
 ﻿using Bibliotech.Model.DAO;
 using Bibliotech.Model.Entities;
+using Bibliotech.Services;
+using Bibliotech.Singletons;
 using System.Collections.Generic;
 using System.Windows;
-using Bibliotech.Singletons;
-using System.Data;
-using Bibliotech.Services;
 
 namespace Bibliotech.View.Devolutions
 {
@@ -14,10 +13,11 @@ namespace Bibliotech.View.Devolutions
     public partial class SearchLectorWindow : Window
     {
         private readonly DAOLector DAOLector;
-        private DialogService dialogService;
+        private readonly DialogService dialogService;
         private readonly int IdBranch = Session.Instance.User.Branch.IdBranch;
-        private  List<Lector> lectors;
+        private List<Lector> lectors;
         public Lector Selectedlectors;
+
         public SearchLectorWindow()
         {
             InitializeComponent();
@@ -27,26 +27,29 @@ namespace Bibliotech.View.Devolutions
             dialogService = new DialogService();
         }
 
-        private void IsEnabled(bool result)
+        private void SetIsEnabled(bool result)
         {
             loading.Awaiting = result;
             searchField.IsEnabled = !result;
             btnSelectLector.IsEnabled = !result;
         }
+
         private async void SearchLector()
         {
-            IsEnabled(true);
+            SetIsEnabled(true);
             string text = searchField.Text;
             lectors = await DAOLector.GetLectors(IdBranch, text);
             dataGrid.ItemsSource = lectors;
-            IsEnabled(false);
+            SetIsEnabled(false);
         }
-        private Lector lector()
+
+        private Lector GetLector()
         {
             int index = dataGrid.SelectedIndex;
             Lector lector = lectors[index];
             return lector;
         }
+
         private void SelectLectorWindow_Loaded(object sender, RoutedEventArgs e)
         {
             SearchLector();
@@ -60,7 +63,7 @@ namespace Bibliotech.View.Devolutions
                 return;
             }
 
-            Selectedlectors = lector();
+            Selectedlectors = GetLector();
             Close();
         }
 

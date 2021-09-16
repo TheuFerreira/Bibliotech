@@ -50,7 +50,7 @@ namespace Bibliotech.Model.DAO
                 command.Parameters.Add("?", System.Data.DbType.String).Value = address.Complement;
                 command.Parameters.Add("?", System.Data.DbType.String).Value = address.IdAddress;
 
-                _ = await command.ExecuteNonQueryAsync();
+                await command.ExecuteNonQueryAsync();
             }
             catch (MySqlException ex)
             {
