@@ -37,7 +37,8 @@
         <DataGrid
             x:Name="dataGrid"
             Margin="0,87,0,143"
-            ItemsSource="{Binding}">
+            ItemsSource="{Binding}"
+            SelectionChanged="DataGrid_SelectionChanged">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Nº" Width="50" Binding="{Binding Path=IdIndex,StringFormat=D3}" ElementStyle="{StaticResource ColumnText}"/>

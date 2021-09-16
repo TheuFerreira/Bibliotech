@@ -135,19 +135,30 @@ namespace Bibliotech.View.Books
             return exemplaries[selectedExemplary];
         }
 
-        private async void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        private async void SetExemplaryToStock(Exemplary exemplary)
         {
-            if (dataGrid.SelectedIndex < 0)
+            int idIndex = exemplary.IdIndex;
+            bool result = dialogService.ShowQuestion("RECUPERAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como RECUPERADO???");
+            if (result == false)
             {
                 return;
             }
 
-            Exemplary exemplary = GetExemplaryInGrid();
-            if (exemplary.IsLost())
+            SetButtons(false);
+            result = await daoExemplary.SetStatus(exemplary, Status.Stock);
+            SetButtons(true);
+
+            if (result == false)
             {
                 return;
             }
 
+            exemplary.Status = Status.Stock;
+            dialogService.ShowInformation("Livro Recuperado!!!");
+        }
+
+        private async void SetExemplaryToLost(Exemplary exemplary)
+        {
             int idIndex = exemplary.IdIndex;
             bool result = dialogService.ShowQuestion("EXTRAVIAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como EXTRAVIADO???");
             if (result == false)
@@ -166,6 +177,24 @@ namespace Bibliotech.View.Books
 
             exemplary.Status = Status.Lost;
             dialogService.ShowInformation("Livro Extraviado!!!");
+        }
+
+        private void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            if (exemplary.IsLost())
+            {
+                SetExemplaryToStock(exemplary);
+            }
+            else
+            {
+                SetExemplaryToLost(exemplary);
+            }
         }
 
         private async void BtnInactive_OnClick(object sender, RoutedEventArgs e)
@@ -249,6 +278,17 @@ namespace Bibliotech.View.Books
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            btnLost.Text = exemplary.IsLost() ? "RECUPEROU" : "EXTRAVIOU";
         }
     }
 }
