@@ -563,6 +563,8 @@
   <ItemGroup>
     <Resource Include="Resources\img_pdf.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\img_giveback.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
