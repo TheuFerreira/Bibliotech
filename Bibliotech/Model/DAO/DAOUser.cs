@@ -288,7 +288,7 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     "SELECT COUNT(id_user) " +
                     "FROM users " +
-                    "WHERE user_name = ? " +
+                    "WHERE BINARY user_name = ? " +
                         "AND status = 1;";
                 MySqlCommand command = new MySqlCommand(sql, SqlConnection);
                 command.Parameters.Add("?", DbType.String).Value = userName;

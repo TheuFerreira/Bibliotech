@@ -1,7 +1,8 @@
 ﻿using Bibliotech.UserControls.CustomDialog;
 using Bibliotech.UserControls.CustomEnums;
-using Microsoft.Win32;
 using System;
+using System.Windows.Forms;
+
 
 namespace Bibliotech.Services
 {
@@ -66,11 +67,12 @@ namespace Bibliotech.Services
                 DefaultExt = defaultExt,
                 FileName = fileName
             };
-
-            if (saveFileDialog.ShowDialog() != true)
+           
+            if (saveFileDialog.ShowDialog() != DialogResult.OK)
             {
                 return string.Empty;
             }
+           
             return saveFileDialog.FileName;
         }
     }

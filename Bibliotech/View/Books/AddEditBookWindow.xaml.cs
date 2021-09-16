@@ -41,7 +41,6 @@ namespace Bibliotech.View.Books
         {
             Title = "Editar Livros";
             tbInfo.Text = "Editar Livros";
-            tfBarCode.Text = $"" + currentBranch.IdBranch.ToString().PadLeft(2, '0') + "" + book.IdBook.ToString().PadLeft(6, '0');
             tfTitle.Text = book.Title;
             tfSubtitle.Text = book.Subtitle;
             tfPublishingCompany.Text = book.PublishingCompany;
@@ -140,11 +139,6 @@ namespace Bibliotech.View.Books
         private void BtnExemplaryBook_Click(object sender, RoutedEventArgs e)
         {
             ShowExemplaries();
-        }
-
-        private void tfBarCode_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

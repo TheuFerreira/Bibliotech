@@ -8,9 +8,11 @@ using EnumsNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Bibliotech.View.Books
 {
@@ -125,6 +127,11 @@ namespace Bibliotech.View.Books
                 return;
             }
 
+            SetButtons(false);
+            List<Exemplary> exemplarySelected = new List<Exemplary>();
+            exemplarySelected.Add(GetExemplaryInGrid());
+            SetButtons(true);
+
             await barCode.BuildAsync(exemplariesSelected, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
         }
@@ -135,19 +142,30 @@ namespace Bibliotech.View.Books
             return exemplaries[selectedExemplary];
         }
 
-        private async void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        private async Task SetExemplaryToStock(Exemplary exemplary)
         {
-            if (dataGrid.SelectedIndex < 0)
+            int idIndex = exemplary.IdIndex;
+            bool result = dialogService.ShowQuestion("RECUPERAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como RECUPERADO???");
+            if (result == false)
             {
                 return;
             }
 
-            Exemplary exemplary = GetExemplaryInGrid();
-            if (exemplary.IsLost())
+            SetButtons(false);
+            result = await daoExemplary.SetStatus(exemplary, Status.Stock);
+            SetButtons(true);
+
+            if (result == false)
             {
                 return;
             }
 
+            exemplary.Status = Status.Stock;
+            dialogService.ShowInformation("Livro Recuperado!!!");
+        }
+
+        private async Task SetExemplaryToLost(Exemplary exemplary)
+        {
             int idIndex = exemplary.IdIndex;
             bool result = dialogService.ShowQuestion("EXTRAVIAR", $"Tem certeza de que deseja marcar o exemplar {idIndex:D2}, como EXTRAVIADO???");
             if (result == false)
@@ -166,6 +184,39 @@ namespace Bibliotech.View.Books
 
             exemplary.Status = Status.Lost;
             dialogService.ShowInformation("Livro Extraviado!!!");
+        }
+
+        private void UpdateBtnLost()
+        {
+            Uri uriGiveBack = new Uri("pack://application:,,,/Bibliotech;component/Resources/img_giveback.png");
+            BitmapImage isGiveBack = new BitmapImage(uriGiveBack);
+
+            Uri uriLost = new Uri("pack://application:,,,/Bibliotech;component/Resources/img_lost.png");
+            BitmapImage isLost = new BitmapImage(uriLost);
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            btnLost.Text = exemplary.IsLost() ? "RECUPEROU" : "EXTRAVIOU";
+            btnLost.Source = exemplary.IsLost() ? isGiveBack : isLost;
+        }
+
+        private async void BtnLost_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            Exemplary exemplary = GetExemplaryInGrid();
+            if (exemplary.IsLost())
+            {
+                await SetExemplaryToStock(exemplary);
+            }
+            else
+            {
+                await SetExemplaryToLost(exemplary);
+            }
+
+            UpdateBtnLost();
         }
 
         private async void BtnInactive_OnClick(object sender, RoutedEventArgs e)
@@ -249,6 +300,16 @@ namespace Bibliotech.View.Books
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
 
             SetButtons(true);
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dataGrid.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            UpdateBtnLost();
         }
     }
 }

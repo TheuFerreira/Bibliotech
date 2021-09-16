@@ -62,7 +62,7 @@ namespace Bibliotech.View.Devolutions
 
             if (exemplaries.Count < 1)
             {
-                dialogService.ShowError("Escolha um Livro.");
+                dialogService.ShowError("Escolha um Exemplar.");
                 return false;
             }
 
@@ -124,14 +124,17 @@ namespace Bibliotech.View.Devolutions
                 return;
             }
 
-            exemplary = Exemplary();
+            if(dialogService.ShowQuestion("Extraviar", "Deseja extraviar esse livro?"))
+            {
+                exemplary = Exemplary();
 
-            IsEnabledControls(true);
-            DateTime dateMisplaced = DateTime.Parse(dateDevolution.date.Text);
-            await DAOLector.GetStatusDevolution(4, exemplary.IdExemplary, exemplary.Lending.IdLending, dateMisplaced);
-            dialogService.ShowSuccess("Exemplar extraviado com sucesso!!!");
-            IsEnabledControls(false);
-            SearchExemplaries();
+                IsEnabledControls(true);
+                DateTime dateMisplaced = DateTime.Parse(dateDevolution.date.Text);
+                await DAOLector.GetStatusDevolution(4, exemplary.IdExemplary, exemplary.Lending.IdLending, dateMisplaced);
+                dialogService.ShowSuccess("Exemplar extraviado com sucesso!!!");
+                IsEnabledControls(false);
+                SearchExemplaries();
+            }
         }
 
         private async void BtnDevolution_OnClick(object sender, RoutedEventArgs e)
@@ -147,15 +150,18 @@ namespace Bibliotech.View.Devolutions
                 return;
             }
 
-            exemplary = Exemplary();
-            IsEnabledControls(true);
+            if(dialogService.ShowQuestion("Devoulução", "Deseja devolver esse livro?"))
+            {
+                exemplary = Exemplary();
+                IsEnabledControls(true);
+                DateTime devolution = DateTime.Parse(dateDevolution.date.Text);
+                await DAOLector.GetStatusDevolution(3, exemplary.IdExemplary, exemplary.Lending.IdLending, devolution);
 
-            DateTime dateDEvolution = DateTime.Parse(dateDevolution.date.Text);
-            await DAOLector.GetStatusDevolution(3, exemplary.IdExemplary, exemplary.Lending.IdLending, dateDEvolution);
-
-            dialogService.ShowSuccess("Exemplar devolvido com sucesso!!!");
-            IsEnabledControls(false);
-            SearchExemplaries();
+                dialogService.ShowSuccess("Exemplar devolvido com sucesso!!!");
+                IsEnabledControls(false);
+                SearchExemplaries();
+            }
+            
         }
 
         private async void BtnExtend_OnClick(object sender, RoutedEventArgs e)
@@ -170,15 +176,19 @@ namespace Bibliotech.View.Devolutions
                 dialogService.ShowError("Selecione um exemplar!!!");
                 return;
             }
+            
+            if(dialogService.ShowQuestion("Estender prazo", "Deseja estender o prazo desse livro?"))
+            {
+                exemplary = Exemplary();
 
-            exemplary = Exemplary();
-
-            IsEnabledControls(true);
-            DateTime date = Convert.ToDateTime(dateDevolution.date.SelectedDate);
-            await DAOLector.GetExtendDevolution(date, exemplary.Lending.IdLending);
-            dialogService.ShowSuccess("Data Atualizada");
-            IsEnabledControls(false);
-            SearchExemplaries();
+                IsEnabledControls(true);
+                DateTime date = Convert.ToDateTime(dateDevolution.date.SelectedDate);
+                await DAOLector.GetExtendDevolution(date, exemplary.Lending.IdLending);
+                dialogService.ShowSuccess("Data Atualizada");
+                IsEnabledControls(false);
+                SearchExemplaries();
+            }
+           
         }
     }
 }
