@@ -1,6 +1,7 @@
 ﻿using Bibliotech.Singletons;
 using MySqlConnector;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Bibliotech.Model.DAO
 {
@@ -19,7 +20,8 @@ namespace Bibliotech.Model.DAO
             }
             catch (MySqlException ex)
             {
-                throw ex;
+                //throw ex;
+                MessageBox.Show("Não foi possível conectar");
             }
         }
 
