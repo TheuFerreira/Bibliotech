@@ -26,18 +26,17 @@ namespace Bibliotech.View.Users
 
         private async void BtnEnter_Click(object sender, RoutedEventArgs e)
         {
-            btnEnter.IsEnabled = false;
-
             if (string.IsNullOrWhiteSpace(tfUser.Text)
                 || string.IsNullOrWhiteSpace(tfPassword.Text))
             {
                 ShowMessage("Atenção", "Usuário ou Senha inválida. Tente novamente", TypeDialog.Error);
                 return;
             }
-           
+
             string userName = tfUser.Text;
             string password = tfPassword.Text;
 
+            btnEnter.IsEnabled = false;
             User user = await DaoUser.IsValidUser(userName, password);
             btnEnter.IsEnabled = true;
 
