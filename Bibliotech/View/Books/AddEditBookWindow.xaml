@@ -33,6 +33,7 @@
                     MaxLength="200"
                     Title="TÍTULO:*"
                     Placeholder="INSIRA O TÍTULO" HorizontalAlignment="Right" Width="363"/>
+
                 <uc:TextField 
                     x:Name="tfAuthor"
                     MaxLength="200"
@@ -40,16 +41,8 @@
                     Placeholder="AUTOR"
                     HorizontalAlignment="Left" 
                     IsEnabled="False"
-                    Width="295" Margin="0,-3,0,3" RenderTransformOrigin="0.5,0.5">
-                    <uc:TextField.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform AngleY="-0.178"/>
-                            <RotateTransform/>
-                            <TranslateTransform Y="-0.497"/>
-                        </TransformGroup>
-                    </uc:TextField.RenderTransform>
-                </uc:TextField>
+                    Width="295" Margin="0,-3,0,3" RenderTransformOrigin="0.5,0.5"/>
+
                 <uc:Button
                     x:Name="bntAddAuthor"
                     Margin="306,0,0,0"
@@ -58,7 +51,9 @@
                     Text="PESQUISAR"
                     CornerRadius="15"
                     Source="/Bibliotech;component/Resources/img_zoom.png"
-                    MarginImage="7,5" Click="BtnAddAuthor_Click" SnapsToDevicePixels="True" FontSize="11" HorizontalAlignment="Left" Width="127"/>
+                    MarginImage="7,5" Click="BtnAddAuthor_Click" 
+                    SnapsToDevicePixels="True" FontSize="11" 
+                    HorizontalAlignment="Left" Width="127"/>
             </Grid>
 
             <Grid
@@ -86,6 +81,7 @@
                     HorizontalAlignment="Right"
                     Width="166" 
                     Margin="0,3,51,-3"/>
+                
                 <uc:TextField 
                     x:Name="tfSubtitle"
                     MaxLength="200"
@@ -94,6 +90,7 @@
                     Placeholder="INSIRA O SUBTÍTULO"
                     HorizontalAlignment="Left"
                     Width="229"/>
+                
                 <uc:TextField 
                     x:Name="tfPublishingCompany"
                     MaxLength="50"
@@ -123,6 +120,7 @@
                     Title="COLEÇÃO:"
                     Placeholder="COLEÇÃO" 
                     Margin="252,0,0,0" HorizontalAlignment="Left" Width="183"/>
+                
                 <uc:TextField 
                     x:Name="tfNumberPages"
                     VerticalAlignment="Top"
@@ -132,12 +130,14 @@
                     Placeholder="555" 
                     HorizontalAlignment="Left" 
                     Width="105" Margin="0,1,0,-1" />
+                
                 <uc:TextField 
                     x:Name="tfYear"
                     MaxLength="4"
                     Title="ANO DE PUBLICAÇÃO:"
                     Placeholder="2021"
                     FieldType="Number" Margin="0,1,198,-1" HorizontalAlignment="Right" Width="166"/>
+                
                 <uc:TextField 
                     x:Name="tfLanguage"
                     MaxLength="50"
@@ -179,14 +179,8 @@
             Margin="10"
             Source="/Bibliotech;component/Resources/img_save.png"
             HorizontalAlignment="Right" 
-            VerticalAlignment="Bottom" OnClick="BtnSave_OnClick"/>
-        <uc:TextField 
-                    x:Name="tfBarCode"
-                    MaxLength="50"
-                    IsEnabled="False"
-                    Title="CÓDIGO DE BARRAS:*"
-                    Text="005050"
-                    Margin="299,0,300,45" Height="42" VerticalAlignment="Bottom"/>
-
+            VerticalAlignment="Bottom" 
+            OnClick="BtnSave_OnClick"/>
+        
     </Grid>
 </Window>
