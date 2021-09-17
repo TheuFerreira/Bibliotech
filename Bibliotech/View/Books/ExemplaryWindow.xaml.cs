@@ -281,8 +281,6 @@ namespace Bibliotech.View.Books
 
         private async void BtnPrint_OnClick(object sender, RoutedEventArgs e)
         {
-            SetButtons(false);
-
             string fileName = $"Código de Barras - {Book.Title}";
             string path = dialogService.SaveFileDialg("PDF Files|*.pdf", "pdf", fileName);
             if (path == string.Empty)
@@ -295,6 +293,8 @@ namespace Bibliotech.View.Books
                 dialogService.ShowError("O arquivo já está aberto em outro programa. \\ Por favor, feche-o");
                 return;
             }
+
+            SetButtons(false);
 
             await barCode.BuildAsync(exemplaries, currentBranch, path);
             dialogService.ShowInformation("PDF gerado com sucesso!!!");
