@@ -107,6 +107,19 @@ namespace Bibliotech.View.Lendings
             return true;
         }
 
+        private bool ValidateDate()
+        {
+            DateTime begin = Convert.ToDateTime(dtpBegin.date.ToString());
+            DateTime end = Convert.ToDateTime(dtpEnd.date.ToString());
+
+            if (end < begin)
+            {
+                dialogService.ShowError("A data de devolução deve ser posterior à data de empréstimo!");
+                return false;
+            }
+            return true;
+        }
+
         private void OnOffControls(bool validate)
         {
             loading.Awaiting = !validate;
@@ -179,6 +192,8 @@ namespace Bibliotech.View.Lendings
             tfNameLector.Text = lector.Name.ToString();
         }
 
+       
+
         private void btnSearchBook_Click(object sender, RoutedEventArgs e)
         {
             SearchBookWindow searchBook = new SearchBookWindow();  
@@ -201,6 +216,11 @@ namespace Bibliotech.View.Lendings
         private async void addButton_OnClick(object sender, RoutedEventArgs e)
         {
             if(!ValidateFields())
+            {
+                return;
+            }
+
+            if(!ValidateDate())
             {
                 return;
             }
