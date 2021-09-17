@@ -199,5 +199,10 @@ namespace Bibliotech.View.Devolutions
             SearchExemplaries();
 
         }
+
+        private void btnMisplaced_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

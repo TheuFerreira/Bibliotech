@@ -104,7 +104,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Bibliotech;component/Resources/img_lost.png"
-                Text="EXTRAVIOUR" OnClick="BtnMisplaced_OnClick"/>
+                Text="EXTRAVIOU" OnClick="BtnMisplaced_OnClick"/>
 
             <uc:ButtonImage
                 x:Name="btnExtend"
