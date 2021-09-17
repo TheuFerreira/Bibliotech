@@ -134,7 +134,7 @@ namespace Bibliotech.View.Devolutions
             exemplary = Exemplary();
 
             IsEnabledControls(true);
-            
+
             await new DAOExamplary().SetStatus(exemplary, Status.Lost);
             dialogService.ShowSuccess("Exemplar extraviado com sucesso!!!");
 
@@ -155,18 +155,19 @@ namespace Bibliotech.View.Devolutions
                 return;
             }
 
-            if(dialogService.ShowQuestion("Devoulução", "Deseja devolver esse livro?"))
+            if (!dialogService.ShowQuestion("Devoulução", "Deseja devolver esse livro?"))
             {
-                exemplary = Exemplary();
-                IsEnabledControls(true);
-                DateTime devolution = DateTime.Parse(dateDevolution.date.Text);
-                await DAOLector.GetStatusDevolution(Status.Stock, exemplary.IdExemplary, exemplary.Lending.IdLending, devolution);
-
-                dialogService.ShowSuccess("Exemplar devolvido com sucesso!!!");
-                IsEnabledControls(false);
-                SearchExemplaries();
+                return;
             }
-            
+
+            exemplary = Exemplary();
+            IsEnabledControls(true);
+            DateTime devolution = DateTime.Parse(dateDevolution.date.Text);
+            await DAOLector.GetStatusDevolution(Status.Stock, exemplary.IdExemplary, exemplary.Lending.IdLending, devolution);
+
+            dialogService.ShowSuccess("Exemplar devolvido com sucesso!!!");
+            IsEnabledControls(false);
+            SearchExemplaries();
         }
 
         private async void BtnExtend_OnClick(object sender, RoutedEventArgs e)
@@ -190,19 +191,13 @@ namespace Bibliotech.View.Devolutions
             exemplary = Exemplary();
 
             IsEnabledControls(true);
-            
+
             DateTime date = Convert.ToDateTime(dateDevolution.date.SelectedDate);
             await DAOLector.GetExtendDevolution(date, exemplary.Lending.IdLending);
             dialogService.ShowSuccess("Data Atualizada");
-            
+
             IsEnabledControls(false);
             SearchExemplaries();
-
-        }
-
-        private void btnMisplaced_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

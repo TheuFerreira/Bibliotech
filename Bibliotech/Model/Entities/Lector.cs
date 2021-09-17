@@ -20,5 +20,10 @@ namespace Bibliotech.Model.Entities
             IdLector = -1;
             Address = new Address();
         }
+
+        public string BirthDateToString()
+        {
+            return BirthDate.HasValue ? BirthDate.Value.ToString("dd/MM/yyyy") : string.Empty;
+        }
     }
 }

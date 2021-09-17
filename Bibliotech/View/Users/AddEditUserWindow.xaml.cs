@@ -173,20 +173,16 @@ namespace Bibliotech.View.Users
 
         private bool ValidatedBirthDate()
         {
-            user.BirthDate = null;
-            if (string.IsNullOrEmpty(tfBirthDate.Text))
-            {
-                return true;
-            }
+            DateTimeService dateTimeService = new DateTimeService();
 
-            bool result = DateTime.TryParseExact(tfBirthDate.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime datetime);
-            if (result == false)
+            user.BirthDate = null;
+            if (dateTimeService.CheckIfIsDate(tfBirthDate.Text) == false)
             {
                 dialogService.ShowError("Data de Nascimento Inválida!!!");
                 return false;
             }
-
-            user.BirthDate = datetime;
+            
+            user.BirthDate = dateTimeService.ConvertString(tfBirthDate.Text);
             return true;
         }
 

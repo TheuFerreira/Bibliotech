@@ -184,6 +184,7 @@
     <Compile Include="Model\Entities\Lending.cs" />
     <Compile Include="Model\Entities\Branch.cs" />
     <Compile Include="Model\Entities\User.cs" />
+    <Compile Include="Services\DateTimeService.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Singletons\Server.cs" />

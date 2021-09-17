@@ -43,7 +43,7 @@ namespace Bibliotech.View.Lectors
             tfName.Text = lector.Name;
             tfUserRegistration.Text = lector.IdLector.ToString("D6");
             tfResponsible.Text = lector.Responsible;
-            tfBirthDate.Text = lector.BirthDate.ToString();
+            tfBirthDate.Text = lector.BirthDateToString();
             tfCity.Text = address.City;
             tfDistrict.Text = address.Neighborhood;
             tfStreet.Text = address.Street;
@@ -99,15 +99,21 @@ namespace Bibliotech.View.Lectors
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(tfBirthDate.Text))
+            return true;
+        }
+
+        private bool ValidatedBirthDate()
+        {
+            DateTimeService dateTimeService = new DateTimeService();
+
+            lector.BirthDate = null;
+            if (dateTimeService.CheckIfIsDate(tfBirthDate.Text) == false)
             {
-                if (tfBirthDate.Text.Length < 10)
-                {
-                    dialogService.ShowError("Escreva uma data de nascimento válida!\nOu deixe este campo sem preencher.");
-                    return false;
-                }
+                dialogService.ShowError("Data de Nascimento Inválida!!!");
+                return false;
             }
 
+            lector.BirthDate = dateTimeService.ConvertString(tfBirthDate.Text);
             return true;
         }
 
@@ -115,13 +121,6 @@ namespace Bibliotech.View.Lectors
         {
             lector.Name = tfName.Text;
             lector.Responsible = tfResponsible.Text;
-
-            lector.BirthDate = null;
-            if (DateTime.TryParse(tfBirthDate.Text, out DateTime temp))
-            {
-                lector.BirthDate = temp;
-            }
-
             lector.Phone = null;
             if (!string.IsNullOrEmpty(tfPhone.Text))
             {
@@ -163,6 +162,11 @@ namespace Bibliotech.View.Lectors
                 return;
             }
 
+            if (!ValidatedBirthDate())
+            {
+                return;
+            }
+
             GroupArguments();
 
             if (lector.IdLector == -1)
@@ -196,7 +200,7 @@ namespace Bibliotech.View.Lectors
                     return;
                 }
 
-                dialogService.ShowSuccess("Leitor alterado coom sucesso!");
+                dialogService.ShowSuccess("Leitor alterado com sucesso!");
                 Close();
 
                 return;
