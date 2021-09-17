@@ -383,7 +383,7 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE le.return_date IS NULL AND DATE(le.loan_date) = ? " +
+                        "WHERE DATE(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) = ? " +
@@ -418,7 +418,7 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE le.return_date IS NULL AND YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
+                        "WHERE YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? AND MONTH(le.loan_date) = ? " +
@@ -455,7 +455,7 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE le.return_date IS NULL AND YEAR(le.loan_date) = ? " +
+                        "WHERE YEAR(le.loan_date) = ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND YEAR(le.loan_date) = ? " +
@@ -490,7 +490,7 @@ namespace Bibliotech.Model.DAO
                 string sql = "" +
                     BASE_REPORT_SQL_SELECT_LECTOR +
                     BASE_REPORT_SQL_LEFT_JOIN_PICKUP +
-                        "WHERE le.return_date IS NULL AND DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
+                        "WHERE DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
                         "GROUP BY lc.id_lector) AS pick ON pick.id_lector = l.id_lector " +
                     BASE_REPORT_SQL_LEFT_JOIN_RETURNED +
                         "WHERE le.return_date IS NOT NULL AND DATE(le.loan_date) >= ? AND DATE(le.loan_date) <= ? " +
@@ -677,7 +677,7 @@ namespace Bibliotech.Model.DAO
 
                 cmd.CommandText = update;
                 cmd.Parameters.Clear();
-                cmd.Parameters.Add("?", DbType.Date).Value = devolution;
+                cmd.Parameters.Add("?", DbType.DateTime).Value = devolution;
                 cmd.Parameters.Add("?", DbType.Int32).Value = idLending;
 
                 await cmd.ExecuteNonQueryAsync();
