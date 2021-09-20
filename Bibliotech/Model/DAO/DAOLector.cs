@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Bibliotech.Model.DAO
 {
@@ -579,8 +580,8 @@ namespace Bibliotech.Model.DAO
                     "inner join book as b on b.id_book = ba.id_book " +
                     "inner join author as a on a.id_author = ba.id_author " +
                     "inner join lector as lec on lec.id_lector = le.id_lector " +
-                    "where lec.id_lector = ? and e.status = 2 " +
-                    "group by e.id_exemplary; ";
+                    "where lec.id_lector = ? and e.status = 2 and le.was_returned = 0 " +
+                    "group by le.id_lending ; ";
 
                 MySqlCommand cmd = new MySqlCommand(selectBooks, SqlConnection);
 
@@ -664,8 +665,8 @@ namespace Bibliotech.Model.DAO
             {
                 MySqlCommand cmd = new MySqlCommand(SqlConnection, transaction);
 
-                string update = "update exemplary set status = ? where id_exemplary = ?; ";
-
+                string update = "update exemplary set status = ? where id_exemplary = ? ; ";
+               
                 cmd.CommandText = update;
                 cmd.Parameters.Clear();
                 cmd.Parameters.Add("?", DbType.Int32).Value = status;
@@ -673,7 +674,7 @@ namespace Bibliotech.Model.DAO
 
                 await cmd.ExecuteNonQueryAsync();
 
-                update = "update lending set return_date = ? where id_lending = ? ;  ";
+                update = "update lending set return_date = ?, was_returned = 1 where id_lending = ? ;  ";
 
                 cmd.CommandText = update;
                 cmd.Parameters.Clear();

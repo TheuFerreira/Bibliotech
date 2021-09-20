@@ -225,6 +225,7 @@ namespace Bibliotech.Model.DAO
             }
         }
 
+
         public async Task<bool> Insert(List<Exemplary> exemplary, Lector lector, DateTime begin, DateTime end)
         {
             await Connect();
@@ -233,14 +234,12 @@ namespace Bibliotech.Model.DAO
 
             int idUser = Session.Instance.User.IdUser;
 
-           
-
             try
             {
                 for (int i = 0; i < exemplary.Count; i++)
                 {
-                    string strSql = "insert into lending (id_exemplary, id_lector, id_user, loan_date, expected_date) " +
-                               "values(@id_exemplary, @id_lector, @id_user, @loan_date, @expected_date);";
+                    string strSql = "insert into lending (id_exemplary, id_lector, id_user, loan_date, expected_date, was_returned) " +
+                               "values(@id_exemplary, @id_lector, @id_user, @loan_date, @expected_date, 0); ";
 
                     MySqlCommand cmd = new MySqlCommand(strSql, SqlConnection, transaction);
 
@@ -250,12 +249,13 @@ namespace Bibliotech.Model.DAO
                     cmd.Parameters.AddWithValue("@loan_date", begin);
                     cmd.Parameters.AddWithValue("@expected_date", end);
 
-                    object o = await cmd.ExecuteNonQueryAsync();
-                    //MessageBox.Show(exemplary.Count().ToString() + ", " + exemplary[i].IdExemplary.ToString() + " ,retorno" + o.ToString() + " i: " + i);
+                    _ = await cmd.ExecuteNonQueryAsync();
 
                     strSql = "update exemplary set status = 2 where exemplary.id_exemplary = " + exemplary[i].IdExemplary;
                     cmd.CommandText = strSql;
+
                     _ = await cmd.ExecuteNonQueryAsync();
+                    
                 }
 
                 await transaction.CommitAsync();
