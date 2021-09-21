@@ -7,7 +7,7 @@
         xmlns:uc="clr-namespace:Bibliotech.UserControls"
         mc:Ignorable="d"
         Title="TypeReportWindow" 
-        Height="245" Width="420" 
+        Height="265" Width="440" 
         Icon="/Resources/ico_bibliotech.ico" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen" 
@@ -16,7 +16,13 @@
         Background="Transparent">
     <Border 
         Background="White"
-        CornerRadius="35">
+        CornerRadius="35"
+        Margin="10">
+
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="15" ShadowDepth="0"/>
+        </Border.Effect>
+
         <Grid>
 
             <Grid.RowDefinitions>
