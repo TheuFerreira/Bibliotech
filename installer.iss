@@ -29,6 +29,7 @@ SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 WizardStyle=modern
+PrivilegesRequired=admin
 
 [Languages]
 Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
@@ -77,7 +78,6 @@ Source: "Bibliotech\bin\Debug\NPOI.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\NPOI.OOXML.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\NPOI.OOXML.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\NPOI.OpenXml4Net.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Bibliotech\bin\Debug\NPOI.OpenXml4Net.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\NPOI.OpenXmlFormats.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\NPOI.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -91,6 +91,7 @@ Source: "Bibliotech\bin\Debug\System.Threading.Tasks.Extensions.xml"; DestDir: "
 Source: "Bibliotech\bin\Debug\Bibliotech.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\Bibliotech.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Bibliotech\bin\Debug\Bibliotech.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Bibliotech\bin\Debug\Manual\manual.pdf"; DestDir: "{app}\Manual"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#MyAppPublisher}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -98,3 +99,6 @@ Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+
+[Dirs]
+Name: "{app}\Manual"

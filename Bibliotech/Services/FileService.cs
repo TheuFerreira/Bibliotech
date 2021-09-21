@@ -12,7 +12,7 @@ namespace Bibliotech.Services
 
                 return false;
             }
-            catch (IOException)
+            catch
             {
                 return false;
             }
