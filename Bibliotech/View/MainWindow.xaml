@@ -99,6 +99,7 @@
                 VerticalAlignment="Center" OnClick="BtnUsers_OnClick" Margin="295,25,29,25"/>
 
             <ctrl:ButtonImage 
+                x:Name="btnManual"
                 Grid.Column="1"
                 Text="MANUAL"
                 HasBorder="False"
@@ -106,7 +107,9 @@
                 Width="200"
                 Height="150"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center" Margin="11,25,26,25"/>
+                VerticalAlignment="Center" 
+                Margin="11,25,26,25"
+                OnClick="BtnManual_OnClick"/>
 
             <ctrl:ButtonImage 
                 x:Name="btnReports"

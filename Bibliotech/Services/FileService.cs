@@ -17,5 +17,10 @@ namespace Bibliotech.Services
                 return false;
             }
         }
+
+        public bool FileExists(string filePath)
+        {
+            return File.Exists(filePath);
+        }
     }
 }

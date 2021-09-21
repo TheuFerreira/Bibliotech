@@ -9,6 +9,9 @@ using Bibliotech.View.Lendings;
 using Bibliotech.View.Reports;
 using Bibliotech.View.Schools;
 using Bibliotech.View.Users;
+using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 
 namespace Bibliotech.View
@@ -168,6 +171,27 @@ namespace Bibliotech.View
             Branch branch = await new DAOBranch().GetById(idBranch);
 
             _ = new AddEditSchoolWindow(branch).ShowDialog();
+        }
+
+        private void BtnManual_OnClick(object sender, RoutedEventArgs e)
+        {
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + @"\Manual\manual.pdf";
+
+            FileService fileService = new FileService();
+            if (fileService.FileExists(filePath) == false)
+            {
+                dialogService.ShowError("O Manual não foi encontrado!!!");
+                return;
+            }
+
+            if (fileService.IsFileOpen(filePath))
+            {
+                dialogService.ShowError("O Manual, já está aberto!!!");
+                return;
+            }
+
+            Process.Start(filePath);
+            dialogService.ShowInformation("Abrindo Manual!!!");
         }
     }
 }
