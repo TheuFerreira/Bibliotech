@@ -161,6 +161,7 @@
             VerticalAlignment="Bottom">
 
             <uc:Button
+                x:Name="btnExemplaries"
                 Source="/Bibliotech;component/Resources/img_zoom.png"
                 VerticalAlignment="Bottom"
                 Height="30"
