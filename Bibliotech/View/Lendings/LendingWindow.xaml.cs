@@ -140,16 +140,12 @@ namespace Bibliotech.View.Lendings
 
         private void DeleteFromList(int index)
         {
-            if (!dialogService.ShowQuestion("Tem certeza que deseja\ndeletar este livro?", ""))
-            {
-                return;
-            }
-            if (index < 0)
+            if (!dialogService.ShowQuestion("Pergunta", "Tem certeza que deseja deletar este livro?"))
             {
                 return;
             }
 
-            if (index > books.Count)
+            if (index < 0 || index > books.Count)
             {
                 return;
             }
