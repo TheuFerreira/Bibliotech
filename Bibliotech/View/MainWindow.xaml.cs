@@ -99,7 +99,11 @@ namespace Bibliotech.View
             {
                 Close();
             }
+        }
 
+        private void BtnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://github.com/TheuFerreira/Bibliotech/tree/main");
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

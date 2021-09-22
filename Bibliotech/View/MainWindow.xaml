@@ -136,6 +136,19 @@
                 VerticalAlignment="Center" OnClick="BtnSchools_OnClick"/>
 
             <ctrl:Button
+                Source="/Bibliotech;component/Resources/img_about.png"
+                Text="SOBRE"
+                FontSize="16"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Height="35"
+                MarginImage="8,6"
+                CornerRadius="20"
+                Width="125" 
+                Click="BtnAbout_Click"/>
+            
+            <ctrl:Button
                 Source="/Bibliotech;component/Resources/img_exit.png"
                 Text="SAIR"
                 FontSize="16"
@@ -144,7 +157,8 @@
                 Margin="10"
                 Height="35"
                 CornerRadius="20"
-                Width="125" Click="BtnOut_Click"/>
+                Width="125" 
+                Click="BtnOut_Click"/>
         </Grid>
 
         <Grid 
