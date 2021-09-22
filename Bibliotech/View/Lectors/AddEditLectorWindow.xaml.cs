@@ -18,7 +18,6 @@ namespace Bibliotech.View.Lectors
         private readonly Lector lector;
         private readonly Address address;
         private readonly int idBranch;
-        private readonly Loading loading = new Loading();
 
         public AddEditLectorWindow(Lector lector)
         {
@@ -152,7 +151,6 @@ namespace Bibliotech.View.Lectors
         {
             btnSave.IsEnabled = value;
             HistoryButton.IsEnabled = value;
-            loading.Awaiting = !value;
         }
 
         private async void Save_OnClick(object sender, RoutedEventArgs e)
@@ -175,6 +173,7 @@ namespace Bibliotech.View.Lectors
                 {
                     return;
                 }
+
                 OnOffButtons(false);
                 btnSave.IsEnabled = false;
                 if (!await daoLector.Insert(idBranch, lector, address))
@@ -187,13 +186,14 @@ namespace Bibliotech.View.Lectors
                 
                 ClearFields();
                 OnOffButtons(true);
+                HistoryButton.IsEnabled = false;
 
                 return;
             }
-            OnOffButtons(false);
 
             if (await daoLector.Update(lector, address))
             {
+                OnOffButtons(false);
                 if (!dialogService.ShowQuestion("Confirmação", "Tem certeza que deseja alterar este leitor?"))
                 {
                     OnOffButtons(true);

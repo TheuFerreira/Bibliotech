@@ -155,7 +155,7 @@ namespace Bibliotech.View.Devolutions
                 return;
             }
 
-            if (!dialogService.ShowQuestion("Devoulução", "Deseja devolver esse livro?"))
+            if (!dialogService.ShowQuestion("Devolução", "Deseja devolver esse livro?"))
             {
                 return;
             }
