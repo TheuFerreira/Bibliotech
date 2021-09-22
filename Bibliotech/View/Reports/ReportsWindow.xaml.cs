@@ -204,7 +204,7 @@ namespace Bibliotech.View.Reports
             data = data.Replace("/", "_");
             data = data.Replace(":", "-");
 
-            string nome = type + "Export" + data + ".xls";
+            string nome = type + " " + data + ".xls";
 
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "XLS (*.xls) |*.xls";
@@ -254,7 +254,7 @@ namespace Bibliotech.View.Reports
             data = data.Replace("/", "_");
             data = data.Replace(":", "-");
 
-            string nome = type + "Export" + data + ".pdf";
+            string nome = type + " " + data + ".pdf";
 
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "PDF (*.pdf) |*.pdf";
@@ -302,28 +302,28 @@ namespace Bibliotech.View.Reports
                     case Tabs.Lendings:
                         if (lendingDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToExcel(true, lendingDataGrid, "Lending");
+                        ExportToExcel(true, lendingDataGrid, "Empréstimos");
                         break;
 
                     case Tabs.Lectors:
                         if (lectorDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToExcel(true, lectorDataGrid, "Lector");
+                        ExportToExcel(true, lectorDataGrid, "Leitores");
                         break;
 
                     case Tabs.Books:
                         if (bookDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToExcel(false, bookDataGrid, "Book");
+                        ExportToExcel(false, bookDataGrid, "Livros");
                         break;
                 }
             }
@@ -334,28 +334,28 @@ namespace Bibliotech.View.Reports
                     case Tabs.Lendings:
                         if (lendingDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToPdf(lendingDataGrid, "Lending", true);
+                        ExportToPdf(lendingDataGrid, "Empréstimos", true);
                         break;
 
                     case Tabs.Lectors:
                         if (lectorDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToPdf(lectorDataGrid, "Lector", true);
+                        ExportToPdf(lectorDataGrid, "Leitores", true);
                         break;
 
                     case Tabs.Books:
                         if (bookDataGrid.Items.Count < 1)
                         {
-                            dialogService.ShowError("Escolha primeiro O tipo de\nrelatório que deseja!");
+                            dialogService.ShowError("Escolha primeiro O tipo de relatório que deseja!");
                             return;
                         }
-                        ExportToPdf(bookDataGrid, "Book", false);
+                        ExportToPdf(bookDataGrid, "Livros", false);
                         break;
                 }
             }
