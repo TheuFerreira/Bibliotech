@@ -65,7 +65,9 @@ namespace Bibliotech.Export.PDF
 
                 document.Open();
                 document.Add(pTable);
+
                 document.Close();
+                writer.Close();
 
                 return true;
             }

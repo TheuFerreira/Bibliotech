@@ -219,11 +219,10 @@ namespace Bibliotech.View.Reports
 
             try
             {
-                ReportsExcel reportsExcel = new ReportsExcel();
-
-                if (await reportsExcel.ExportToExcel(haveImage, dataGrid, saveFile.FileName) && dialogService.ShowQuestion("Deseja abrir o arquivo?", ""))
+                bool result = await new ReportsExcel().ExportToExcel(haveImage, dataGrid, saveFile.FileName);
+                if (result && dialogService.ShowQuestion("Pergunta", "Deseja abrir o arquivo?"))
                 {
-                    _ = Process.Start(saveFile.FileName);
+                    Process.Start(saveFile.FileName);
                 }
 
                 OnOffControls(true);
