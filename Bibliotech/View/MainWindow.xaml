@@ -187,6 +187,15 @@
                     Text="SECRETARIA MUNICIPAL DE EDUCAÇÃO"/>
             </StackPanel>
 
+            <TextBlock
+                x:Name="txtVersion"
+                Text="Versão 1.0.0"
+                FontSize="16"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Foreground="{StaticResource NormalSolidColor}" />
+
         </Grid>
 
     </Grid>

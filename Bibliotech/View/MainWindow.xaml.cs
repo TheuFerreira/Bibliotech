@@ -11,6 +11,7 @@ using Bibliotech.View.Schools;
 using Bibliotech.View.Users;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 
 namespace Bibliotech.View
@@ -73,7 +74,9 @@ namespace Bibliotech.View
 
             FirstLogin();
 
-            _ = new LoginWindow().ShowDialog();
+            new LoginWindow().ShowDialog();
+
+            txtVersion.Text = "Versão " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             loggedUser = Session.Instance.User;
             if (loggedUser == null)
