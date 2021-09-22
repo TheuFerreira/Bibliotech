@@ -49,8 +49,12 @@ namespace Bibliotech.View.Devolutions
         {
             IsEnabledControls(true);
             exemplaries = new List<Exemplary>();
-            exemplaries = await DAOLector.GetBooks(lector.IdLector);
-            dataGrid.ItemsSource = exemplaries;
+          
+            if (ValidateFields())
+            {
+                exemplaries = await DAOLector.GetBooks(lector.IdLector);
+                dataGrid.ItemsSource = exemplaries;
+            }
             IsEnabledControls(false);
         }
 

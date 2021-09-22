@@ -28,6 +28,7 @@ namespace Bibliotech.View.Books
 
             Title = "Adicionar Livro";
             tbInfo.Text = "Adicionar Livro";
+            btnExemplaries.IsEnabled = false;
 
             if (book.IdBook == -1)
             {
@@ -52,6 +53,7 @@ namespace Bibliotech.View.Books
             tfLanguage.Text = book.Language;
             tfVolume.Text = book.Volume;
             tfColletion.Text = book.Collection;
+            btnExemplaries.IsEnabled = true;
         }
 
         private void ShowMessage(string title, string contents, TypeDialog typeDialog)
@@ -93,6 +95,7 @@ namespace Bibliotech.View.Books
             _ = searchAuthor.ShowDialog();
 
             tfAuthor.Text = book.GetAuthorsToString();
+            
         }
 
         private async void BtnSave_OnClick(object sender, RoutedEventArgs e)
