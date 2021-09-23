@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using System;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
@@ -85,56 +87,84 @@ namespace Bibliotech.Export.Excel
 
             matriz = ToArray2(datagrid, haveImage);
 
-           /* SaveFileDialog saveFile = new SaveFileDialog();
-            saveFile.Title = "Arquivo";
-            saveFile.FileName = "";
-            saveFile.Filter = "Excel Files (2007|*.xlsx|Excel Files(.CSV)|*.csv";
-            if (saveFile.ShowDialog() != true)
-            {
-                return;
-            }*/
 
-            Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-            excelApp.Application.Workbooks.Add(Type.Missing);
+
+            /*Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
+            excelApp.Application.Workbooks.Add(Type.Missing);*/
 
       
 
-            if(!await addAsync(x, y, excelApp, matriz))
+            if(!await addAsync(x, y, fileNme /*excelApp*/, matriz))
             {
                 return false;
             }
  
-            excelApp.Columns.AutoFit();
+           /* excelApp.Columns.AutoFit();
             excelApp.ActiveWorkbook.SaveCopyAs(fileNme);
             excelApp.ActiveWorkbook.Saved = true;
-            excelApp.Quit();
+            excelApp.Quit();*/
             return true;
+
+
         }
 
-        private async Task<bool> addAsync(int x, int y, Microsoft.Office.Interop.Excel.Application excelApp, string[,] matriz)
+        private async Task<bool> addAsync(int x, int y, string fileName /*Microsoft.Office.Interop.Excel.Application excelApp*/, string[,] matriz)
         {
-            return await Task<bool>.Run(() => add(x+1, y, excelApp, matriz));
+            return await Task<bool>.Run(() => add(x+1, y, fileName /*excelApp*/, matriz));
         }
 
-        private bool add(int x, int y, Microsoft.Office.Interop.Excel.Application excelApp, string[,] matriz)
+        private bool add(int x, int y, string fileName /*Microsoft.Office.Interop.Excel.Application excelApp*/, string[,] matriz)
         {
-            for (int i = 0; i < x; i++)
+            /* for (int i = 0; i < x; i++)
+             {
+                 for (int j = 0; j < y; j++)
+                 {
+                     try
+                     {
+                         excelApp.Cells[i + 1, j + 1] = matriz[i, j];
+
+                     }
+
+                     catch (Exception)
+                     {
+                         return false;
+                     }
+                 }
+             }
+             return true;*/
+
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("Planilha1");
+
+            try
             {
-                for (int j = 0; j < y; j++)
+                for (int i = 0; i < x; i++)
                 {
-                    try
-                    {
-                        excelApp.Cells[i + 1, j + 1] = matriz[i, j];
-                        
-                    }
+                    int rowIndex = i;// + 1;
+                    IRow row = sheet.CreateRow(rowIndex);
 
-                    catch (Exception)
+                    for (int j = 0; j < y; j++)
                     {
-                        return false;
+                        ICell cell = row.CreateCell(j);
+
+                        cell.SetCellValue(matriz[i, j]);
+                        sheet.AutoSizeColumn(j);
+
                     }
                 }
+                var stream = new MemoryStream();
+                workbook.Write(stream);
+
+                FileStream file = new FileStream(fileName, FileMode.CreateNew, FileAccess.Write);
+                stream.WriteTo(file);
+                file.Close();
+                stream.Close();
+                return true;
             }
-            return true;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

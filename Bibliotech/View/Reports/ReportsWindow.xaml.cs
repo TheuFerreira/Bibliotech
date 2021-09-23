@@ -297,6 +297,10 @@ namespace Bibliotech.View.Reports
 
             if (typeReport.ExportType == ExportType.Excel)
             {
+                if(!dialogService.ShowQuestion("Esta exportação pode demorar bastante","Certifique - se que poderá esperar!"))
+                {
+                    return;
+                }
                 switch (tabs)
                 {
                     case Tabs.Lendings:
