@@ -161,7 +161,7 @@ namespace Bibliotech.Export.Excel
                 stream.Close();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
