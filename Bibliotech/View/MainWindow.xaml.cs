@@ -36,6 +36,13 @@ namespace Bibliotech.View
                 }
             }
 
+            DAOServer daoServer = new DAOServer();
+            bool connectionResult = await daoServer.TestConnection();
+            if (connectionResult == false)
+            {
+                return;
+            }
+
             DAOBranch daoBranch = new DAOBranch();
             int totalBranches = await daoBranch.Total();
             if (totalBranches == 0)
@@ -63,8 +70,6 @@ namespace Bibliotech.View
                     return;
                 }
             }
-
-            return;
         }
 
         public MainWindow()

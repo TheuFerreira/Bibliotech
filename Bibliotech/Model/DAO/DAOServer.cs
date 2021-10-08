@@ -1,4 +1,6 @@
-﻿using MySqlConnector;
+﻿using iText.Svg.Renderers.Path.Impl;
+using MySqlConnector;
+using System;
 using System.Threading.Tasks;
 
 namespace Bibliotech.Model.DAO
@@ -16,14 +18,31 @@ namespace Bibliotech.Model.DAO
 
                 return true;
             }
-            catch (MySqlException ex)
+            catch (MySqlException)
             {
-                System.Console.WriteLine(ex.Message);
                 return false;
             }
             finally
             {
                 await connection.CloseAsync();
+            }
+        }
+
+        public async Task<bool> TestConnection()
+        {
+            try
+            {
+                await Connect(false);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                await Disconnect();
             }
         }
     }

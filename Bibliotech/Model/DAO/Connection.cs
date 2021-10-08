@@ -14,7 +14,7 @@ namespace Bibliotech.Model.DAO
         //private const string CONNECTION_STRING = "Server=localhost;Port=3306;Database=bibliotech;Username=bibliotech;Password=@bibliotech123;AllowZeroDateTime=true;Allow User Variables=true;";
         //private const string CONNECTION_STRING = "Server=ns858.hostgator.com.br;Port=3306;Database=asifmg99_bibliotech;Username=asifmg99_bib;Password=@bibliotech2021;AllowZeroDateTime=true;Allow User Variables=true;";
 
-        protected async Task Connect()
+        protected async Task Connect(bool showError = true)
         {
             try
             {
@@ -24,9 +24,13 @@ namespace Bibliotech.Model.DAO
             }
             catch (MySqlException ex)
             {
-                new DialogService().ShowError("Houve um problema ao se conectar com o servidor! O programa será fechado.");
-               
-                App.Current.Shutdown();
+                if (showError)
+                {
+                    new DialogService().ShowError("Houve um problema ao se conectar com o servidor! O programa será fechado.");
+
+                    App.Current.Shutdown();
+                }
+
                 throw ex;
             }
         }
